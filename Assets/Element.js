@@ -19,6 +19,8 @@ var xPos				: int = 0;
 var yPos				: int = 0;
 var params:Hashtable = {};
 
+var isColliding			: int = 0;
+
 function Start (){
     	
 
@@ -34,16 +36,16 @@ function Start (){
 			var x:float = params["x"];
 			var y:float = params["y"];
 			
-			elementContainer.transform.parent.localPosition.y = h*0.5;
+			//this.gameObject.transform.localPosition.y = h*0.5;
 
 
 			//collider
 			//Debug.Log(this.gameObject);
 			
 			var sc : BoxCollider;
-			sc = elementContainer.gameObject.AddComponent ("BoxCollider");
+			sc = this.gameObject.AddComponent ("BoxCollider");
 			
-			elementContainer.GetComponent("BoxCollider").transform.position.y = h * 0.5;
+			this.GetComponent("BoxCollider").transform.position.y = h * 0.5;
 			
 			
 			sc.transform.localScale = Vector3(w,h*1.1,depth);
@@ -63,9 +65,10 @@ function Start (){
 			var isRigid:int =  params["isRigid"];
 			
 			if(isRigid == 1) {
-				elementContainer.AddComponent(Rigidbody);
-				elementContainer.rigidbody.isKinematic = true;
-				elementContainer.rigidbody.useGravity = false;
+				this.gameObject.AddComponent(Rigidbody);
+				this.gameObject.rigidbody.isKinematic = true;
+				this.gameObject.rigidbody.useGravity = false;
+				this.gameObject.rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
 			}
 			
 			
@@ -146,7 +149,7 @@ function Start (){
 			
 			}
 			
-			Place(x,y);
+			Place(x,y + h * 0.5);
 			
     	}
     	
@@ -156,7 +159,7 @@ function Place (_xPos : int, _yPos : int)
 {
 	 	xPos = _xPos;
  		yPos = _yPos;
- 		elementContainer.transform.localPosition = Vector3(xPos,yPos, 0);
+ 		this.gameObject.transform.localPosition = Vector3(xPos,yPos, 0);
  		
 
 }
@@ -165,13 +168,35 @@ function Place (_xPos : int, _yPos : int)
 function Update ()
 {
 
-//Debug.Log("ju");
+
 	
 }
 
-function OnCollisionEnter(collision : Collision) {
-		// Debug-draw all contact points and normals
-		Debug.Log("ju");
+function OnTriggerEnter (collided : Collider) {
+
+		//Debug.Log(collided.gameObject.name);
+		
+		xPos = collided.gameObject.transform.position.x;
+		
+		yPos = collided.gameObject.transform.position.y;
+		
+		//Debug.Log(xPos);
+		
+		isColliding = 1;
+}
+
+function OnTriggerExit (other : Collider) {
+		
+		isColliding = 0;
+
+}
+
+function OnTriggerStay (other : Collider) {
+
+		isColliding = 1;
 		
 }
-    	
+  
+
+
+  	

@@ -19,6 +19,13 @@ private var woodThickness : float = 1;
 private var parameters : List.<Hashtable> = new List.<Hashtable>();
 private var moduls : List.<GameObject> = new List.<GameObject>();
 
+
+private var variableScript : Element;
+
+//drag edilen nesnenin koordinatı
+private var tempPosition : Vector3 = new Vector3(0,0,0);
+private var draggingObject : GameObject;
+
 function Start () {
 	
 	//camera positioning
@@ -170,22 +177,30 @@ function Start () {
 }
 
 function Update () {
+
 	var mainCamera = Camera.main;
 	var hit : RaycastHit;
+	
+	
 
 	if (Input.GetMouseButtonDown (0)){
 	
 		if( Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition),  hit ) ) {
 		
-		
+			 if(hit.rigidbody.gameObject.GetComponent("BoxCollider")){
+				draggingObject = hit.collider.gameObject;
+				
+				tempPosition = hit.transform.position;
+				
+				mouseScreen = Vector3(Input.mousePosition.x,Input.mousePosition.y,-1 * mainCamera.transform.position.z);
+				
+				mouseWorld = mainCamera.ScreenToWorldPoint(mouseScreen);
+				
+				offSet = mouseWorld-hit.transform.position;		
 			
-			mouseScreen = Vector3(Input.mousePosition.x,Input.mousePosition.y,-1 * mainCamera.transform.position.z);
-			
-			mouseWorld = mainCamera.ScreenToWorldPoint(mouseScreen);
-			
-			offSet = mouseWorld-hit.transform.position;		
-		
-		    
+				Debug.Log(tempPosition);
+			    
+			}
 		}
 			
 	
@@ -193,34 +208,39 @@ function Update () {
 	
 	if (Input.GetMouseButton (0)){
 	
-		if( Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition),  hit ) ) {
+		if(draggingObject){
+	
+		mouseScreen = Vector3(Input.mousePosition.x,Input.mousePosition.y,-1 * mainCamera.transform.position.z);
 			
-			mouseScreen = Vector3(Input.mousePosition.x,Input.mousePosition.y,-1 * mainCamera.transform.position.z);
+		mouseWorld = mainCamera.ScreenToWorldPoint(mouseScreen);
 			
-			mouseWorld = mainCamera.ScreenToWorldPoint(mouseScreen);
-			
-			//Debug.Log(hit.rigidbody.gameObject.GetComponent("BoxCollider"));
+		variableScript = draggingObject.GetComponent("Element");
 				
-			if(hit.rigidbody.gameObject.GetComponent("BoxCollider")){
-			
-			
-				var oLayer1 : 	GameObject = hit.collider.gameObject;
-				var oLayer2	:	GameObject = oLayer1.transform.parent.gameObject;
+		//Debug.Log(variableScript.isColliding);
 				
-				var variableScript : Element;
-	 	 		variableScript = oLayer2.GetComponent("Element");
-	 	 		
-				//Debug.Log(variableScript.xPos);
-	 	 		
-	 	 
-		    	hit.transform.position.x = mouseWorld.x - offSet.x;
-				hit.transform.position.y = mouseWorld.y - offSet.y;
-				hit.transform.position.z = 0;	    	
-				
-	    	}
+    	draggingObject.transform.position.x = mouseWorld.x - offSet.x;
+		draggingObject.transform.position.y = mouseWorld.y - offSet.y;
+		draggingObject.transform.position.z = 0;
+		}
 	   
+
+	}
+	
+	if (Input.GetMouseButtonUp (0)){
+	
+		if(draggingObject){
+			Debug.Log(variableScript.isColliding);
+		
+			if(variableScript.isColliding == 1){
+				//Collide ederken mouse burakırsa
+				draggingObject.transform.position = tempPosition;
+			}
+				
+			draggingObject = null;
 		}
 	}
 	
 	 
 }
+
+
