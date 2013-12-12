@@ -1,5 +1,8 @@
 #pragma strict
 
+// Editted on mac mini filika tasarim
+// 12.10.2013
+
 var elementContainer: GameObject;
 var cubeFront 		: GameObject;
 var cubeFrontUp		: GameObject;

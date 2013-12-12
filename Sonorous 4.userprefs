@@ -1,8 +1,8 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Cuber.js">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Element.js">
     <Files>
-      <File FileName="Assets/Element.js" Line="72" Column="4" />
+      <File FileName="Assets/Element.js" Line="1" Column="1" />
       <File FileName="Assets/Cuber.js" Line="212" Column="7" />
       <File FileName="Assets/Base.js" Line="1" Column="1" />
     </Files>
