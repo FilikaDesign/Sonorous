@@ -48,7 +48,7 @@ function Start (){
 			this.GetComponent("BoxCollider").transform.position.y = h * 0.5;
 			
 			
-			sc.transform.localScale = Vector3(w,h*1.1,depth);
+			sc.transform.localScale = Vector3(w,h,depth);
 			
 			sc.isTrigger = true;
 			//sc.convex = true;
@@ -122,13 +122,7 @@ function Start (){
 			cubeRight.transform.localPosition = Vector3(w * 0.5 - woodThickness*0.5, h * 0.5, 0);
 			cubeRight.renderer.material.mainTexture = Resources.Load(Right, Texture2D);
 			cubeRight.transform.parent = elementContainer.transform;
-			
-			
-			
-			
-			
-			
-			
+
 			
 			//Bottom
 		    cubeBottom  = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -136,11 +130,7 @@ function Start (){
 			cubeBottom.transform.localPosition = Vector3(0,woodThickness*0.5, 0);
 			cubeBottom.renderer.material.mainTexture = Resources.Load(Bottom, Texture2D);
 			cubeBottom.transform.parent = elementContainer.transform;
-			
-			
-			
-			
-			
+
 			
 			//Top
 		    cubeTop  = GameObject.CreatePrimitive(PrimitiveType.Cube);

@@ -26,6 +26,9 @@ private var variableScript : Element;
 private var tempPosition : Vector3 = new Vector3(0,0,0);
 private var draggingObject : GameObject;
 
+private var snapping 	: int = 0;
+private var snapFactor 	: int = 10;
+
 function Start () {
 	
 	//camera positioning
@@ -218,9 +221,18 @@ function Update () {
 			variableScript = draggingObject.GetComponent("Element");
 					
 			//Debug.Log(variableScript.isColliding);
+			
+			if(snapping == 1){
+			
+				draggingObject.transform.position.x = (snapFactor * Mathf.Floor(mouseWorld.x/snapFactor))- offSet.x; 
+				draggingObject.transform.position.y = (snapFactor * Mathf.Floor(mouseWorld.y/snapFactor))- offSet.y; 
+			
+			}else{
+				draggingObject.transform.position.x = mouseWorld.x - offSet.x;
+				draggingObject.transform.position.y = mouseWorld.y - offSet.y;
+			}
 					
-	    	draggingObject.transform.position.x = mouseWorld.x - offSet.x;
-			draggingObject.transform.position.y = mouseWorld.y - offSet.y;
+	    	
 			
 			if(draggingObject.transform.position.y < draggingObject.transform.localScale.y * 0.5){
 				draggingObject.transform.position.y = draggingObject.transform.localScale.y * 0.5;			
