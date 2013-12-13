@@ -203,7 +203,7 @@ function Update () {
 				
 			if(hit.rigidbody.gameObject.GetComponent("BoxCollider")){
 			
-			
+				/*
 				var oLayer1 : 	GameObject = hit.collider.gameObject;
 				var oLayer2	:	GameObject = oLayer1.transform.parent.gameObject;
 				
@@ -212,7 +212,7 @@ function Update () {
 	 	 		
 				//Debug.Log(variableScript.xPos);
 	 	 		
-	 	 
+	 	 */
 		    	hit.transform.position.x = mouseWorld.x - offSet.x;
 				hit.transform.position.y = mouseWorld.y - offSet.y;
 				hit.transform.position.z = 0;	    	
@@ -221,6 +221,14 @@ function Update () {
 	   
 		}
 	}
-	
-	 
+}
+
+//Basic collision detection checking for two differently named objects
+function OnCollisionEnter(theCollision : Collision){
+Debug.Log("Hit the floor");
+ if(theCollision.gameObject.name == "Floor"){
+  Debug.Log("Hit the floor");
+ }else if(theCollision.gameObject.name == "Wall"){
+  Debug.Log("Hit the wall");
+ }
 }
