@@ -210,17 +210,22 @@ function Update () {
 	
 		if(draggingObject){
 	
-		mouseScreen = Vector3(Input.mousePosition.x,Input.mousePosition.y,-1 * mainCamera.transform.position.z);
-			
-		mouseWorld = mainCamera.ScreenToWorldPoint(mouseScreen);
-			
-		variableScript = draggingObject.GetComponent("Element");
+			mouseScreen = Vector3(Input.mousePosition.x,Input.mousePosition.y,-1 * mainCamera.transform.position.z);
 				
-		//Debug.Log(variableScript.isColliding);
+			mouseWorld = mainCamera.ScreenToWorldPoint(mouseScreen);
 				
-    	draggingObject.transform.position.x = mouseWorld.x - offSet.x;
-		draggingObject.transform.position.y = mouseWorld.y - offSet.y;
-		draggingObject.transform.position.z = 0;
+			variableScript = draggingObject.GetComponent("Element");
+					
+			//Debug.Log(variableScript.isColliding);
+					
+	    	draggingObject.transform.position.x = mouseWorld.x - offSet.x;
+			draggingObject.transform.position.y = mouseWorld.y - offSet.y;
+			
+			if(draggingObject.transform.position.y < draggingObject.transform.localScale.y * 0.5){
+				draggingObject.transform.position.y = draggingObject.transform.localScale.y * 0.5;			
+			}
+			
+			draggingObject.transform.position.z = 0;
 		}
 	   
 
