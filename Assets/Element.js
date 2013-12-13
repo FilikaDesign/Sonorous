@@ -78,15 +78,15 @@ function Start (){
 			
 			//Front
 		    cubeFront  = GameObject.CreatePrimitive(PrimitiveType.Cube);
-		    cubeFront.transform.localScale = Vector3(w,h,woodThickness);
-			cubeFront.transform.localPosition = Vector3(0,h * 0.5, -1 * depth * 0.5 + woodThickness*0.5);
+		    cubeFront.transform.localScale = Vector3(w-woodThickness * 2,h-woodThickness,woodThickness);
+			cubeFront.transform.localPosition = Vector3(0, h * 0.5 - 0.5* woodThickness, -1 * depth * 0.5 + woodThickness*0.5);
 			cubeFront.renderer.material.mainTexture = Resources.Load(Front, Texture2D);
 			cubeFront.transform.parent = elementContainer.transform;
 			
 			
 			}else if(params["nFrontFace"] == 2){
 			
-			
+			//things to do
 			//FrontUp
 		    cubeFrontUp  = GameObject.CreatePrimitive(PrimitiveType.Cube);
 		    cubeFrontUp.transform.localScale = Vector3(w,h*0.5-woodThickness*0.2,woodThickness);
@@ -104,7 +104,7 @@ function Start (){
 			
 			//Back
 		    cubeBack  = GameObject.CreatePrimitive(PrimitiveType.Cube);
-		    cubeBack.transform.localScale = Vector3(w,h,woodThickness);
+		    cubeBack.transform.localScale = Vector3(w-woodThickness * 2,h-woodThickness * 2,woodThickness);
 			cubeBack.transform.localPosition = Vector3(0,h * 0.5, depth * 0.5 - woodThickness*0.5);
 			cubeBack.renderer.material.mainTexture = Resources.Load(Back, Texture2D);
 			cubeBack.transform.parent = elementContainer.transform;
@@ -112,33 +112,44 @@ function Start (){
 			//Left
 		    cubeLeft  = GameObject.CreatePrimitive(PrimitiveType.Cube);
 		    cubeLeft.transform.localScale = Vector3(woodThickness,h,depth);
-			cubeLeft.transform.localPosition = Vector3(-1 * w * 0.5 + woodThickness*0.5,h * 0.5, 0);
+			cubeLeft.transform.localPosition = Vector3(-1 * w * 0.5 + 0.5*woodThickness, h * 0.5, 0);
 			cubeLeft.renderer.material.mainTexture = Resources.Load(Left, Texture2D);
 			cubeLeft.transform.parent = elementContainer.transform;
 			
 			//Right
 		    cubeRight  = GameObject.CreatePrimitive(PrimitiveType.Cube);
 		    cubeRight.transform.localScale = Vector3(woodThickness,h,depth);
-			cubeRight.transform.localPosition = Vector3(w * 0.5 - woodThickness*0.5,h * 0.5, 0);
+			cubeRight.transform.localPosition = Vector3(w * 0.5 - woodThickness*0.5, h * 0.5, 0);
 			cubeRight.renderer.material.mainTexture = Resources.Load(Right, Texture2D);
 			cubeRight.transform.parent = elementContainer.transform;
 			
+			
+			
+			
+			
+			
+			
+			
 			//Bottom
 		    cubeBottom  = GameObject.CreatePrimitive(PrimitiveType.Cube);
-		    cubeBottom.transform.localScale = Vector3(w,woodThickness,depth);
+		    cubeBottom.transform.localScale = Vector3(w-woodThickness * 2,woodThickness,depth-woodThickness * 2);
 			cubeBottom.transform.localPosition = Vector3(0,woodThickness*0.5, 0);
 			cubeBottom.renderer.material.mainTexture = Resources.Load(Bottom, Texture2D);
 			cubeBottom.transform.parent = elementContainer.transform;
 			
+			
+			
+			
+			
+			
 			//Top
 		    cubeTop  = GameObject.CreatePrimitive(PrimitiveType.Cube);
-		    cubeTop.transform.localScale = Vector3(w,woodThickness,depth);
-			cubeTop.transform.localPosition = Vector3(0,h, 0);
+		    cubeTop.transform.localScale = Vector3(w-woodThickness * 2,woodThickness,depth);
+			cubeTop.transform.localPosition = Vector3(0,h-woodThickness*0.5, 0);
 			cubeTop.renderer.material.mainTexture = Resources.Load(Top, Texture2D);
-			//cubeTop.renderer.material.color = Color.gray;
 			cubeTop.transform.parent = elementContainer.transform;
 			
-			
+							
 			if(hole ==  1){
 			//Hole
 		    cubeHole  = GameObject.CreatePrimitive(PrimitiveType.Cube);

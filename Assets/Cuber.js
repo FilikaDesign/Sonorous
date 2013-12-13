@@ -96,7 +96,7 @@ function Start () {
                         "Bottom":"H3375_ST22",
                         "Top":"200s",
                         "Hole":0,
-                        "nFrontFace":2,
+                        "nFrontFace":1,
                         "w":70,
                         "h":40,
                         "depth":50,
@@ -156,6 +156,7 @@ function Start () {
 	
 	var other : Element = eleman.GetComponent("Element");
 	other.params = parameters[0];
+	
 	
 	/////// 2
 	var eleman2 : GameObject = new GameObject("Kutu2");
