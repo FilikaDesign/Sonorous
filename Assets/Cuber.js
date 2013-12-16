@@ -32,7 +32,7 @@ private var snapFactor 	: int = 10;
 function Start () {
 	
 	//camera positioning
-	this.transform.position = Vector3(90,150,-250);
+	this.transform.position = Vector3(90,150,-300);
 	this.transform.Rotate(15,-5,0);
 	
 	// Make a game object
@@ -82,7 +82,7 @@ function Start () {
 	floor.name = "Floor";
 	var floorBoxCollider : BoxCollider = floor.GetComponent("BoxCollider");
 	floorBoxCollider.enabled = false;
-	floor.transform.position = Vector3(0,0,-120);
+	floor.transform.position = Vector3(0,-1,-120);
 	floor.transform.localScale = Vector3(800,2,300);
 	floor.transform.Rotate(0,0,0);
 	floor.renderer.material.mainTexture = Resources.Load("wooden-floor-texture", Texture2D);
@@ -121,7 +121,7 @@ function Start () {
                         "w":120,
                         "h":40,
                         "depth":50,
-                        "x":98,
+                        "x":70,
                         "y":0,
                         "isRigid":1
                         };
@@ -139,7 +139,7 @@ function Start () {
                         "w":40,
                         "h":80,
                         "depth":50,
-                        "x":178,
+                        "x":190,
                         "y":0,
                         "isRigid":1
                         };
@@ -185,6 +185,12 @@ function Update () {
 	var mainCamera = Camera.main;
 	var hit : RaycastHit;
 	
+	//gizmo
+	
+	
+	Debug.DrawLine (Vector3 (0, 0, 0), Vector3 (100, 0, 0), Color.red);
+	Debug.DrawLine (Vector3 (0, 0, 0), Vector3 (0, 100, 0), Color.blue);
+	Debug.DrawLine (Vector3 (0, 0, 0), Vector3 (0, 0, -100), Color.green);	
 	
 
 	if (Input.GetMouseButtonDown (0)){
@@ -234,8 +240,8 @@ function Update () {
 					
 	    	
 			
-			if(draggingObject.transform.position.y < draggingObject.transform.localScale.y * 0.5){
-				draggingObject.transform.position.y = draggingObject.transform.localScale.y * 0.5;			
+			if(draggingObject.transform.position.y < draggingObject.transform.localScale.y * 0.5 +1){
+				draggingObject.transform.position.y = draggingObject.transform.localScale.y * 0.5 +1;			
 			}
 			
 			draggingObject.transform.position.z = 0;
