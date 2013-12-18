@@ -209,15 +209,11 @@ function Update ()
 
 function OnTriggerEnter (collided : Collider) {
 
-		//Debug.Log(collided.gameObject.name);
 		
 		xPos = collided.gameObject.transform.position.x;
 		yPos = collided.gameObject.transform.position.y;
-		
-		//Debug.Log(xPos);
-		
-		isColliding = 1;
-		
+
+		isColliding = 1;	
 		
 }
 
@@ -227,6 +223,13 @@ function OnTriggerStay (collided : Collider) {
 		yPos = collided.gameObject.transform.position.y;
 		
 		isColliding = 1;
+		
+		var arr = new Array();
+
+		arr.push(xPos);
+		arr.push(yPos);
+		
+		GameObject.Find("Main Camera").SendMessage("CollisionAction",arr);
 		
 }
 

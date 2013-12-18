@@ -208,8 +208,7 @@ function Update () {
 				
 				offSet = mouseWorld-hit.transform.position;		
 			
-				Debug.Log(tempPosition);
-			    
+				
 			}
 		}
 			
@@ -226,7 +225,6 @@ function Update () {
 				
 			variableScript = draggingObject.GetComponent("Element");
 					
-			//Debug.Log(variableScript.isColliding);
 			
 			if(snapping == 1){
 			
@@ -253,7 +251,7 @@ function Update () {
 	if (Input.GetMouseButtonUp (0)){
 	
 		if(draggingObject){
-			Debug.Log(variableScript.isColliding);
+			//Debug.Log(variableScript.isColliding);
 		
 			if(variableScript.isColliding == 1){
 				//Collide ederken mouse burakırsa
@@ -265,6 +263,12 @@ function Update () {
 	}
 	
 	 
+}
+
+function CollisionAction(arr : Array){
+
+	Debug.Log(arr[0]);
+	
 }
 
 
