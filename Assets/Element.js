@@ -212,7 +212,6 @@ function OnTriggerEnter (collided : Collider) {
 		//Debug.Log(collided.gameObject.name);
 		
 		xPos = collided.gameObject.transform.position.x;
-		
 		yPos = collided.gameObject.transform.position.y;
 		
 		//Debug.Log(xPos);
@@ -222,17 +221,22 @@ function OnTriggerEnter (collided : Collider) {
 		
 }
 
+function OnTriggerStay (collided : Collider) {
+
+		xPos = collided.gameObject.transform.position.x;
+		yPos = collided.gameObject.transform.position.y;
+		
+		isColliding = 1;
+		
+}
+
 function OnTriggerExit (other : Collider) {
 		
 		isColliding = 0;
 
 }
 
-function OnTriggerStay (other : Collider) {
 
-		isColliding = 1;
-		
-}
 
 
 
