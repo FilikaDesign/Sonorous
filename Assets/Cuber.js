@@ -25,9 +25,22 @@ private var variableScript : Element;
 //drag edilen nesnenin koordinatı
 private var tempPosition : Vector3 = new Vector3(0,0,0);
 private var draggingObject : GameObject;
+private var draggingElementId : int;
 
-private var snapping 	: int = 0;
-private var snapFactor 	: int = 10;
+private var dragID		: int;
+private	var dragX 		: float;
+private	var dragY 		: float;
+private	var dragW 		: float;
+private	var dragH 		: float;
+	
+private	var staticID	: int;
+private	var staticX 	: float;
+private	var staticY 	: float;
+private	var staticW 	: float;
+private	var staticH 	: float;
+
+private var snapX		: float;
+private var snapY		: float;
 
 function Start () {
 	
@@ -90,7 +103,9 @@ function Start () {
 
 	
 	//create Parameter Data
-	var myStuffTex:Hashtable = {"Front":"H3375_ST22",
+	var myStuffTex:Hashtable = {"elementId":1,
+						"elementType":"EX",
+						"Front":"H3375_ST22",
                         "FrontUp":"200s",
                         "FrontDown":"200s",
                         "Back":"H3375_ST22",
@@ -100,7 +115,7 @@ function Start () {
                         "Top":"200s",
                         "Hole":0,
                         "nFrontFace":1,
-                        "w":70,
+                        "w":130,
                         "h":40,
                         "depth":50,
                         "x":0,
@@ -108,7 +123,9 @@ function Start () {
                         "isRigid":1
                         };
                         
-    var myStuffTex2:Hashtable = {"Front":"H3375_ST22",
+    var myStuffTex2:Hashtable = {"elementId":2,
+   						"elementType":"EX",
+    					"Front":"H3375_ST22",
                         "FrontUp":"200s",
                         "FrontDown":"200s",
                         "Back":"H3375_ST22",
@@ -118,7 +135,7 @@ function Start () {
                         "Top":"200s",
                         "Hole":1,
                         "nFrontFace":1,
-                        "w":120,
+                        "w":130,
                         "h":40,
                         "depth":50,
                         "x":70,
@@ -126,7 +143,9 @@ function Start () {
                         "isRigid":1
                         };
                         
-    var myStuffTex3:Hashtable = {"Front":"H3375_ST22",
+    var myStuffTex3:Hashtable = {"elementId":3,
+    					"elementType":"EX",
+    					"Front":"H3375_ST22",
                         "FrontUp":"200s",
                         "FrontDown":"200s",
                         "Back":"H3375_ST22",
@@ -136,8 +155,8 @@ function Start () {
                         "Top":"200s",
                         "Hole":0,
                         "nFrontFace":2,
-                        "w":40,
-                        "h":80,
+                        "w":65,
+                        "h":40,
                         "depth":50,
                         "x":190,
                         "y":0,
@@ -218,24 +237,20 @@ function Update () {
 	if (Input.GetMouseButton (0)){
 	
 		if(draggingObject){
+		
 	
 			mouseScreen = Vector3(Input.mousePosition.x,Input.mousePosition.y,-1 * mainCamera.transform.position.z);
 				
 			mouseWorld = mainCamera.ScreenToWorldPoint(mouseScreen);
 				
 			variableScript = draggingObject.GetComponent("Element");
+			
+			draggingElementId = variableScript.elementID;
 					
 			
-			if(snapping == 1){
-			
-				draggingObject.transform.position.x = (snapFactor * Mathf.Floor(mouseWorld.x/snapFactor))- offSet.x; 
-				draggingObject.transform.position.y = (snapFactor * Mathf.Floor(mouseWorld.y/snapFactor))- offSet.y; 
-			
-			}else{
-				draggingObject.transform.position.x = mouseWorld.x - offSet.x;
-				draggingObject.transform.position.y = mouseWorld.y - offSet.y;
-			}
-					
+			draggingObject.transform.position.x = mouseWorld.x - offSet.x;
+			draggingObject.transform.position.y = mouseWorld.y - offSet.y;
+		
 	    	
 			
 			if(draggingObject.transform.position.y < draggingObject.transform.localScale.y * 0.5 +1){
@@ -251,12 +266,15 @@ function Update () {
 	if (Input.GetMouseButtonUp (0)){
 	
 		if(draggingObject){
-			//Debug.Log(variableScript.isColliding);
+			
+			
 		
 			if(variableScript.isColliding == 1){
 				//Collide ederken mouse burakırsa
-				draggingObject.transform.position = tempPosition;
-			}
+				//draggingObject.transform.position = tempPosition;
+				draggingObject.transform.position.x = snapX;
+				draggingObject.transform.position.y = snapY;
+			} 
 				
 			draggingObject = null;
 		}
@@ -265,10 +283,49 @@ function Update () {
 	 
 }
 
-function CollisionAction(arr : Array){
+function CollisionSnap(arr : Array){
 
-	Debug.Log(arr[0]);
+	//Debug.Log(draggingElementId);
 	
+	
+	if(arr[0] == draggingElementId){
+		//drag edilen nesne ile ilgili bilgi
+		dragID = arr[0];
+		dragX = arr[1];
+		dragY = arr[2];
+		dragW = arr[3];
+		dragH = arr[4];
+		
+	}else if(arr[0] != draggingElementId){
+		//statik nesne ile ilgili bilgi
+		staticID = arr[0];
+		staticX = arr[1];
+		staticY = arr[2];
+		staticW = arr[3];	
+		staticH = arr[4];
+
+	}
+	
+	Debug.Log(dragY);	
+	
+	//sağında mı solunda mı?
+	//üstünde mi altında mı?
+	
+	if(dragX < staticX && dragY > staticY - dragH){
+		//solunda
+		snapX = staticX - dragW - 0.1;
+		snapY = staticY;
+	}else{
+		//sağında
+		snapX = staticX + staticW + 0.1;
+		snapY = staticY;
+	}
+	
+	
+	
+	
+	
+	//Debug.Log(snapX);
 }
 
 

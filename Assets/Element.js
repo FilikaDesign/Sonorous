@@ -3,6 +3,7 @@
 // Editted on mac mini filika tasarim
 // 12.10.2013
 
+var elementID		: int;
 var elementContainer: GameObject;
 var cubeFront 		: GameObject;
 var cubeFrontUp		: GameObject;
@@ -20,6 +21,8 @@ var yPos				: int = 0;
 var params:Hashtable = {};
 
 var isColliding			: int = 0;
+var wCol				: float; //colliding eden nesnenin genişliği
+var hCol				: float; //colliding eden nesnenin genişliği
 
 function Start (){
     	
@@ -27,11 +30,14 @@ function Start (){
     		elementContainer = new GameObject("Element Container");
     		elementContainer.transform.parent = this.transform;
     		
+    		elementID = params["elementId"];
 			
 			////
     		
     		var h:float = params["h"];
+    		hCol = h;
 			var w:float = params["w"];
+			wCol = w;
 			var depth:float = params["depth"];
 			var x:float = params["x"];
 			var y:float = params["y"];
@@ -225,11 +231,14 @@ function OnTriggerStay (collided : Collider) {
 		isColliding = 1;
 		
 		var arr = new Array();
-
-		arr.push(xPos);
-		arr.push(yPos);
+		arr.push(elementID);
+		arr.push(this.gameObject.transform.position.x);
+		arr.push(this.gameObject.transform.position.y);
+		arr.push(wCol);
+		arr.push(hCol);
 		
-		GameObject.Find("Main Camera").SendMessage("CollisionAction",arr);
+		
+		GameObject.Find("Main Camera").SendMessage("CollisionSnap",arr);
 		
 }
 
