@@ -110,7 +110,7 @@ function Start () {
                         "h":40,
                         "depth":50,
                         "x":0,
-                        "y":0,
+                        "y":20,
                         "isRigid":1
                         };
                         
@@ -129,7 +129,7 @@ function Start () {
                         "w":130,
                         "h":40,
                         "depth":50,
-                        "x":70,
+                        "x":130,
                         "y":0,
                         "isRigid":1
                         };
@@ -149,16 +149,37 @@ function Start () {
                         "w":65,
                         "h":40,
                         "depth":50,
-                        "x":190,
-                        "y":0,
+                        "x":260,
+                        "y":40,
                         "isRigid":1
                         };
+                        
+    var myStuffTex4:Hashtable = {"elementId":3,
+    					"elementType":"ED",
+    					"Front":"H3375_ST22",
+                        "FrontUp":"200s",
+                        "FrontDown":"200s",
+                        "Back":"H3375_ST22",
+                        "Left":"H3375_ST22",
+                        "Right":"H3375_ST22",
+                        "Bottom":"H3375_ST22",
+                        "Top":"200s",
+                        "Hole":0,
+                        "nFrontFace":2,
+                        "w":65,
+                        "h":40,
+                        "depth":50,
+                        "x":-65,
+                        "y":60,
+                        "isRigid":1
+                        };                    
     //////
            
 	//Add parameter data to ArrayList
 	parameters.Add(myStuffTex);
 	parameters.Add(myStuffTex2);
 	parameters.Add(myStuffTex3);
+	parameters.Add(myStuffTex4);
 	/////
 	
 	
@@ -186,6 +207,13 @@ function Start () {
 	
 	var other3 : Element = eleman3.GetComponent("Element");
 	other3.params = parameters[2];
+	
+	//////// 4
+	var eleman4 : GameObject = new GameObject("Kutu4");
+	eleman4.AddComponent("Element");
+	
+	var other4 : Element = eleman4.GetComponent("Element");
+	other4.params = parameters[3];
 	
 
 }
@@ -294,42 +322,61 @@ function Update () {
 
 function RulesEngine(){
 
+		var othersX	: int;
+		var othersY : int;
+		var othersH : int;
+		var othersW : int;
+		
+		var deltaW : int;
+		
+		var considerX : int;
+		var considerY : int;
+		var considerH : int;
+		var considerW : int;
+		
+		considerX = parameters[draggingElementId]["x"];
+		considerY = parameters[draggingElementId]["y"];
+		considerH = parameters[draggingElementId]["h"];
+		considerW = parameters[draggingElementId]["w"];
+
 		// Rule 1 : EX ÜST ÜSTE OLMAZ
 		
 		if(parameters[draggingElementId]["elementType"] == "EX"){
 			
-			
+			Debug.Log("1 : EX rule");
 			for(var i : int = 0; i < parameters.Count; i++){
 			
-				if(i != draggingElementId){
+				if(i != draggingElementId && parameters[i]["elementType"] == "EX"){
 				
-					var othersX	: int = parameters[i]["x"];
-					var othersY : int = parameters[i]["y"];
-					var othersH : int = parameters[i]["h"];
-					var othersW : int = parameters[i]["w"];
+					othersX = parameters[i]["x"];
+					othersY = parameters[i]["y"];
+					othersH = parameters[i]["h"];
+					othersW = parameters[i]["w"];
 					
-					var considerX : int = parameters[draggingElementId]["x"];
-					var considerY : int = parameters[draggingElementId]["y"];
-					var considerH : int = parameters[draggingElementId]["h"];
-					var considerW : int = parameters[draggingElementId]["w"];
+					if(Mathf.Min(othersX,considerX) == othersX){
+						
+							//others solda
+							deltaW = othersW;
+						
+					}else{
+							//others solda
+							deltaW = considerW;
+						
+					}
 					
 				
 					if(//conditions
-					
-					(parameters[i]["elementType"] == "EX")
-					
-					&&
 					
 					(Mathf.Abs(othersY - considerY) == considerH) //yukarda aşağıda
 					
 					&&
 					
-					(Mathf.Abs(othersX - considerX) < Mathf.Min(othersW,considerW)) // arasında
+					(Mathf.Abs(othersX - considerX) < deltaW) // arasında
 					
 					
 					){
 						
-						Debug.Log("ust uste olmaaaaz");
+						Debug.Log("1 : EX ust uste olmaaaaz");
 						break;
 					}
 				
@@ -339,6 +386,151 @@ function RulesEngine(){
 		
 		}
 		
+		// Rule 2 : ED ÜST ÜSTE OLMAZ
 		
+		if(parameters[draggingElementId]["elementType"] == "ED"){
+			
+			Debug.Log("2 : ED rule");
+			for(var j : int = 0; j < parameters.Count; j++){
+			
+				if(j != draggingElementId && parameters[j]["elementType"] == "ED"){
+					
+					othersX = parameters[j]["x"];
+					othersY = parameters[j]["y"];
+					othersH = parameters[j]["h"];
+					othersW = parameters[j]["w"];
+					
+					if(Mathf.Min(othersX,considerX) == othersX){
+						
+							//others solda
+							deltaW = othersW;
+						
+					}else{
+							//others solda
+							deltaW = considerW;
+						
+					}
+		
+					if(//conditions
+
+					
+					(Mathf.Abs(othersY - considerY) == considerH) //yukarda aşağıda
+					
+					&&
+					
+					(Mathf.Abs(othersX - considerX) < deltaW) // arasında
+					
+					
+					){
+						
+						Debug.Log("2 : ED ust uste olmaaaaz");
+						break;
+					}
+				
+				}
+				
+			}
+		
+		}
+		
+		// Rule 3 : ED EX’in ÜSTÜNE GELEBİLİR. TAM TERSİ OLAMAZ. = EX ED'in üstüne gelemez
+		
+		if(parameters[draggingElementId]["elementType"] == "EX"){
+		
+			Debug.Log("3 : ED EX rule");
+		
+			for(var k : int = 0; k < parameters.Count; k++){
+			
+				if(k != draggingElementId && parameters[k]["elementType"] == "ED"){
+						//static ED'ler
+						othersX = parameters[k]["x"];
+						othersY = parameters[k]["y"];
+						othersH = parameters[k]["h"];
+						othersW = parameters[k]["w"];
+						
+						
+						
+						if(Mathf.Min(othersX,considerX) == othersX){
+						
+							//others solda
+							deltaW = othersW;
+						
+						}else{
+							//others solda
+							deltaW = considerW;
+						
+						}
+						
+						if(//conditions
+
+					
+						(considerY - othersY == considerH) //yukarda 
+						
+						&&
+						
+						(Mathf.Abs(othersX - considerX) < deltaW) // arasında
+						
+						
+						){
+							
+							Debug.Log("3 : EX ED'in üstüne gelemez");
+							break;
+						}
+				
+				
+				}
+			
+			
+			}
+		}
+		
+		if(parameters[draggingElementId]["elementType"] == "ED"){
+		
+			Debug.Log("3 : ED EX rule");
+		
+			for(var m : int = 0; m < parameters.Count; m++){
+			
+				if(m != draggingElementId && parameters[m]["elementType"] == "EX"){
+						//static EX'ler
+						othersX = parameters[m]["x"];
+						othersY = parameters[m]["y"];
+						othersH = parameters[m]["h"];
+						othersW = parameters[m]["w"];
+						
+						
+						
+						if(Mathf.Min(othersX,considerX) == othersX){
+						
+							//others solda
+							deltaW = othersW;
+						
+						}else{
+							//others solda
+							deltaW = considerW;
+						
+						}
+						
+						if(//conditions
+
+					
+						(othersY - considerY == considerH) //yukarda aşağıda
+						
+						&&
+						
+						(Mathf.Abs(othersX - considerX) < deltaW) // arasında
+						
+						
+						){
+							
+							Debug.Log("3 : EX ED'in üstüne gelemez");
+							break;
+						}
+				
+				
+				}
+			
+			
+			}
+		}
 
 }
