@@ -27,20 +27,11 @@ private var tempPosition : Vector3 = new Vector3(0,0,0);
 private var draggingObject : GameObject;
 private var draggingElementId : int;
 
-private var dragID		: int;
-private	var dragX 		: float;
-private	var dragY 		: float;
-private	var dragW 		: float;
-private	var dragH 		: float;
-	
-private	var staticID	: int;
-private	var staticX 	: float;
-private	var staticY 	: float;
-private	var staticW 	: float;
-private	var staticH 	: float;
 
-private var snapX		: float;
-private var snapY		: float;
+private var snapFactor	: float = 5;
+private var snapEnable 	: boolean = true;
+
+
 
 function Start () {
 	
@@ -103,7 +94,7 @@ function Start () {
 
 	
 	//create Parameter Data
-	var myStuffTex:Hashtable = {"elementId":1,
+	var myStuffTex:Hashtable = {"elementId":0,
 						"elementType":"EX",
 						"Front":"H3375_ST22",
                         "FrontUp":"200s",
@@ -123,7 +114,7 @@ function Start () {
                         "isRigid":1
                         };
                         
-    var myStuffTex2:Hashtable = {"elementId":2,
+    var myStuffTex2:Hashtable = {"elementId":1,
    						"elementType":"EX",
     					"Front":"H3375_ST22",
                         "FrontUp":"200s",
@@ -143,8 +134,8 @@ function Start () {
                         "isRigid":1
                         };
                         
-    var myStuffTex3:Hashtable = {"elementId":3,
-    					"elementType":"EX",
+    var myStuffTex3:Hashtable = {"elementId":2,
+    					"elementType":"ED",
     					"Front":"H3375_ST22",
                         "FrontUp":"200s",
                         "FrontDown":"200s",
@@ -247,9 +238,20 @@ function Update () {
 			
 			draggingElementId = variableScript.elementID;
 					
+					
+			if(snapEnable){
+				draggingObject.transform.position.x = (snapFactor * Mathf.Floor((mouseWorld.x- offSet.x)/snapFactor)); 
+	       		draggingObject.transform.position.y = (snapFactor * Mathf.Floor((mouseWorld.y- offSet.y)/snapFactor)); 
+	       		
+	       		//Debug.Log(snapX);
+					
+			}
+			else{
+				draggingObject.transform.position.x = mouseWorld.x - offSet.x;
+				draggingObject.transform.position.y = mouseWorld.y - offSet.y;		
+			}		
 			
-			draggingObject.transform.position.x = mouseWorld.x - offSet.x;
-			draggingObject.transform.position.y = mouseWorld.y - offSet.y;
+			
 		
 	    	
 			
@@ -268,13 +270,20 @@ function Update () {
 		if(draggingObject){
 			
 			
-		
+			
+			
+			
 			if(variableScript.isColliding == 1){
 				//Collide ederken mouse burakırsa
-				//draggingObject.transform.position = tempPosition;
-				draggingObject.transform.position.x = snapX;
-				draggingObject.transform.position.y = snapY;
+				draggingObject.transform.position = tempPosition;
+				//draggingObject.transform.position.x = snapX;
+				//draggingObject.transform.position.y = snapY;
 			} 
+			
+			parameters[draggingElementId]["x"] = draggingObject.transform.position.x;
+			parameters[draggingElementId]["y"] = draggingObject.transform.position.y;
+			
+			RulesEngine();
 				
 			draggingObject = null;
 		}
@@ -283,49 +292,49 @@ function Update () {
 	 
 }
 
-function CollisionSnap(arr : Array){
+function RulesEngine(){
 
-	//Debug.Log(draggingElementId);
-	
-	
-	if(arr[0] == draggingElementId){
-		//drag edilen nesne ile ilgili bilgi
-		dragID = arr[0];
-		dragX = arr[1];
-		dragY = arr[2];
-		dragW = arr[3];
-		dragH = arr[4];
+		// Rule 1 : EX ÜST ÜSTE OLMAZ
 		
-	}else if(arr[0] != draggingElementId){
-		//statik nesne ile ilgili bilgi
-		staticID = arr[0];
-		staticX = arr[1];
-		staticY = arr[2];
-		staticW = arr[3];	
-		staticH = arr[4];
+		if(parameters[draggingElementId]["elementType"] == "EX"){
+			
+			
+			for(var i : int = 0; i < parameters.Count; i++){
+			
+				if(i != draggingElementId){
+				
+					var othersX	: int = parameters[i]["x"];
+					var othersY : int = parameters[i]["y"];
+					var othersH : int = parameters[i]["h"];
+					var othersW : int = parameters[i]["w"];
+					
+					var considerX : int = parameters[draggingElementId]["x"];
+					var considerY : int = parameters[draggingElementId]["y"];
+					var considerH : int = parameters[draggingElementId]["h"];
+					var considerW : int = parameters[draggingElementId]["w"];
+					
+					Debug.Log(Mathf.Abs(othersX - considerY));
+				
+					if(//conditions
+					
+					(Mathf.Abs(othersY - considerY) == considerH) //yukarda aşağıda
+					
+					&&
+					
+					(Mathf.Abs(othersX - considerY) < Mathf.Min(othersW,considerW)) // arasında
+					
+					
+					){
+						
+						Debug.Log("ust uste olmaaaaz");
+					}
+				
+				}
+				
+			}
+		
+		}
+		
+		
 
-	}
-	
-	Debug.Log(dragY);	
-	
-	//sağında mı solunda mı?
-	//üstünde mi altında mı?
-	
-	if(dragX < staticX && dragY > staticY - dragH){
-		//solunda
-		snapX = staticX - dragW - 0.1;
-		snapY = staticY;
-	}else{
-		//sağında
-		snapX = staticX + staticW + 0.1;
-		snapY = staticY;
-	}
-	
-	
-	
-	
-	
-	//Debug.Log(snapX);
 }
-
-

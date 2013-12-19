@@ -53,6 +53,8 @@ function Start (){
 			sc.center.x =  0.5;
 			sc.center.y =  0;
 			sc.center.z =  -1 * 0.5;
+			sc.size.x = 0.99;
+			sc.size.y = 0.99;
 			
 			
 			
@@ -229,7 +231,7 @@ function OnTriggerStay (collided : Collider) {
 		yPos = collided.gameObject.transform.position.y;
 		
 		isColliding = 1;
-		
+		/*
 		var arr = new Array();
 		arr.push(elementID);
 		arr.push(this.gameObject.transform.position.x);
@@ -239,6 +241,7 @@ function OnTriggerStay (collided : Collider) {
 		
 		
 		GameObject.Find("Main Camera").SendMessage("CollisionSnap",arr);
+		*/
 		
 }
 
