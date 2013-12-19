@@ -313,20 +313,24 @@ function RulesEngine(){
 					var considerH : int = parameters[draggingElementId]["h"];
 					var considerW : int = parameters[draggingElementId]["w"];
 					
-					Debug.Log(Mathf.Abs(othersX - considerY));
 				
 					if(//conditions
+					
+					(parameters[i]["elementType"] == "EX")
+					
+					&&
 					
 					(Mathf.Abs(othersY - considerY) == considerH) //yukarda aşağıda
 					
 					&&
 					
-					(Mathf.Abs(othersX - considerY) < Mathf.Min(othersW,considerW)) // arasında
+					(Mathf.Abs(othersX - considerX) < Mathf.Min(othersW,considerW)) // arasında
 					
 					
 					){
 						
 						Debug.Log("ust uste olmaaaaz");
+						break;
 					}
 				
 				}
