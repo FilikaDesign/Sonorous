@@ -1,9 +1,8 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Element.js">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Cuber.js">
     <Files>
-      <File FileName="Assets\Cuber.js" Line="50" Column="19" />
-      <File FileName="Assets\Element.js" Line="57" Column="20" />
+      <File FileName="Assets/Cuber.js" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

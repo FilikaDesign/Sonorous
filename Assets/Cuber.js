@@ -49,6 +49,7 @@ private var w:int = 240;
 private var ml:int = 5;
 private var tfH:int = 20;
 
+public var sonorousGUISkin:GUISkin;
 
 //
 
@@ -615,6 +616,8 @@ private var guiRect:LTRect = new LTRect( Screen.width, 0,w, Screen.height );
 private var guiPosX:int = Screen.width;
 function OnGUI() {
 	
+	GUI.skin = sonorousGUISkin;
+	
 	if(GUI.Button(Rect(0,0,100,25),"Inspector")) {
 		
 		if(iSwitch)
@@ -654,12 +657,14 @@ function hideInspector() {
 
 function showInspector() {
 	
-	
+	var customButton : GUIStyle;
 	GUI.BeginGroup (guiRect.rect);
 	
+	//GUI.backgroundColor = Color(0,0,0,0.7);
+	GUI.color.a = 0.9;
 	GUI.Box(Rect(0, 0, w, Screen.height),"");
 	
-	GUI.backgroundColor = Color(0,0,0,0);
+	
 	
 	GUI.Label(Rect(ml,ml,w,20),"Element Type");
 	GUI.Label(Rect(ml,ml+tfH,w,20),"Element Size");
@@ -684,6 +689,36 @@ function showInspector() {
 	GUI.Label(Rect(ml+startx,ml+tfH*7,w,20),": " + elementR);
 	GUI.Label(Rect(ml+startx,ml+tfH*8,w,20),": " + elementBO);
 	GUI.Label(Rect(ml+startx,ml+tfH*9,w,20),": " + elementT);
-
+	
+	if(GUI.Button(Rect(ml,ml+tfH*10,200,20),"Add Element")) {
+		var myStuffTex5:Hashtable = {"elementId":4,
+						"elementType":"EX",
+						"Front":"H3375_ST22",
+                        "FrontUp":"200s",
+                        "FrontDown":"200s",
+                        "Back":"H3375_ST22",
+                        "Left":"H3375_ST22",
+                        "Right":"H3375_ST22",
+                        "Bottom":"H3375_ST22",
+                        "Top":"200s",
+                        "Hole":0,
+                        "nFrontFace":1,
+                        "w":130,
+                        "h":80,
+                        "depth":50,
+                        "x":-230,
+                        "y":20,
+                        "isRigid":1
+                        };
+        
+        parameters.Add(myStuffTex5);
+        
+        var eleman4 : GameObject = new GameObject("Kutu5");
+		eleman4.AddComponent("Element");
+	
+        var other4 : Element = eleman4.GetComponent("Element");
+		other4.params = parameters[4];
+	}
+	
 	GUI.EndGroup ();
 }
