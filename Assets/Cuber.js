@@ -28,7 +28,7 @@ private var draggingObject : GameObject;
 private var draggingElementId : int;
 
 
-private var snapFactor	: float = 5;
+private var snapFactor	: float = 2;
 private var snapEnable 	: boolean = true;
 
 // GUI
@@ -48,6 +48,8 @@ private var elementT:String = "none";
 private var w:int = 240;
 private var ml:int = 5;
 private var tfH:int = 20;
+
+
 //
 
 
@@ -129,7 +131,8 @@ function Start () {
                         "depth":50,
                         "x":0,
                         "y":20,
-                        "isRigid":1
+                        "isRigid":1,
+                        "baseHeight":0
                         };
                         
     var myStuffTex2:Hashtable = {"elementId":1,
@@ -149,7 +152,8 @@ function Start () {
                         "depth":50,
                         "x":130,
                         "y":0,
-                        "isRigid":1
+                        "isRigid":1,
+                        "baseHeight":0
                         };
                         
     var myStuffTex3:Hashtable = {"elementId":2,
@@ -169,7 +173,8 @@ function Start () {
                         "depth":50,
                         "x":260,
                         "y":40,
-                        "isRigid":1
+                        "isRigid":1,
+                        "baseHeight":0
                         };
                         
     var myStuffTex4:Hashtable = {"elementId":3,
@@ -189,27 +194,10 @@ function Start () {
                         "depth":50,
                         "x":-65,
                         "y":60,
-                        "isRigid":1
+                        "isRigid":1,
+                        "baseHeight":0
                         };   
-	var myStuffTex5:Hashtable = {"elementId":4,
-    					"elementType":"Base",
-    					"Front":"200s",
-                        "FrontUp":"200s",
-                        "FrontDown":"200s",
-                        "Back":"200s",
-                        "Left":"200s",
-                        "Right":"200s",
-                        "Bottom":"200s",
-                        "Top":"200s",
-                        "Hole":0,
-                        "nFrontFace":1,
-                        "w":65,
-                        "h":8,
-                        "depth":46,
-                        "x":-165,
-                        "y":60,
-                        "isRigid":1
-                        };                                          
+	                                        
     //////
            
 	//Add parameter data to ArrayList
@@ -217,7 +205,6 @@ function Start () {
 	parameters.Add(myStuffTex2);
 	parameters.Add(myStuffTex3);
 	parameters.Add(myStuffTex4);
-	parameters.Add(myStuffTex5);
 	/////
 	
 	
@@ -253,12 +240,7 @@ function Start () {
 	var other4 : Element = eleman4.GetComponent("Element");
 	other4.params = parameters[3];
 	
-	//////// 5
-	var eleman5 : GameObject = new GameObject("Baza");
-	eleman5.AddComponent("Element");
 	
-	var other5 : Element = eleman5.GetComponent("Element");
-	other5.params = parameters[4];
 	
 	
 
@@ -344,11 +326,12 @@ function Update () {
 			}		
 			
 			
-		
-	    	
 			
-			if(draggingObject.transform.position.y < draggingObject.transform.localScale.y * 0.5 +1){
-				draggingObject.transform.position.y = draggingObject.transform.localScale.y * 0.5 +1;			
+	    	var dragBaseHeight : int = parameters[draggingElementId]["baseHeight"];
+			
+			if(draggingObject.transform.position.y - draggingObject.transform.localScale.y * 0.5 - dragBaseHeight
+				< floor.gameObject.transform.position.y - floor.gameObject.transform.localScale.y * 0.5){
+				draggingObject.transform.position.y = draggingObject.transform.localScale.y * 0.5 + dragBaseHeight;			
 			}
 			
 			draggingObject.transform.position.z = 0;
@@ -618,7 +601,8 @@ function RulesEngine(){
 			
 			}else{
 				Debug.Log("6 : Yerdeki tüm ürünler (EX) bir baza seçeneğine sahip olmak zorunda.");
-			
+				GameObject.Find(draggingObject.name).SendMessage("createBase",8);
+				
 			}
 		
 		}

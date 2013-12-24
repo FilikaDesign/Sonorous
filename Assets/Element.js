@@ -15,14 +15,15 @@ var cubeBottom 		: GameObject;
 var cubeTop 		: GameObject;
 var cubeHole 		: GameObject;
 var woodThickness 	: float = 1;
+var w				:float;
+var h				:float;
+var depth			:float;
 
 var xPos				: int = 0;
 var yPos				: int = 0;
 var params:Hashtable = {};
 
 var isColliding			: int = 0;
-var wCol				: float; //colliding eden nesnenin genişliği
-var hCol				: float; //colliding eden nesnenin genişliği
 
 
 function Start (){
@@ -35,11 +36,9 @@ function Start (){
 			
 			////
     		
-    		var h:float = params["h"];
-    		hCol = h;
-			var w:float = params["w"];
-			wCol = w;
-			var depth:float = params["depth"];
+    		h = params["h"];
+			w = params["w"];
+			depth = params["depth"];
 			var x:float = params["x"];
 			var y:float = params["y"];
 			
@@ -54,8 +53,8 @@ function Start (){
 			sc.center.x =  0.5;
 			sc.center.y =  0;
 			sc.center.z =  -1 * 0.5;
-			sc.size.x = 0.99;
-			sc.size.y = 0.99;
+			sc.size.x = 0.95;
+			sc.size.y = 0.95;
 			
 			
 			
@@ -250,6 +249,19 @@ function OnTriggerExit (other : Collider) {
 		
 		isColliding = 0;
 
+}
+
+function createBase(size : int){
+if(params["baseHeight"] == 0){
+		Debug.Log("Baza yarat");
+		params["baseHeight"] = size;
+		var baseElement: GameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+		baseElement.transform.localScale = Vector3(w,size,depth-2);
+		baseElement.transform.position.x = elementContainer.transform.position.x + w * 0.5;
+		baseElement.transform.position.z = elementContainer.transform.position.z - depth * 0.5 + 1;
+		baseElement.renderer.material.color = Color.gray;
+		baseElement.transform.parent = elementContainer.transform;
+	}
 }
 
 
