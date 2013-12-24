@@ -190,7 +190,26 @@ function Start () {
                         "x":-65,
                         "y":60,
                         "isRigid":1
-                        };                    
+                        };   
+	var myStuffTex5:Hashtable = {"elementId":4,
+    					"elementType":"Base",
+    					"Front":"200s",
+                        "FrontUp":"200s",
+                        "FrontDown":"200s",
+                        "Back":"200s",
+                        "Left":"200s",
+                        "Right":"200s",
+                        "Bottom":"200s",
+                        "Top":"200s",
+                        "Hole":0,
+                        "nFrontFace":1,
+                        "w":65,
+                        "h":8,
+                        "depth":46,
+                        "x":-165,
+                        "y":60,
+                        "isRigid":1
+                        };                                          
     //////
            
 	//Add parameter data to ArrayList
@@ -198,6 +217,7 @@ function Start () {
 	parameters.Add(myStuffTex2);
 	parameters.Add(myStuffTex3);
 	parameters.Add(myStuffTex4);
+	parameters.Add(myStuffTex5);
 	/////
 	
 	
@@ -232,6 +252,13 @@ function Start () {
 	
 	var other4 : Element = eleman4.GetComponent("Element");
 	other4.params = parameters[3];
+	
+	//////// 5
+	var eleman5 : GameObject = new GameObject("Baza");
+	eleman5.AddComponent("Element");
+	
+	var other5 : Element = eleman5.GetComponent("Element");
+	other5.params = parameters[4];
 	
 	
 
@@ -568,6 +595,32 @@ function RulesEngine(){
 			
 			
 			}
+		}
+		
+		// Rule 4 : ED YERDE OLAMAZ.
+		
+		if(parameters[draggingElementId]["elementType"] == "ED"){
+			
+			if(considerY - considerH * 0.5 < snapFactor){
+				Debug.Log("4 : ED YERDE OLAMAZ");
+			
+			}
+		
+		}
+		
+		// Rule 5 : EX DUVARDA OLAMAZ (ASILAMAZ). HER ZAMAN YERDE OLMALI
+		// Rule 6 : Yerdeki tüm ürünler (EX) bir baza seçeneğine sahip olmak zorunda.
+		
+		if(parameters[draggingElementId]["elementType"] == "EX"){
+			
+			if(considerY - considerH * 0.5 >= snapFactor){
+				Debug.Log("5 : EX DUVARDA OLAMAZ (ASILAMAZ). HER ZAMAN YERDE OLMALI");
+			
+			}else{
+				Debug.Log("6 : Yerdeki tüm ürünler (EX) bir baza seçeneğine sahip olmak zorunda.");
+			
+			}
+		
 		}
 }
 
