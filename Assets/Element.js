@@ -1,7 +1,7 @@
 #pragma strict
 
-// Editted on mac mini filika tasarim
-// 12.10.2013
+// Editted by alp
+// 24.12.2013
 
 var elementID		: int;
 var elementContainer: GameObject;
@@ -23,6 +23,7 @@ var params:Hashtable = {};
 var isColliding			: int = 0;
 var wCol				: float; //colliding eden nesnenin genişliği
 var hCol				: float; //colliding eden nesnenin genişliği
+
 
 function Start (){
     	

@@ -31,6 +31,24 @@ private var draggingElementId : int;
 private var snapFactor	: float = 5;
 private var snapEnable 	: boolean = true;
 
+// GUI
+private var iSwitch:boolean = true;  
+
+private var elementSize:String = "0x0";
+private var elementType:String = "default";
+private var elementF:String = "none";
+private var elementFU:String = "none";
+private var elementFD:String = "none";
+private var elementL:String = "none";
+private var elementR:String = "none";
+private var elementB:String = "none";
+private var elementBO:String = "none";
+private var elementT:String = "none";
+
+private var w:int = 240;
+private var ml:int = 5;
+private var tfH:int = 20;
+//
 
 
 function Start () {
@@ -215,6 +233,7 @@ function Start () {
 	var other4 : Element = eleman4.GetComponent("Element");
 	other4.params = parameters[3];
 	
+	
 
 }
 
@@ -247,6 +266,24 @@ function Update () {
 				offSet = mouseWorld-hit.transform.position;		
 			
 				
+				/* GUI Parameter */	
+				variableScript = draggingObject.GetComponent("Element");
+				draggingElementId = variableScript.elementID;
+				
+				var w:int = parameters[draggingElementId]["w"];
+				var h:int = parameters[draggingElementId]["h"];
+				var d:int = parameters[draggingElementId]["depth"];
+				elementType = parameters[draggingElementId]["elementType"];
+				elementSize = w.ToString() + "x" + h.ToString() + "x" + d.ToString();
+				elementF 	= parameters[draggingElementId]["Front"];
+				elementFU 	= parameters[draggingElementId]["FrontUp"];
+				elementFD 	= parameters[draggingElementId]["FrontDown"];
+				elementB 	= parameters[draggingElementId]["Back"];
+				elementL 	= parameters[draggingElementId]["Left"];
+				elementR 	= parameters[draggingElementId]["Right"];
+				elementBO 	= parameters[draggingElementId]["Bottom"];
+				elementT 	= parameters[draggingElementId]["Top"];
+				//
 			}
 		}
 			
@@ -532,5 +569,84 @@ function RulesEngine(){
 			
 			}
 		}
+}
 
+/*************************************************************************************************
+**************** GUI *****************************************************************************
+**************************************************************************************************/
+private var guiRect:LTRect = new LTRect( Screen.width, 0,w, Screen.height );
+private var guiPosX:int = Screen.width;
+function OnGUI() {
+	
+	if(GUI.Button(Rect(0,0,100,25),"Inspector")) {
+		
+		if(iSwitch)
+			guiPosX = Screen.width-w;
+		else
+			guiPosX = guiPosX+w;
+			
+			
+			
+			
+		LeanTween.move( guiRect, Vector2(guiPosX, 0), 0.25 );
+		//d.setOnComplete( tweenFinished );
+		
+		iSwitch =  !iSwitch;
+	}
+	
+	if(iSwitch) {
+		//hideInspector();
+		
+	}else {
+		//showInspector();
+	}
+	showInspector();
+	
+}
+
+function tweenFinished() {
+	//LeanTween.move( guiRect, Vector2(Screen.width, 0), 0.25 ).setOnComplete(tweenFinished);
+	Debug.Log(guiRect.rect.x);
+}
+
+
+function hideInspector() {
+
+}
+
+
+function showInspector() {
+	
+	
+	GUI.BeginGroup (guiRect.rect);
+	
+	GUI.Box(Rect(0, 0, w, Screen.height),"");
+	
+	GUI.backgroundColor = Color(0,0,0,0);
+	
+	GUI.Label(Rect(ml,ml,w,20),"Element Type");
+	GUI.Label(Rect(ml,ml+tfH,w,20),"Element Size");
+	GUI.Label(Rect(ml,ml+tfH*2,w,20),"Texture Front");
+	GUI.Label(Rect(ml,ml+tfH*3,w,20),"Texture FrontUp");
+	GUI.Label(Rect(ml,ml+tfH*4,w,20),"Texture FrontDown");
+	GUI.Label(Rect(ml,ml+tfH*5,w,20),"Texture Back");
+	GUI.Label(Rect(ml,ml+tfH*6,w,20),"Texture Left");
+	GUI.Label(Rect(ml,ml+tfH*7,w,20),"Texture Right");
+	GUI.Label(Rect(ml,ml+tfH*8,w,20),"Texture Bottom");
+	GUI.Label(Rect(ml,ml+tfH*9,w,20),"Texture Top");
+	
+	var startx:int = 122;
+				
+	GUI.Label(Rect(ml+startx,ml,w,20),": "+ elementType);
+	GUI.Label(Rect(ml+startx,ml+tfH,w,20),": "+ elementSize);
+	GUI.Label(Rect(ml+startx,ml+tfH*2,w,20),": " + elementF);
+	GUI.Label(Rect(ml+startx,ml+tfH*3,w,20),": " + elementFU);
+	GUI.Label(Rect(ml+startx,ml+tfH*4,w,20),": " + elementFD);
+	GUI.Label(Rect(ml+startx,ml+tfH*5,w,20),": " + elementB);
+	GUI.Label(Rect(ml+startx,ml+tfH*6,w,20),": " + elementL);
+	GUI.Label(Rect(ml+startx,ml+tfH*7,w,20),": " + elementR);
+	GUI.Label(Rect(ml+startx,ml+tfH*8,w,20),": " + elementBO);
+	GUI.Label(Rect(ml+startx,ml+tfH*9,w,20),": " + elementT);
+
+	GUI.EndGroup ();
 }
