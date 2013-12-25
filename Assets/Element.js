@@ -53,8 +53,8 @@ function Start (){
 			sc.center.x =  0.5;
 			sc.center.y =  0;
 			sc.center.z =  -1 * 0.5;
-			sc.size.x = 0.95;
-			sc.size.y = 0.95;
+			sc.size.x = 0.9999999;
+			sc.size.y = 0.9999999;
 			
 			
 			
@@ -222,6 +222,7 @@ function OnTriggerEnter (collided : Collider) {
 		yPos = collided.gameObject.transform.position.y;
 
 		isColliding = 1;	
+		//Debug.Log(isColliding);
 		
 }
 
@@ -231,6 +232,7 @@ function OnTriggerStay (collided : Collider) {
 		yPos = collided.gameObject.transform.position.y;
 		
 		isColliding = 1;
+		//Debug.Log(isColliding);
 		/*
 		var arr = new Array();
 		arr.push(elementID);
@@ -253,7 +255,7 @@ function OnTriggerExit (other : Collider) {
 
 function createBase(size : int){
 if(params["baseHeight"] == 0){
-		Debug.Log("Baza yarat");
+		//Debug.Log("Baza yarat");
 		params["baseHeight"] = size;
 		var baseElement: GameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
 		baseElement.transform.localScale = Vector3(w,size,depth-2);

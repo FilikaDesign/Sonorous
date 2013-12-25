@@ -25,6 +25,7 @@ private var variableScript : Element;
 //drag edilen nesnenin koordinatı
 private var tempPosition : Vector3 = new Vector3(0,0,0);
 private var draggingObject : GameObject;
+private var preDraggingObj:GameObject;
 private var draggingElementId : int;
 
 
@@ -33,6 +34,12 @@ private var snapEnable 	: boolean = true;
 
 // GUI
 private var iSwitch:boolean = true;  
+private var guiState:String = "default";
+private var guiNotification:String = "";
+
+// toggle state
+private var inch2:boolean = false;
+private var inch8:boolean = false;
 
 private var elementSize:String = "0x0";
 private var elementType:String = "default";
@@ -47,6 +54,8 @@ private var elementT:String = "none";
 
 private var w:int = 240;
 private var ml:int = 5;
+private var mt:int = 8;
+private var bMargin:int = 5;
 private var tfH:int = 20;
 
 public var sonorousGUISkin:GUISkin;
@@ -260,7 +269,7 @@ function Update () {
 	Debug.DrawLine (Vector3 (0, 0, 0), Vector3 (0, 0, -100), Color.green);	
 	
 
-	if (Input.GetMouseButtonDown (0)){
+	if (Input.GetMouseButtonDown (0) && iSwitch){
 	
 		if( Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition),  hit ) ) {
 		
@@ -300,7 +309,7 @@ function Update () {
 	
 	}
 	
-	if (Input.GetMouseButton (0)){
+	if (Input.GetMouseButton (0)&& iSwitch){
 	
 		if(draggingObject){
 		
@@ -341,12 +350,9 @@ function Update () {
 
 	}
 	
-	if (Input.GetMouseButtonUp (0)){
+	if (Input.GetMouseButtonUp (0)&& iSwitch){
 	
 		if(draggingObject){
-			
-			
-			
 			
 			
 			if(variableScript.isColliding == 1){
@@ -360,13 +366,216 @@ function Update () {
 			parameters[draggingElementId]["y"] = draggingObject.transform.position.y;
 			
 			RulesEngine();
-				
+			
+			preDraggingObj = draggingObject;
 			draggingObject = null;
 		}
 	}
 	
-	 
+
 }
+
+
+
+/*************************************************************************************************
+**************** GUI *****************************************************************************
+**************************************************************************************************/
+private var guiRect:LTRect = new LTRect( Screen.width, 0,w, Screen.height );
+private var guiPosX:int = Screen.width;
+function OnGUI() {
+	
+	GUI.skin = sonorousGUISkin;
+	
+	if(GUI.Button(Rect(0,0,100,25),"Inspector")) {
+		guiState = "default";
+		openInspector();
+	}
+	
+	
+	
+	/* Keyboard Control */
+	if (Event.current.Equals (Event.KeyboardEvent ("up")) || Event.current.Equals (Event.KeyboardEvent ("w"))) {
+		
+		setPositionArray("up");
+		
+	}else if(Event.current.Equals (Event.KeyboardEvent ("down")) || Event.current.Equals (Event.KeyboardEvent ("s"))) {
+	
+		setPositionArray("down");
+	
+	
+	}else if(Event.current.Equals (Event.KeyboardEvent ("left")) || Event.current.Equals (Event.KeyboardEvent ("a"))) {
+		setPositionArray("left");
+	
+	}else if(Event.current.Equals (Event.KeyboardEvent ("right")) || Event.current.Equals (Event.KeyboardEvent ("d"))) {
+	
+		setPositionArray("right");
+	
+	}
+	
+	/* GUI State */
+	var customButton : GUIStyle;
+	GUI.BeginGroup (guiRect.rect);
+	
+	//GUI.backgroundColor = Color(0,0,0,0.7);
+	GUI.color.a = 0.9;
+	GUI.Box(Rect(0, 0, w, Screen.height),"");
+	
+	
+	if(guiState == "default") {
+		GUI.Label(Rect(ml,ml,w,20),"Element Type");
+		GUI.Label(Rect(ml,ml+tfH,w,20),"Element Size");
+		GUI.Label(Rect(ml,ml+tfH*2,w,20),"Texture Front");
+		GUI.Label(Rect(ml,ml+tfH*3,w,20),"Texture FrontUp");
+		GUI.Label(Rect(ml,ml+tfH*4,w,20),"Texture FrontDown");
+		GUI.Label(Rect(ml,ml+tfH*5,w,20),"Texture Back");
+		GUI.Label(Rect(ml,ml+tfH*6,w,20),"Texture Left");
+		GUI.Label(Rect(ml,ml+tfH*7,w,20),"Texture Right");
+		GUI.Label(Rect(ml,ml+tfH*8,w,20),"Texture Bottom");
+		GUI.Label(Rect(ml,ml+tfH*9,w,20),"Texture Top");
+		
+		var startx:int = 122;
+					
+		GUI.Label(Rect(ml+startx,ml,w,20),": "+ elementType);
+		GUI.Label(Rect(ml+startx,ml+tfH,w,20),": "+ elementSize);
+		GUI.Label(Rect(ml+startx,ml+tfH*2,w,20),": " + elementF);
+		GUI.Label(Rect(ml+startx,ml+tfH*3,w,20),": " + elementFU);
+		GUI.Label(Rect(ml+startx,ml+tfH*4,w,20),": " + elementFD);
+		GUI.Label(Rect(ml+startx,ml+tfH*5,w,20),": " + elementB);
+		GUI.Label(Rect(ml+startx,ml+tfH*6,w,20),": " + elementL);
+		GUI.Label(Rect(ml+startx,ml+tfH*7,w,20),": " + elementR);
+		GUI.Label(Rect(ml+startx,ml+tfH*8,w,20),": " + elementBO);
+		GUI.Label(Rect(ml+startx,ml+tfH*9,w,20),": " + elementT);
+		
+		if(GUI.Button(Rect(ml,ml+tfH*10+mt,w-ml*2,20),"Add Element")) {
+			var myStuffTex5:Hashtable = {"elementId":4,
+							"elementType":"EX",
+							"Front":"H3375_ST22",
+	                        "FrontUp":"200s",
+	                        "FrontDown":"200s",
+	                        "Back":"H3375_ST22",
+	                        "Left":"H3375_ST22",
+	                        "Right":"H3375_ST22",
+	                        "Bottom":"H3375_ST22",
+	                        "Top":"200s",
+	                        "Hole":0,
+	                        "nFrontFace":1,
+	                        "w":130,
+	                        "h":80,
+	                        "depth":50,
+	                        "x":-230,
+	                        "y":20,
+	                        "isRigid":1,
+	                        "baseHeight":0
+	                        };
+	        
+	        parameters.Add(myStuffTex5);
+	        
+	        var eleman4 : GameObject = new GameObject("Kutu5");
+			eleman4.AddComponent("Element");
+		
+	        var other4 : Element = eleman4.GetComponent("Element");
+			other4.params = parameters[4];
+		}
+	}else{
+		if(guiState == "select_base") {
+			GUI.Label(Rect(ml,ml,w,20),"UYARI");
+			GUI.Label(Rect(ml,ml+tfH,w,Screen.height),guiNotification);
+			
+			if(GUI.Toggle(Rect(ml,ml+tfH*5,100,30),inch2," 2 cm")) {
+				inch2 = true;
+				inch8 = false;
+				GameObject.Find(preDraggingObj.name).SendMessage("createBase",2);
+				preDraggingObj.transform.position.y = 2 + preDraggingObj.transform.localScale.y*0.5;	
+				parameters[draggingElementId]["y"] = 2 + preDraggingObj.transform.localScale.y*0.5;
+			}
+			
+			if(GUI.Toggle(Rect(ml+100,ml+tfH*5,200,30),inch8," 8 cm")) {
+				inch2 = false;
+				inch8 = true;
+				GameObject.Find(preDraggingObj.name).SendMessage("createBase",8);
+				preDraggingObj.transform.position.y = 8 + preDraggingObj.transform.localScale.y*0.5;	
+				parameters[draggingElementId]["y"] = 8 + preDraggingObj.transform.localScale.y*0.5;
+			}
+			
+			//GUI.Toggle(Rect(),
+		}
+	}
+	
+	
+	GUI.EndGroup ();
+}
+
+function openInspector() {
+	if(iSwitch) {
+			guiPosX = Screen.width-w;
+		}else{
+			guiPosX = guiPosX+w;
+			resetGUIParams();
+		}
+		LeanTween.move( guiRect, Vector2(guiPosX, 0), 0.25 );
+		//d.setOnComplete( tweenFinished );
+		
+		iSwitch =  !iSwitch;
+}
+
+function resetGUIParams() {
+	inch2 = false;
+	inch8 = false;
+}
+
+function tweenFinished() {
+	//LeanTween.move( guiRect, Vector2(Screen.width, 0), 0.25 ).setOnComplete(tweenFinished);
+	Debug.Log(guiRect.rect.x);
+}
+
+
+function hideInspector() {
+
+}
+
+function setPositionArray(direction : String) {
+
+	
+	if(variableScript.isColliding == 0){
+		
+		tempPosition = preDraggingObj.transform.position;
+	} else{
+		Debug.Log("isColliding");
+		//Collide ederken mouse burakırsa
+		preDraggingObj.transform.position = tempPosition;
+		
+	}
+	
+	switch(direction){
+	
+		case "up":
+			preDraggingObj.transform.position.y = preDraggingObj.transform.position.y + snapFactor;	
+			break;
+		case "down":
+			preDraggingObj.transform.position.y = preDraggingObj.transform.position.y - snapFactor;	
+			break;
+		case "right":
+			preDraggingObj.transform.position.x = preDraggingObj.transform.position.x + snapFactor;	
+			break;
+		case "left":
+			preDraggingObj.transform.position.x = preDraggingObj.transform.position.x - snapFactor;	
+			break;
+		default :
+			break;
+	
+	
+	}
+	Debug.Log(variableScript.isColliding);
+	
+			
+	RulesEngine();
+	
+	parameters[draggingElementId]["x"] = preDraggingObj.transform.position.x;
+	parameters[draggingElementId]["y"] = preDraggingObj.transform.position.y;
+	
+	
+}
+
 
 function RulesEngine(){
 
@@ -601,124 +810,14 @@ function RulesEngine(){
 				Debug.Log("5 : EX DUVARDA OLAMAZ (ASILAMAZ). HER ZAMAN YERDE OLMALI");
 			
 			}else{
-				Debug.Log("6 : Yerdeki tüm ürünler (EX) bir baza seçeneğine sahip olmak zorunda.");
-				GameObject.Find(draggingObject.name).SendMessage("createBase",8);
+				//EX YERDE DEMEK
+				guiNotification="Yerdeki tüm ürünler (EX) bir baza seçeneğine sahip olmak zorunda. Lütfen baza yüksekliği seçin.";
+				guiState = "select_base";
+				openInspector();
+				//Debug.Log("6 : Yerdeki tüm ürünler (EX) bir baza seçeneğine sahip olmak zorunda.");
+				
 				
 			}
 		
 		}
-}
-
-/*************************************************************************************************
-**************** GUI *****************************************************************************
-**************************************************************************************************/
-private var guiRect:LTRect = new LTRect( Screen.width, 0,w, Screen.height );
-private var guiPosX:int = Screen.width;
-function OnGUI() {
-	
-	GUI.skin = sonorousGUISkin;
-	
-	if(GUI.Button(Rect(0,0,100,25),"Inspector")) {
-		
-		if(iSwitch)
-			guiPosX = Screen.width-w;
-		else
-			guiPosX = guiPosX+w;
-			
-			
-			
-			
-		LeanTween.move( guiRect, Vector2(guiPosX, 0), 0.25 );
-		//d.setOnComplete( tweenFinished );
-		
-		iSwitch =  !iSwitch;
-	}
-	
-	if(iSwitch) {
-		//hideInspector();
-		
-	}else {
-		//showInspector();
-	}
-	showInspector();
-	
-}
-
-function tweenFinished() {
-	//LeanTween.move( guiRect, Vector2(Screen.width, 0), 0.25 ).setOnComplete(tweenFinished);
-	Debug.Log(guiRect.rect.x);
-}
-
-
-function hideInspector() {
-
-}
-
-
-function showInspector() {
-	
-	var customButton : GUIStyle;
-	GUI.BeginGroup (guiRect.rect);
-	
-	//GUI.backgroundColor = Color(0,0,0,0.7);
-	GUI.color.a = 0.9;
-	GUI.Box(Rect(0, 0, w, Screen.height),"");
-	
-	
-	
-	GUI.Label(Rect(ml,ml,w,20),"Element Type");
-	GUI.Label(Rect(ml,ml+tfH,w,20),"Element Size");
-	GUI.Label(Rect(ml,ml+tfH*2,w,20),"Texture Front");
-	GUI.Label(Rect(ml,ml+tfH*3,w,20),"Texture FrontUp");
-	GUI.Label(Rect(ml,ml+tfH*4,w,20),"Texture FrontDown");
-	GUI.Label(Rect(ml,ml+tfH*5,w,20),"Texture Back");
-	GUI.Label(Rect(ml,ml+tfH*6,w,20),"Texture Left");
-	GUI.Label(Rect(ml,ml+tfH*7,w,20),"Texture Right");
-	GUI.Label(Rect(ml,ml+tfH*8,w,20),"Texture Bottom");
-	GUI.Label(Rect(ml,ml+tfH*9,w,20),"Texture Top");
-	
-	var startx:int = 122;
-				
-	GUI.Label(Rect(ml+startx,ml,w,20),": "+ elementType);
-	GUI.Label(Rect(ml+startx,ml+tfH,w,20),": "+ elementSize);
-	GUI.Label(Rect(ml+startx,ml+tfH*2,w,20),": " + elementF);
-	GUI.Label(Rect(ml+startx,ml+tfH*3,w,20),": " + elementFU);
-	GUI.Label(Rect(ml+startx,ml+tfH*4,w,20),": " + elementFD);
-	GUI.Label(Rect(ml+startx,ml+tfH*5,w,20),": " + elementB);
-	GUI.Label(Rect(ml+startx,ml+tfH*6,w,20),": " + elementL);
-	GUI.Label(Rect(ml+startx,ml+tfH*7,w,20),": " + elementR);
-	GUI.Label(Rect(ml+startx,ml+tfH*8,w,20),": " + elementBO);
-	GUI.Label(Rect(ml+startx,ml+tfH*9,w,20),": " + elementT);
-	
-	if(GUI.Button(Rect(ml,ml+tfH*10,200,20),"Add Element")) {
-		var myStuffTex5:Hashtable = {"elementId":4,
-						"elementType":"EX",
-						"Front":"H3375_ST22",
-                        "FrontUp":"200s",
-                        "FrontDown":"200s",
-                        "Back":"H3375_ST22",
-                        "Left":"H3375_ST22",
-                        "Right":"H3375_ST22",
-                        "Bottom":"H3375_ST22",
-                        "Top":"200s",
-                        "Hole":0,
-                        "nFrontFace":1,
-                        "w":130,
-                        "h":80,
-                        "depth":50,
-                        "x":-230,
-                        "y":20,
-                        "isRigid":1
-                        };
-        
-        parameters.Add(myStuffTex5);
-        
-        var eleman4 : GameObject = new GameObject("Kutu5");
-		eleman4.AddComponent("Element");
-	
-        var other4 : Element = eleman4.GetComponent("Element");
-		other4.params = parameters[4];
-	}
-	
-	GUI.EndGroup ();
 }
