@@ -26,7 +26,7 @@ private var variableScript : Element;
 private var tempPosition : Vector3 = new Vector3(0,0,0);
 private var draggingObject : GameObject;
 private var preDraggingObj:GameObject;
-private var draggingElementId : int;
+private var draggingElementId : int = -1;
 
 
 private var snapFactor	: float = 2;
@@ -40,6 +40,9 @@ private var guiNotification:String = "";
 // toggle state
 private var inch2:boolean = false;
 private var inch8:boolean = false;
+
+// Scroll Position
+var scrollPosition : Vector2 = Vector2.zero;
 
 private var elementSize:String = "0x0";
 private var elementType:String = "default";
@@ -61,8 +64,16 @@ private var tfH:int = 20;
 public var sonorousGUISkin:GUISkin;
 //
 
+var setRoomSize : boolean = false;
+var textWidth:String = "Genişlik";
+var textHeight:String = "Yükseklik";
+var logo:Texture2D;
 
-private var prevHighlighted : GameObject;
+// Modul Item Images
+var m1:Texture2D;
+
+//private var prevHighlighted : GameObject;
+private var prevHighlightedId : int;
 private var modulDestroyed:boolean = false;
 
 
@@ -213,12 +224,11 @@ function Start () {
                         
                         
 	addModul(myStuffTex,"0");
-	addModul(myStuffTex2,"0");
-	addModul(myStuffTex3,"0");
-	addModul(myStuffTex4,"0");                                        
+	addModul(myStuffTex2,"1");
+	addModul(myStuffTex3,"2");
+	addModul(myStuffTex4,"3");                                        
     //////
      
-	prevHighlighted = new GameObject("prevHighlighted");
 	
 	
 }
@@ -240,7 +250,7 @@ function addModul(modulParams:Hashtable, id:String) {
 }
 
 function Update () {
-
+	if(setRoomSize) {
 	var mainCamera = Camera.main;
 	var hit : RaycastHit;
 	
@@ -285,9 +295,24 @@ function Update () {
 				elementR 	= parameters[draggingElementId]["Right"];
 				elementBO 	= parameters[draggingElementId]["Bottom"];
 				elementT 	= parameters[draggingElementId]["Top"];
-				//
-				//Debug.Log("modul  : "+draggingElementId);
+				
 				ToggleLight(moduls[draggingElementId]);
+			}
+		}else{
+			//clear Highlighted Elements
+			if(draggingElementId != -1 && moduls.Count != 0){
+				if(!modulDestroyed)
+					var allChildren = moduls[prevHighlightedId].GetComponentsInChildren(Transform);
+	
+				for (var child : Transform in allChildren) {
+  				// do whatever with child transform here
+	  				if(child.renderer != null){
+		    			child.renderer.material.color = Color.white;
+		    			variableScript.highlighted = false;
+	    			}
+	      		}
+	      		//draggingElementId = -1;
+	      		//prevHighlightedId = -1;
 			}
 		}
 			
@@ -353,12 +378,12 @@ function Update () {
 			
 			RulesEngine();
 			
-			preDraggingObj = draggingObject;
+			preDraggingObj = moduls[draggingElementId];
 			draggingObject = null;
 		}
 	}
 	
-
+}
 }
 
 
@@ -367,41 +392,59 @@ function Update () {
 **************** GUI *****************************************************************************
 **************************************************************************************************/
 private var guiRect:LTRect = new LTRect( Screen.width, 0,w, Screen.height );
+private var welcomeRect = new LTRect(0,0,Screen.width,Screen.height);
+
 private var guiPosX:int = Screen.width;
 function OnGUI() {
 	
 	GUI.skin = sonorousGUISkin;
+	/*
+	scrollPosition = GUI.BeginScrollView (Rect (10,300,130,100),
+	scrollPosition, Rect (0, 0, 220, 200));	
 	
+	GUI.Button (Rect (0,0,100,20), "Top-left");
+	GUI.Button (Rect (0,21,100,20), "Top-left");
+	GUI.Button (Rect (0,42,100,20), "Top-left");
+	GUI.Button (Rect (0,63,100,20), "Top-left");
+	GUI.Button (Rect (0,84,100,20), "Top-left");
+	
+	GUI.EndScrollView ();
+	
+	GUI.Box(Rect(0,100,200,200),m1);
+	*/
+	// Enable Keyboard Interaction
+	initKeyboardInteraction();
+	
+	// Menu Buttons
 	if(GUI.Button(Rect(0,0,100,25),"Inspector")) {
 		guiState = "default";
 		openInspector();
-	}else if(GUI.Button(Rect(101,0,100,25),"Screen Shot")) {
-		Application.CaptureScreenshot("Desktop/Screenshot.png",1);
-	}else if(GUI.Button(Rect(202,0,100,25),"Delete Modul")) {
+	}
+	
+	// Screen Shot Button
+	else if(GUI.Button(Rect(101,0,100,25),"Screen Shot")) {
+		Application.CaptureScreenshot("Screenshot.png",1);
+	}
+	
+	// Delete Button
+	else if(GUI.Button(Rect(202,0,100,25),"Delete Modul")) {
 		Destroy(moduls[draggingElementId]);
 		modulDestroyed = true;
 	}
 	
-	
-	
-	/* Keyboard Control */
-	if (Event.current.Equals (Event.KeyboardEvent ("up")) || Event.current.Equals (Event.KeyboardEvent ("w"))) {
-		
-		setPositionArray("up");
-		
-	}else if(Event.current.Equals (Event.KeyboardEvent ("down")) || Event.current.Equals (Event.KeyboardEvent ("s"))) {
-	
-		setPositionArray("down");
-	
-	
-	}else if(Event.current.Equals (Event.KeyboardEvent ("left")) || Event.current.Equals (Event.KeyboardEvent ("a"))) {
-		setPositionArray("left");
-	
-	}else if(Event.current.Equals (Event.KeyboardEvent ("right")) || Event.current.Equals (Event.KeyboardEvent ("d"))) {
-	
-		setPositionArray("right");
-	
+	// Delete All Button
+	else if(GUI.Button(Rect(303,0,100,25),"Delete All")) {
+		for(var i:int=0; i < moduls.Count; i++) {
+			Destroy(moduls[i]);
+		}
+		modulDestroyed = true;
 	}
+	
+	// Set Room Size
+	else if(GUI.Button(Rect(404,0,100,25),"Room Size")){
+		setRoomSize = false;
+	}
+	
 	
 	/* GUI State */
 	var customButton : GUIStyle;
@@ -458,16 +501,8 @@ function OnGUI() {
 	                        "isRigid":1,
 	                        "baseHeight":0
 	                        };
-	        
-	        parameters.Add(myStuffTex5);
-	        
-	        var eleman4 : GameObject = new GameObject("Kutu5");
-			eleman4.AddComponent("Element");
-		
-	        var other4 : Element = eleman4.GetComponent("Element");
-			other4.params = parameters[4];
-			
-			moduls.Add(eleman4);
+	        var id:String= (moduls.Count-1).ToString();
+	        addModul(myStuffTex5,id);
 		}
 	}else{
 		if(guiState == "select_base") {
@@ -489,26 +524,28 @@ function OnGUI() {
 				preDraggingObj.transform.position.y = 8 + preDraggingObj.transform.localScale.y*0.5;	
 				parameters[draggingElementId]["y"] = 8 + preDraggingObj.transform.localScale.y*0.5;
 			}
-			
-			//GUI.Toggle(Rect(),
 		}
 	}
 	
 	
 	GUI.EndGroup ();
+	
+	// Welcome Screen
+	initSetRoomSize();
+	
 }
 
 function openInspector() {
 	if(iSwitch) {
-			guiPosX = Screen.width-w;
-		}else{
-			guiPosX = guiPosX+w;
-			resetGUIParams();
-		}
-		LeanTween.move( guiRect, Vector2(guiPosX, 0), 0.25 );
-		//d.setOnComplete( tweenFinished );
-		
-		iSwitch =  !iSwitch;
+		guiPosX = Screen.width-w;
+	}else{
+		guiPosX = guiPosX+w;
+		resetGUIParams();
+	}
+	LeanTween.move( guiRect, Vector2(guiPosX, 0), 0.25 );
+	//d.setOnComplete( tweenFinished );
+	
+	iSwitch =  !iSwitch;
 }
 
 function resetGUIParams() {
@@ -518,12 +555,26 @@ function resetGUIParams() {
 
 function tweenFinished() {
 	//LeanTween.move( guiRect, Vector2(Screen.width, 0), 0.25 ).setOnComplete(tweenFinished);
-	Debug.Log(guiRect.rect.x);
 }
 
+function initSetRoomSize() {
 
-function hideInspector() {
-
+	if(!setRoomSize) {
+		GUI.color.a = 0.9;
+		GUI.BeginGroup(welcomeRect.rect);
+		GUI.Box(Rect(0,0,Screen.width,Screen.height),"");
+		GUI.Box(Rect((Screen.width-logo.width)*0.5,50,logo.width,logo.height),logo);
+		textWidth = GUI.TextField(Rect(Screen.width*0.5-35,150,70,20),textWidth);
+		textHeight = GUI.TextField(Rect(Screen.width*0.5-35,174,70,20),textHeight);
+		
+		if(GUI.Button(Rect(Screen.width*0.5-50,210,100,30),"OK")) {
+			wall.transform.localScale = Vector3(parseInt(textWidth),2,parseInt(textHeight));
+			floor.transform.localScale = Vector3(parseInt(textWidth),2,parseInt(textHeight));
+			setRoomSize = true;
+		}
+		
+		GUI.EndGroup();
+	}
 }
 
 function setPositionArray(direction : String) {
@@ -569,7 +620,37 @@ function setPositionArray(direction : String) {
 	
 }
 
-
+/* Keyboard Control */
+function initKeyboardInteraction() {
+	
+	if(setRoomSize) {
+		if (Event.current.Equals (Event.KeyboardEvent ("up")) || Event.current.Equals (Event.KeyboardEvent ("w"))) {
+			
+			setPositionArray("up");
+			
+		}else if(Event.current.Equals (Event.KeyboardEvent ("down")) || Event.current.Equals (Event.KeyboardEvent ("s"))) {
+		
+			setPositionArray("down");
+		
+		
+		}else if(Event.current.Equals (Event.KeyboardEvent ("left")) || Event.current.Equals (Event.KeyboardEvent ("a"))) {
+			setPositionArray("left");
+		
+		}else if(Event.current.Equals (Event.KeyboardEvent ("right")) || Event.current.Equals (Event.KeyboardEvent ("d"))) {
+		
+			setPositionArray("right");
+		
+		}
+	}else{
+		if(Event.current.Equals (Event.KeyboardEvent ("return"))) {
+		
+			wall.transform.localScale = Vector3(parseInt(textWidth),2,parseInt(textHeight));
+			floor.transform.localScale = Vector3(parseInt(textWidth),2,parseInt(textHeight));
+			setRoomSize = true;
+		
+		}
+	}
+}
 function RulesEngine(){
 
 		var othersX	: int;
@@ -818,43 +899,7 @@ function RulesEngine(){
 function ToggleLight( go : GameObject ){
 
 
- 	
- 	/*
- 	var childObject : GameObject = go.gameObject;
- 	
- 	var allChildren = childObject.GetComponentsInChildren(Transform);
- 	
-
- 	variableScript = childObject.GetComponent("Element");
-		
-	for (var child : Transform in allChildren) {
-    // do whatever with child transform here
-	    if(child.renderer != null){
-	    
-		    child.renderer.material.color = Color.red;
-		    variableScript.highlighted = true;
-		   
-	    }
-	       
-	}
- 
-	allChildren = prevHighlighted.GetComponentsInChildren(Transform);
-	
-	for (var child : Transform in allChildren) {
-    // do whatever with child transform here
-	    if(child.renderer != null){
-	    
-		    child.renderer.material.color = Color.white;
-		    variableScript.highlighted = false;
-		   
-	    }
-	       
-	}
-	
-	prevHighlighted = childObject;
-	*/
-	
-	
+	//highlight
 	var allChildren = moduls[draggingElementId].GetComponentsInChildren(Transform);
  	
 
@@ -870,21 +915,24 @@ function ToggleLight( go : GameObject ){
 	    }
 	       
 	}
- 
- 	if(!modulDestroyed)
-		allChildren = prevHighlighted.GetComponentsInChildren(Transform);
+ 	if(prevHighlightedId != draggingElementId){
+	 	//de-highlight
+	 	if(!modulDestroyed)
+			allChildren = moduls[prevHighlightedId].GetComponentsInChildren(Transform);
+		
+		for (var child : Transform in allChildren) {
+	    // do whatever with child transform here
+		    if(child.renderer != null){
+		    
+			    child.renderer.material.color = Color.white;
+			    variableScript.highlighted = false;
+			   
+		    }
+		       
+		}
+		
+		prevHighlightedId = draggingElementId;
+		modulDestroyed = false;
 	
-	for (var child : Transform in allChildren) {
-    // do whatever with child transform here
-	    if(child.renderer != null){
-	    
-		    child.renderer.material.color = Color.white;
-		    variableScript.highlighted = false;
-		   
-	    }
-	       
 	}
-	
-	prevHighlighted = moduls[draggingElementId];
-	modulDestroyed = false;
 }
