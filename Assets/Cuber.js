@@ -59,11 +59,11 @@ private var bMargin:int = 5;
 private var tfH:int = 20;
 
 public var sonorousGUISkin:GUISkin;
+//
+
 
 private var prevHighlighted : GameObject;
-
-
-//
+private var modulDestroyed:boolean = false;
 
 
 function Start () {
@@ -210,52 +210,32 @@ function Start () {
                         "isRigid":1,
                         "baseHeight":0
                         };   
-	                                        
+                        
+                        
+	addModul(myStuffTex,"0");
+	addModul(myStuffTex2,"0");
+	addModul(myStuffTex3,"0");
+	addModul(myStuffTex4,"0");                                        
     //////
-           
-	//Add parameter data to ArrayList
-	parameters.Add(myStuffTex);
-	parameters.Add(myStuffTex2);
-	parameters.Add(myStuffTex3);
-	parameters.Add(myStuffTex4);
-	/////
+     
+	prevHighlighted = new GameObject("prevHighlighted");
 	
 	
-	// Create moduls 1
-	var eleman : GameObject = new GameObject("Kutu");
+}
+
+/* ADD MODUL METHOD */
+function addModul(modulParams:Hashtable, id:String) {
+	
+	parameters.Add(modulParams);
+	
+	var eleman : GameObject = new GameObject("Kutu"+id);
 	eleman.AddComponent("Element");
 	
 	
 	var other : Element = eleman.GetComponent("Element");
-	other.params = parameters[0];
+	other.params = parameters[parameters.Count-1];
 	
-	
-	/////// 2
-	var eleman2 : GameObject = new GameObject("Kutu2");
-	eleman2.AddComponent("Element");
-	
-	
-	var other2 : Element = eleman2.GetComponent("Element");
-	other2.params = parameters[1];
-
-
-	//////// 3
-	var eleman3 : GameObject = new GameObject("Kutu3");
-	eleman3.AddComponent("Element");
-	
-	var other3 : Element = eleman3.GetComponent("Element");
-	other3.params = parameters[2];
-	
-	//////// 4
-	var eleman4 : GameObject = new GameObject("Kutu4");
-	eleman4.AddComponent("Element");
-	
-	var other4 : Element = eleman4.GetComponent("Element");
-	other4.params = parameters[3];
-	
-	
-	prevHighlighted = new GameObject("prevHighlighted");
-	
+	moduls.Add(eleman);
 
 }
 
@@ -306,8 +286,8 @@ function Update () {
 				elementBO 	= parameters[draggingElementId]["Bottom"];
 				elementT 	= parameters[draggingElementId]["Top"];
 				//
-				
-				ToggleLight(draggingObject);
+				//Debug.Log("modul  : "+draggingElementId);
+				ToggleLight(moduls[draggingElementId]);
 			}
 		}
 			
@@ -395,6 +375,11 @@ function OnGUI() {
 	if(GUI.Button(Rect(0,0,100,25),"Inspector")) {
 		guiState = "default";
 		openInspector();
+	}else if(GUI.Button(Rect(101,0,100,25),"Screen Shot")) {
+		Application.CaptureScreenshot("Desktop/Screenshot.png",1);
+	}else if(GUI.Button(Rect(202,0,100,25),"Delete Modul")) {
+		Destroy(moduls[draggingElementId]);
+		modulDestroyed = true;
 	}
 	
 	
@@ -481,6 +466,8 @@ function OnGUI() {
 		
 	        var other4 : Element = eleman4.GetComponent("Element");
 			other4.params = parameters[4];
+			
+			moduls.Add(eleman4);
 		}
 	}else{
 		if(guiState == "select_base") {
@@ -832,7 +819,7 @@ function ToggleLight( go : GameObject ){
 
 
  	
- 	
+ 	/*
  	var childObject : GameObject = go.gameObject;
  	
  	var allChildren = childObject.GetComponentsInChildren(Transform);
@@ -865,6 +852,39 @@ function ToggleLight( go : GameObject ){
 	}
 	
 	prevHighlighted = childObject;
+	*/
 	
+	
+	var allChildren = moduls[draggingElementId].GetComponentsInChildren(Transform);
+ 	
 
+ 	variableScript = moduls[draggingElementId].GetComponent("Element");
+		
+	for (var child : Transform in allChildren) {
+    // do whatever with child transform here
+	    if(child.renderer != null){
+	    
+		    child.renderer.material.color = Color.red;
+		    variableScript.highlighted = true;
+		   
+	    }
+	       
+	}
+ 
+ 	if(!modulDestroyed)
+		allChildren = prevHighlighted.GetComponentsInChildren(Transform);
+	
+	for (var child : Transform in allChildren) {
+    // do whatever with child transform here
+	    if(child.renderer != null){
+	    
+		    child.renderer.material.color = Color.white;
+		    variableScript.highlighted = false;
+		   
+	    }
+	       
+	}
+	
+	prevHighlighted = moduls[draggingElementId];
+	modulDestroyed = false;
 }
