@@ -60,6 +60,9 @@ private var tfH:int = 20;
 
 public var sonorousGUISkin:GUISkin;
 
+private var prevHighlighted : GameObject;
+
+
 //
 
 
@@ -251,7 +254,7 @@ function Start () {
 	other4.params = parameters[3];
 	
 	
-	
+	prevHighlighted = new GameObject("prevHighlighted");
 	
 
 }
@@ -303,6 +306,8 @@ function Update () {
 				elementBO 	= parameters[draggingElementId]["Bottom"];
 				elementT 	= parameters[draggingElementId]["Top"];
 				//
+				
+				ToggleLight(draggingObject);
 			}
 		}
 			
@@ -353,6 +358,7 @@ function Update () {
 	if (Input.GetMouseButtonUp (0)&& iSwitch){
 	
 		if(draggingObject){
+			
 			
 			
 			if(variableScript.isColliding == 1){
@@ -820,4 +826,45 @@ function RulesEngine(){
 			}
 		
 		}
+}
+
+function ToggleLight( go : GameObject ){
+
+
+ 	
+ 	
+ 	var childObject : GameObject = go.gameObject;
+ 	
+ 	var allChildren = childObject.GetComponentsInChildren(Transform);
+ 	
+
+ 	variableScript = childObject.GetComponent("Element");
+		
+	for (var child : Transform in allChildren) {
+    // do whatever with child transform here
+	    if(child.renderer != null){
+	    
+		    child.renderer.material.color = Color.red;
+		    variableScript.highlighted = true;
+		   
+	    }
+	       
+	}
+ 
+	allChildren = prevHighlighted.GetComponentsInChildren(Transform);
+	
+	for (var child : Transform in allChildren) {
+    // do whatever with child transform here
+	    if(child.renderer != null){
+	    
+		    child.renderer.material.color = Color.white;
+		    variableScript.highlighted = false;
+		   
+	    }
+	       
+	}
+	
+	prevHighlighted = childObject;
+	
+
 }

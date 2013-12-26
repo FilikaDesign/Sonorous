@@ -24,10 +24,12 @@ var yPos				: int = 0;
 var params:Hashtable = {};
 
 var isColliding			: int = 0;
+var highlighted:boolean = false;
 
 
 function Start (){
     	
+    		
 
     		elementContainer = new GameObject("Element Container");
     		elementContainer.transform.parent = this.transform;
@@ -99,6 +101,7 @@ function Start (){
 			cubeFront.transform.parent = elementContainer.transform;
 			var cubeFrontBoxCollider : BoxCollider = cubeFront.GetComponent("BoxCollider");
 			cubeFrontBoxCollider.enabled = false;
+			
 			
 			
 			}else if(params["nFrontFace"] == 2){
