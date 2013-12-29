@@ -29,7 +29,9 @@ private var preDraggingObj:GameObject;
 private var draggingElementId : int = -1;
 
 
-private var snapFactor	: float = 2;
+private var snapFactorX	: float = 5;
+private var snapFactorY	: float = 2;
+private var cameraShift : float = 5;
 private var snapEnable 	: boolean = true;
 
 // GUI
@@ -65,8 +67,8 @@ public var sonorousGUISkin:GUISkin;
 //
 
 var setRoomSize : boolean = false;
-var textWidth:String = "Genişlik";
-var textHeight:String = "Yükseklik";
+private var textWidth:String = "800";
+private var textHeight:String = "300";
 var logo:Texture2D;
 
 // Modul Item Images
@@ -76,6 +78,8 @@ var m1:Texture2D;
 private var prevHighlightedId : int;
 private var modulDestroyed:boolean = false;
 
+private var ww:float;
+private var hh:float;
 
 function Start () {
 	
@@ -89,10 +93,12 @@ function Start () {
 	
 	// Add the light component
 	lightGameObject.AddComponent(Light);
+	
 	// Set color and position
 	lightGameObject.light.color = Color.white;
 	lightGameObject.light.type = LightType.Directional;
 	lightGameObject.light.intensity = 0.4;
+	
 	// Set the position (or any transform property) after
 	// adding the light component.
 	lightGameObject.transform.position = Vector3(0, 500, 0);
@@ -108,6 +114,7 @@ function Start () {
 	pointLightGameObject.light.type = LightType.Point;
 	pointLightGameObject.light.intensity = 1;
 	pointLightGameObject.light.range = 130;
+	
 	// Set the position (or any transform property) after
 	// adding the light component.
 	pointLightGameObject.transform.position = Vector3(60, 140, -31);
@@ -115,12 +122,15 @@ function Start () {
 	
 	
 	//create Background Wall and Floor
+	ww = float.Parse(textWidth);
+	hh = float.Parse(textHeight);
+	
 	wall = GameObject.CreatePrimitive(PrimitiveType.Cube);
 	wall.name = "Wall";
 	var wallBoxCollider : BoxCollider = wall.GetComponent("BoxCollider");
 	wallBoxCollider.enabled = false;
-	wall.transform.position = Vector3(0,150,30);
-	wall.transform.localScale = Vector3(800,2,300);
+	wall.transform.position = Vector3(0,hh*0.5,10);
+	wall.transform.localScale = Vector3(ww,2,hh);
 	wall.transform.Rotate(90,0,0);
 	wall.renderer.material.mainTexture = Resources.Load("wall", Texture2D);
 	wall.renderer.material.mainTextureScale = Vector2 (11,11);
@@ -130,8 +140,8 @@ function Start () {
 	floor.name = "Floor";
 	var floorBoxCollider : BoxCollider = floor.GetComponent("BoxCollider");
 	floorBoxCollider.enabled = false;
-	floor.transform.position = Vector3(0,-1,-120);
-	floor.transform.localScale = Vector3(800,2,300);
+	floor.transform.position = Vector3(0,-1,-hh*0.5+10);
+	floor.transform.localScale = Vector3(ww,2,hh);
 	floor.transform.Rotate(0,0,0);
 	floor.renderer.material.mainTexture = Resources.Load("wooden-floor-texture", Texture2D);
 	floor.renderer.material.mainTextureScale = Vector2 (11,11);
@@ -307,7 +317,12 @@ function Update () {
 				for (var child : Transform in allChildren) {
   				// do whatever with child transform here
 	  				if(child.renderer != null){
-		    			child.renderer.material.color = Color.white;
+		    			if(child.renderer.gameObject.name !="Base"){
+			    			child.renderer.material.color = Color.white;
+			   			 }
+			    		else{
+			   				 child.renderer.material.color = Color.gray;
+			   			 }
 		    			variableScript.highlighted = false;
 	    			}
 	      		}
@@ -334,8 +349,8 @@ function Update () {
 					
 					
 			if(snapEnable){
-				draggingObject.transform.position.x = (snapFactor * Mathf.Floor((mouseWorld.x- offSet.x)/snapFactor)); 
-	       		draggingObject.transform.position.y = (snapFactor * Mathf.Floor((mouseWorld.y- offSet.y)/snapFactor)); 
+				draggingObject.transform.position.x = (snapFactorX * Mathf.Floor((mouseWorld.x- offSet.x)/snapFactorX)); 
+	       		draggingObject.transform.position.y = (snapFactorY * Mathf.Floor((mouseWorld.y- offSet.y)/snapFactorY)); 
 	       		
 	       		//Debug.Log(snapX);
 					
@@ -535,6 +550,9 @@ function OnGUI() {
 	
 }
 
+/*
+*** OPEN INSPECTOR PANEL
+*/
 function openInspector() {
 	if(iSwitch) {
 		guiPosX = Screen.width-w;
@@ -548,6 +566,9 @@ function openInspector() {
 	iSwitch =  !iSwitch;
 }
 
+/*
+*** RESET GUI PAREMETERS
+*/
 function resetGUIParams() {
 	inch2 = false;
 	inch8 = false;
@@ -557,6 +578,9 @@ function tweenFinished() {
 	//LeanTween.move( guiRect, Vector2(Screen.width, 0), 0.25 ).setOnComplete(tweenFinished);
 }
 
+/*
+*** INIT ROOM SIZE
+*/
 function initSetRoomSize() {
 
 	if(!setRoomSize) {
@@ -569,53 +593,50 @@ function initSetRoomSize() {
 		
 		if(GUI.Button(Rect(Screen.width*0.5-50,210,100,30),"OK")) {
 			wall.transform.localScale = Vector3(parseInt(textWidth),2,parseInt(textHeight));
+			wall.transform.position = Vector3(0,parseInt(textHeight)*0.5,10);
 			floor.transform.localScale = Vector3(parseInt(textWidth),2,parseInt(textHeight));
-			setRoomSize = true;
+			floor.transform.position = Vector3(0,-1,-parseInt(textHeight)*0.5+10);
+			setRoomSize = true;			
 		}
 		
 		GUI.EndGroup();
 	}
 }
 
-function setPositionArray(direction : String) {
+function setCameraPosition(direction : String) {
 
-	
-	if(variableScript.isColliding == 0){
-		
-		tempPosition = preDraggingObj.transform.position;
-	} else{
-		Debug.Log("isColliding");
-		//Collide ederken mouse burakırsa
-		preDraggingObj.transform.position = tempPosition;
-		
-	}
-	
 	switch(direction){
 	
+		case "zoomin":
+			this.gameObject.transform.position.z = this.gameObject.transform.position.z + cameraShift;	
+			break;
+		case "zoomout":
+			this.gameObject.transform.position.z = this.gameObject.transform.position.z - cameraShift;	
+			break;
 		case "up":
-			preDraggingObj.transform.position.y = preDraggingObj.transform.position.y + snapFactor;	
+			this.gameObject.transform.position.y = this.gameObject.transform.position.y + cameraShift;	
 			break;
 		case "down":
-			preDraggingObj.transform.position.y = preDraggingObj.transform.position.y - snapFactor;	
+			this.gameObject.transform.position.y = this.gameObject.transform.position.y - cameraShift;	
 			break;
 		case "right":
-			preDraggingObj.transform.position.x = preDraggingObj.transform.position.x + snapFactor;	
+			this.gameObject.transform.position.x = this.gameObject.transform.position.x + cameraShift;	
 			break;
 		case "left":
-			preDraggingObj.transform.position.x = preDraggingObj.transform.position.x - snapFactor;	
+			this.gameObject.transform.position.x = this.gameObject.transform.position.x - cameraShift;	
 			break;
 		default :
 			break;
 	
 	
 	}
-	Debug.Log(variableScript.isColliding);
+	
 	
 			
-	RulesEngine();
+	//RulesEngine();
 	
-	parameters[draggingElementId]["x"] = preDraggingObj.transform.position.x;
-	parameters[draggingElementId]["y"] = preDraggingObj.transform.position.y;
+	//parameters[draggingElementId]["x"] = preDraggingObj.transform.position.x;
+	//parameters[draggingElementId]["y"] = preDraggingObj.transform.position.y;
 	
 	
 }
@@ -624,21 +645,31 @@ function setPositionArray(direction : String) {
 function initKeyboardInteraction() {
 	
 	if(setRoomSize) {
-		if (Event.current.Equals (Event.KeyboardEvent ("up")) || Event.current.Equals (Event.KeyboardEvent ("w"))) {
+		if (Event.current.Equals (Event.KeyboardEvent ("up")) ) {
 			
-			setPositionArray("up");
+			setCameraPosition("zoomin");
 			
-		}else if(Event.current.Equals (Event.KeyboardEvent ("down")) || Event.current.Equals (Event.KeyboardEvent ("s"))) {
+		}else if(Event.current.Equals (Event.KeyboardEvent ("down")) ) {
 		
-			setPositionArray("down");
+			setCameraPosition("zoomout");
 		
 		
-		}else if(Event.current.Equals (Event.KeyboardEvent ("left")) || Event.current.Equals (Event.KeyboardEvent ("a"))) {
-			setPositionArray("left");
+		}else if(Event.current.Equals (Event.KeyboardEvent ("left")) ) {
+			setCameraPosition("left");
 		
-		}else if(Event.current.Equals (Event.KeyboardEvent ("right")) || Event.current.Equals (Event.KeyboardEvent ("d"))) {
+		}else if(Event.current.Equals (Event.KeyboardEvent ("right")) ) {
 		
-			setPositionArray("right");
+			setCameraPosition("right");
+		
+		}
+		else if(Event.current.Equals (Event.KeyboardEvent ("z")) || Event.current.Equals (Event.KeyboardEvent ("Z"))) {
+		
+			setCameraPosition("up");
+		
+		}
+		else if(Event.current.Equals (Event.KeyboardEvent ("x")) || Event.current.Equals (Event.KeyboardEvent ("X"))) {
+		
+			setCameraPosition("down");
 		
 		}
 	}else{
@@ -868,7 +899,7 @@ function RulesEngine(){
 		
 		if(parameters[draggingElementId]["elementType"] == "ED"){
 			
-			if(considerY - considerH * 0.5 < snapFactor){
+			if(considerY - considerH * 0.5 < snapFactorY){
 				Debug.Log("4 : ED YERDE OLAMAZ");
 			
 			}
@@ -880,7 +911,7 @@ function RulesEngine(){
 		
 		if(parameters[draggingElementId]["elementType"] == "EX"){
 			
-			if(considerY - considerH * 0.5 >= snapFactor){
+			if(considerY - considerH * 0.5 >= snapFactorY){
 				Debug.Log("5 : EX DUVARDA OLAMAZ (ASILAMAZ). HER ZAMAN YERDE OLMALI");
 			
 			}else{
@@ -923,8 +954,14 @@ function ToggleLight( go : GameObject ){
 		for (var child : Transform in allChildren) {
 	    // do whatever with child transform here
 		    if(child.renderer != null){
-		    
+		    	if(child.renderer.gameObject.name !="Base"){
 			    child.renderer.material.color = Color.white;
+			    
+			    }
+			    else{
+			    child.renderer.material.color = Color.gray;
+			    
+			    }
 			    variableScript.highlighted = false;
 			   
 		    }
