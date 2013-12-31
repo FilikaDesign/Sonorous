@@ -261,144 +261,146 @@ function addModul(modulParams:Hashtable, id:String) {
 
 function Update () {
 	if(setRoomSize) {
-	var mainCamera = Camera.main;
-	var hit : RaycastHit;
-	
-	//gizmo
-	
-	
-	Debug.DrawLine (Vector3 (0, 0, 0), Vector3 (100, 0, 0), Color.red);
-	Debug.DrawLine (Vector3 (0, 0, 0), Vector3 (0, 100, 0), Color.blue);
-	Debug.DrawLine (Vector3 (0, 0, 0), Vector3 (0, 0, -100), Color.green);	
-	
-
-	if (Input.GetMouseButtonDown (0) && iSwitch){
-	
-		if( Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition),  hit ) ) {
+		var mainCamera = Camera.main;
+		var hit : RaycastHit;
 		
-			 if(hit.rigidbody.gameObject.GetComponent("BoxCollider")){
-				draggingObject = hit.collider.gameObject;
+		//gizmo
+		
+		
+		Debug.DrawLine (Vector3 (0, 0, 0), Vector3 (100, 0, 0), Color.red);
+		Debug.DrawLine (Vector3 (0, 0, 0), Vector3 (0, 100, 0), Color.blue);
+		Debug.DrawLine (Vector3 (0, 0, 0), Vector3 (0, 0, -100), Color.green);	
+		
+	
+		if (Input.GetMouseButtonDown (0) && iSwitch){
+		
+			if( Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition),  hit ) ) {
+			
+				 if(hit.rigidbody.gameObject.GetComponent("BoxCollider")){
+					draggingObject = hit.collider.gameObject;
+					
+					tempPosition = hit.transform.position;
+					
+					mouseScreen = Vector3(Input.mousePosition.x,Input.mousePosition.y,-1 * mainCamera.transform.position.z);
+					
+					mouseWorld = mainCamera.ScreenToWorldPoint(mouseScreen);
+					
+					offSet = mouseWorld-hit.transform.position;		
 				
-				tempPosition = hit.transform.position;
+					
+					/* GUI Parameter */	
+					variableScript = draggingObject.GetComponent("Element");
+					draggingElementId = variableScript.elementID;
+					
+					var w:int = parameters[draggingElementId]["w"];
+					var h:int = parameters[draggingElementId]["h"];
+					var d:int = parameters[draggingElementId]["depth"];
+					elementType = parameters[draggingElementId]["elementType"];
+					elementSize = w.ToString() + "x" + h.ToString() + "x" + d.ToString();
+					elementF 	= parameters[draggingElementId]["Front"];
+					elementFU 	= parameters[draggingElementId]["FrontUp"];
+					elementFD 	= parameters[draggingElementId]["FrontDown"];
+					elementB 	= parameters[draggingElementId]["Back"];
+					elementL 	= parameters[draggingElementId]["Left"];
+					elementR 	= parameters[draggingElementId]["Right"];
+					elementBO 	= parameters[draggingElementId]["Bottom"];
+					elementT 	= parameters[draggingElementId]["Top"];
+					
+					ToggleLight(moduls[draggingElementId]);
+				}
+			}else{
+				//clear Highlighted Elements
+				if(draggingElementId != -1 && moduls.Count != 0){
+					if(!modulDestroyed)
+						var allChildren = moduls[prevHighlightedId].GetComponentsInChildren(Transform);
+		
+					for (var child : Transform in allChildren) {
+	  				// do whatever with child transform here
+		  				if(child.renderer != null){
+			    			if(child.renderer.gameObject.name !="Base"){
+				    			child.renderer.material.color = Color.white;
+				   			 }
+				    		else{
+				   				 child.renderer.material.color = Color.gray;
+				   			 }
+			    			variableScript.highlighted = false;
+		    			}
+		      		}
+		      		//draggingElementId = -1;
+		      		//prevHighlightedId = -1;
+				}
+			}
 				
+		
+		}
+		
+		if (Input.GetMouseButton (0)&& iSwitch){
+		
+			if(draggingObject){
+			
+		
 				mouseScreen = Vector3(Input.mousePosition.x,Input.mousePosition.y,-1 * mainCamera.transform.position.z);
-				
+					
 				mouseWorld = mainCamera.ScreenToWorldPoint(mouseScreen);
-				
-				offSet = mouseWorld-hit.transform.position;		
-			
-				
-				/* GUI Parameter */	
+					
 				variableScript = draggingObject.GetComponent("Element");
+				
 				draggingElementId = variableScript.elementID;
+						
+						
+				if(snapEnable){
+					draggingObject.transform.position.x = (snapFactorX * Mathf.Floor((mouseWorld.x- offSet.x)/snapFactorX)); 
+		       		draggingObject.transform.position.y = (snapFactorY * Mathf.Floor((mouseWorld.y- offSet.y)/snapFactorY)); 
+		       		
+		       		//Debug.Log(snapX);
+						
+				}
+				else{
+					draggingObject.transform.position.x = mouseWorld.x - offSet.x;
+					draggingObject.transform.position.y = mouseWorld.y - offSet.y;		
+				}		
 				
-				var w:int = parameters[draggingElementId]["w"];
-				var h:int = parameters[draggingElementId]["h"];
-				var d:int = parameters[draggingElementId]["depth"];
-				elementType = parameters[draggingElementId]["elementType"];
-				elementSize = w.ToString() + "x" + h.ToString() + "x" + d.ToString();
-				elementF 	= parameters[draggingElementId]["Front"];
-				elementFU 	= parameters[draggingElementId]["FrontUp"];
-				elementFD 	= parameters[draggingElementId]["FrontDown"];
-				elementB 	= parameters[draggingElementId]["Back"];
-				elementL 	= parameters[draggingElementId]["Left"];
-				elementR 	= parameters[draggingElementId]["Right"];
-				elementBO 	= parameters[draggingElementId]["Bottom"];
-				elementT 	= parameters[draggingElementId]["Top"];
 				
-				ToggleLight(moduls[draggingElementId]);
+				
+		    	var dragBaseHeight : int = parameters[draggingElementId]["baseHeight"];
+				
+				if(draggingObject.transform.position.y - draggingObject.transform.localScale.y * 0.5 - dragBaseHeight
+					< floor.gameObject.transform.position.y - floor.gameObject.transform.localScale.y * 0.5){
+					draggingObject.transform.position.y = draggingObject.transform.localScale.y * 0.5 + dragBaseHeight;			
+				}
+				
+				draggingObject.transform.position.z = 0;
 			}
-		}else{
-			//clear Highlighted Elements
-			if(draggingElementId != -1 && moduls.Count != 0){
-				if(!modulDestroyed)
-					var allChildren = moduls[prevHighlightedId].GetComponentsInChildren(Transform);
+		   
 	
-				for (var child : Transform in allChildren) {
-  				// do whatever with child transform here
-	  				if(child.renderer != null){
-		    			if(child.renderer.gameObject.name !="Base"){
-			    			child.renderer.material.color = Color.white;
-			   			 }
-			    		else{
-			   				 child.renderer.material.color = Color.gray;
-			   			 }
-		    			variableScript.highlighted = false;
-	    			}
-	      		}
-	      		//draggingElementId = -1;
-	      		//prevHighlightedId = -1;
-			}
 		}
-			
-	
-	}
-	
-	if (Input.GetMouseButton (0)&& iSwitch){
-	
-		if(draggingObject){
 		
-	
-			mouseScreen = Vector3(Input.mousePosition.x,Input.mousePosition.y,-1 * mainCamera.transform.position.z);
+		if (Input.GetMouseButtonUp (0)&& iSwitch){
+		
+			if(draggingObject){
 				
-			mouseWorld = mainCamera.ScreenToWorldPoint(mouseScreen);
 				
-			variableScript = draggingObject.GetComponent("Element");
-			
-			draggingElementId = variableScript.elementID;
-					
-					
-			if(snapEnable){
-				draggingObject.transform.position.x = (snapFactorX * Mathf.Floor((mouseWorld.x- offSet.x)/snapFactorX)); 
-	       		draggingObject.transform.position.y = (snapFactorY * Mathf.Floor((mouseWorld.y- offSet.y)/snapFactorY)); 
-	       		
-	       		//Debug.Log(snapX);
-					
+				
+				if(variableScript.isColliding == 1){
+					//Collide ederken mouse burakırsa
+					draggingObject.transform.position = tempPosition;
+					//draggingObject.transform.position.x = snapX;
+					//draggingObject.transform.position.y = snapY;
+				} 
+				
+				parameters[draggingElementId]["x"] = draggingObject.transform.position.x;
+				parameters[draggingElementId]["y"] = draggingObject.transform.position.y;
+				
+				RulesEngine();
+				
+				preDraggingObj = moduls[draggingElementId];
+				draggingObject = null;
 			}
-			else{
-				draggingObject.transform.position.x = mouseWorld.x - offSet.x;
-				draggingObject.transform.position.y = mouseWorld.y - offSet.y;		
-			}		
-			
-			
-			
-	    	var dragBaseHeight : int = parameters[draggingElementId]["baseHeight"];
-			
-			if(draggingObject.transform.position.y - draggingObject.transform.localScale.y * 0.5 - dragBaseHeight
-				< floor.gameObject.transform.position.y - floor.gameObject.transform.localScale.y * 0.5){
-				draggingObject.transform.position.y = draggingObject.transform.localScale.y * 0.5 + dragBaseHeight;			
-			}
-			
-			draggingObject.transform.position.z = 0;
 		}
-	   
-
-	}
+		
+	} // Set room size condition
 	
-	if (Input.GetMouseButtonUp (0)&& iSwitch){
-	
-		if(draggingObject){
-			
-			
-			
-			if(variableScript.isColliding == 1){
-				//Collide ederken mouse burakırsa
-				draggingObject.transform.position = tempPosition;
-				//draggingObject.transform.position.x = snapX;
-				//draggingObject.transform.position.y = snapY;
-			} 
-			
-			parameters[draggingElementId]["x"] = draggingObject.transform.position.x;
-			parameters[draggingElementId]["y"] = draggingObject.transform.position.y;
-			
-			RulesEngine();
-			
-			preDraggingObj = moduls[draggingElementId];
-			draggingObject = null;
-		}
-	}
-	
-}
+	setMouseZoom();
 }
 
 
@@ -639,6 +641,16 @@ function setCameraPosition(direction : String) {
 	//parameters[draggingElementId]["y"] = preDraggingObj.transform.position.y;
 	
 	
+}
+
+/* Mouse Control */
+// Todo control scene when mouse + cmd pressed
+function setMouseZoom() {
+	this.gameObject.transform.position.z = this.gameObject.transform.position.z + Input.GetAxis("Mouse ScrollWheel")*cameraShift;
+	if(Input.GetKey(KeyCode.LeftApple) && Input.GetMouseButton) {
+		
+		//this.gameObject.transform.position = this.gameObject.transform.position + Input.mousePosition;
+	}	
 }
 
 /* Keyboard Control */
