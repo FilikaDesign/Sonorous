@@ -73,6 +73,10 @@ var logo:Texture2D;
 
 // Modul Item Images
 var m1:Texture2D;
+var m2:Texture2D;
+var m3:Texture2D;
+var m4:Texture2D;
+var m5:Texture2D;
 
 //private var prevHighlighted : GameObject;
 private var prevHighlightedId : int;
@@ -306,29 +310,13 @@ function Update () {
 					elementBO 	= parameters[draggingElementId]["Bottom"];
 					elementT 	= parameters[draggingElementId]["Top"];
 					
-					ToggleLight(moduls[draggingElementId]);
+					
+					
+					ToggleLight();
+
 				}
 			}else{
-				//clear Highlighted Elements
-				if(draggingElementId != -1 && moduls.Count != 0){
-					if(!modulDestroyed)
-						var allChildren = moduls[prevHighlightedId].GetComponentsInChildren(Transform);
-		
-					for (var child : Transform in allChildren) {
-	  				// do whatever with child transform here
-		  				if(child.renderer != null){
-			    			if(child.renderer.gameObject.name !="Base"){
-				    			child.renderer.material.color = Color.white;
-				   			 }
-				    		else{
-				   				 child.renderer.material.color = Color.gray;
-				   			 }
-			    			variableScript.highlighted = false;
-		    			}
-		      		}
-		      		//draggingElementId = -1;
-		      		//prevHighlightedId = -1;
-				}
+				clearAllHighlightedModuls();
 			}
 				
 		
@@ -398,6 +386,7 @@ function Update () {
 			}
 		}
 		
+
 	} // Set room size condition
 	
 	setMouseZoom();
@@ -409,32 +398,21 @@ function Update () {
 **************** GUI *****************************************************************************
 **************************************************************************************************/
 private var guiRect:LTRect = new LTRect( Screen.width, 0,w, Screen.height );
+
 private var welcomeRect = new LTRect(0,0,Screen.width,Screen.height);
 
 private var guiPosX:int = Screen.width;
 function OnGUI() {
 	
 	GUI.skin = sonorousGUISkin;
-	/*
-	scrollPosition = GUI.BeginScrollView (Rect (10,300,130,100),
-	scrollPosition, Rect (0, 0, 220, 200));	
+		
 	
-	GUI.Button (Rect (0,0,100,20), "Top-left");
-	GUI.Button (Rect (0,21,100,20), "Top-left");
-	GUI.Button (Rect (0,42,100,20), "Top-left");
-	GUI.Button (Rect (0,63,100,20), "Top-left");
-	GUI.Button (Rect (0,84,100,20), "Top-left");
-	
-	GUI.EndScrollView ();
-	
-	GUI.Box(Rect(0,100,200,200),m1);
-	*/
 	// Enable Keyboard Interaction
 	initKeyboardInteraction();
 	
 	// Menu Buttons
 	if(GUI.Button(Rect(0,0,100,25),"Inspector")) {
-		guiState = "default";
+		//guiState = "default";
 		openInspector();
 	}
 	
@@ -446,7 +424,9 @@ function OnGUI() {
 	// Delete Button
 	else if(GUI.Button(Rect(202,0,100,25),"Delete Modul")) {
 		Destroy(moduls[draggingElementId]);
+		
 		modulDestroyed = true;
+		
 	}
 	
 	// Delete All Button
@@ -473,6 +453,7 @@ function OnGUI() {
 	
 	
 	if(guiState == "default") {
+		// Modul Info
 		GUI.Label(Rect(ml,ml,w,20),"Element Type");
 		GUI.Label(Rect(ml,ml+tfH,w,20),"Element Size");
 		GUI.Label(Rect(ml,ml+tfH*2,w,20),"Texture Front");
@@ -498,7 +479,64 @@ function OnGUI() {
 		GUI.Label(Rect(ml+startx,ml+tfH*9,w,20),": " + elementT);
 		
 		if(GUI.Button(Rect(ml,ml+tfH*10+mt,w-ml*2,20),"Add Element")) {
-			var myStuffTex5:Hashtable = {"elementId":4,
+			
+		}
+		
+		// Select Modul to Add Screen
+		scrollPosition = GUI.BeginScrollView (Rect (ml,ml+tfH*11+5+mt,w-10,Screen.height - 20*12-ml),
+		scrollPosition, Rect (0, 0, 0, (64+ml)*10));	
+		
+		if(GUI.Button(Rect( 0,0,128,64 ),m1)) addM1Box();
+		GUI.Button(Rect( 0,(64+ml),128,64 ),m2);
+		GUI.Button(Rect( 0,(64+ml)*2,128,64 ),m3);
+		GUI.Button(Rect( 0,(64+ml)*3,128,64 ),m4);
+		GUI.Button(Rect( 0,(64+ml)*4,128,64 ),m5);
+		GUI.Button(Rect( 0,(64+ml)*5,128,64 ),m1);
+		GUI.Button(Rect( 0,(64+ml)*6,128,64 ),m2);
+		GUI.Button(Rect( 0,(64+ml)*7,128,64 ),m3);
+		GUI.Button(Rect( 0,(64+ml)*8,128,64 ),m4);
+		GUI.Button(Rect( 0,(64+ml)*9,128,64 ),m5);
+		
+		GUI.EndScrollView ();
+		
+		
+	}
+	
+	else if(guiState == "select_base") {
+		GUI.Label(Rect(ml,ml,w,20),"UYARI");
+		GUI.Label(Rect(ml,ml+tfH,w,Screen.height),guiNotification);
+		
+		if(GUI.Toggle(Rect(ml,ml+tfH*5,100,30),inch2," 2 cm")) {
+			inch2 = true;
+			inch8 = false;
+			GameObject.Find(preDraggingObj.name).SendMessage("createBase",2);
+			preDraggingObj.transform.position.y = 2 + preDraggingObj.transform.localScale.y*0.5;	
+			parameters[draggingElementId]["y"] = 2 + preDraggingObj.transform.localScale.y*0.5;
+		}
+		
+		if(GUI.Toggle(Rect(ml+100,ml+tfH*5,200,30),inch8," 8 cm")) {
+			inch2 = false;
+			inch8 = true;
+			GameObject.Find(preDraggingObj.name).SendMessage("createBase",8);
+			preDraggingObj.transform.position.y = 8 + preDraggingObj.transform.localScale.y*0.5;	
+			parameters[draggingElementId]["y"] = 8 + preDraggingObj.transform.localScale.y*0.5;
+		}
+	}
+	
+	
+	
+	GUI.EndGroup ();
+	
+	// Welcome Screen
+	initSetRoomSize();
+	
+}
+
+/* 
+*** ADD SELECTED MODUL TO STGE AND SET ACTIVE
+*/
+function addM1Box() {
+	var myStuffTex5:Hashtable = {"elementId":4,
 							"elementType":"EX",
 							"Front":"H3375_ST22",
 	                        "FrontUp":"200s",
@@ -520,36 +558,6 @@ function OnGUI() {
 	                        };
 	        var id:String= (moduls.Count-1).ToString();
 	        addModul(myStuffTex5,id);
-		}
-	}else{
-		if(guiState == "select_base") {
-			GUI.Label(Rect(ml,ml,w,20),"UYARI");
-			GUI.Label(Rect(ml,ml+tfH,w,Screen.height),guiNotification);
-			
-			if(GUI.Toggle(Rect(ml,ml+tfH*5,100,30),inch2," 2 cm")) {
-				inch2 = true;
-				inch8 = false;
-				GameObject.Find(preDraggingObj.name).SendMessage("createBase",2);
-				preDraggingObj.transform.position.y = 2 + preDraggingObj.transform.localScale.y*0.5;	
-				parameters[draggingElementId]["y"] = 2 + preDraggingObj.transform.localScale.y*0.5;
-			}
-			
-			if(GUI.Toggle(Rect(ml+100,ml+tfH*5,200,30),inch8," 8 cm")) {
-				inch2 = false;
-				inch8 = true;
-				GameObject.Find(preDraggingObj.name).SendMessage("createBase",8);
-				preDraggingObj.transform.position.y = 8 + preDraggingObj.transform.localScale.y*0.5;	
-				parameters[draggingElementId]["y"] = 8 + preDraggingObj.transform.localScale.y*0.5;
-			}
-		}
-	}
-	
-	
-	GUI.EndGroup ();
-	
-	// Welcome Screen
-	initSetRoomSize();
-	
 }
 
 /*
@@ -578,6 +586,27 @@ function resetGUIParams() {
 
 function tweenFinished() {
 	//LeanTween.move( guiRect, Vector2(Screen.width, 0), 0.25 ).setOnComplete(tweenFinished);
+}
+
+function clearAllHighlightedModuls() {
+	//clear Highlighted Elements
+	if(draggingElementId != -1 && moduls.Count != 0){
+		if(!modulDestroyed)
+			var allChildren = moduls[prevHighlightedId].GetComponentsInChildren(Transform);
+
+		for (var child : Transform in allChildren) {
+		// do whatever with child transform here
+			if(child.renderer != null){
+    			if(child.renderer.gameObject.name !="Base"){
+	    			child.renderer.material.color = Color.white;
+	   			 }
+	    		else{
+	   				 child.renderer.material.color = Color.gray;
+	   			 }
+    			variableScript.highlighted = false;
+			}
+  		}
+	}
 }
 
 /*
@@ -646,11 +675,13 @@ function setCameraPosition(direction : String) {
 /* Mouse Control */
 // Todo control scene when mouse + cmd pressed
 function setMouseZoom() {
-	this.gameObject.transform.position.z = this.gameObject.transform.position.z + Input.GetAxis("Mouse ScrollWheel")*cameraShift;
-	if(Input.GetKey(KeyCode.LeftApple) && Input.GetMouseButton) {
-		
-		//this.gameObject.transform.position = this.gameObject.transform.position + Input.mousePosition;
-	}	
+	if(iSwitch) {
+		this.gameObject.transform.position.z = this.gameObject.transform.position.z + Input.GetAxis("Mouse ScrollWheel")*cameraShift;
+		if(Input.GetKey(KeyCode.LeftApple) && Input.GetMouseButton) {
+			
+			//this.gameObject.transform.position = this.gameObject.transform.position + Input.mousePosition;
+		}	
+	}
 }
 
 /* Keyboard Control */
@@ -939,7 +970,7 @@ function RulesEngine(){
 		}
 }
 
-function ToggleLight( go : GameObject ){
+function ToggleLight(){
 
 
 	//highlight
@@ -958,6 +989,7 @@ function ToggleLight( go : GameObject ){
 	    }
 	       
 	}
+	
  	if(prevHighlightedId != draggingElementId){
 	 	//de-highlight
 	 	if(!modulDestroyed)
