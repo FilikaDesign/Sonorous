@@ -276,7 +276,7 @@ function Update () {
 		Debug.DrawLine (Vector3 (0, 0, 0), Vector3 (0, 0, -100), Color.green);	
 		
 	
-		if (Input.GetMouseButtonDown (0) && iSwitch){
+		if (Input.GetMouseButtonDown (0)/* && iSwitch*/){
 		
 			if( Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition),  hit ) ) {
 			
@@ -322,7 +322,7 @@ function Update () {
 		
 		}
 		
-		if (Input.GetMouseButton (0)&& iSwitch){
+		if (Input.GetMouseButton (0) /*&& iSwitch*/){
 		
 			if(draggingObject){
 			
@@ -340,7 +340,7 @@ function Update () {
 					draggingObject.transform.position.x = (snapFactorX * Mathf.Floor((mouseWorld.x- offSet.x)/snapFactorX)); 
 		       		draggingObject.transform.position.y = (snapFactorY * Mathf.Floor((mouseWorld.y- offSet.y)/snapFactorY)); 
 		       		
-		       		//Debug.Log(snapX);
+		       		//Debug.Log(draggingObject.transform.position);
 						
 				}
 				else{
@@ -363,7 +363,7 @@ function Update () {
 	
 		}
 		
-		if (Input.GetMouseButtonUp (0)&& iSwitch){
+		if (Input.GetMouseButtonUp (0) /*&& iSwitch*/){
 		
 			if(draggingObject){
 				
@@ -404,6 +404,7 @@ private var welcomeRect = new LTRect(0,0,Screen.width,Screen.height);
 private var guiPosX:int = Screen.width;
 function OnGUI() {
 	
+	GUI.depth = 2000;
 	GUI.skin = sonorousGUISkin;
 		
 	
@@ -447,7 +448,6 @@ function OnGUI() {
 	var customButton : GUIStyle;
 	GUI.BeginGroup (guiRect.rect);
 	
-	//GUI.backgroundColor = Color(0,0,0,0.7);
 	GUI.color.a = 0.9;
 	GUI.Box(Rect(0, 0, w, Screen.height),"");
 	
@@ -486,7 +486,7 @@ function OnGUI() {
 		scrollPosition = GUI.BeginScrollView (Rect (ml,ml+tfH*11+5+mt,w-10,Screen.height - 20*12-ml),
 		scrollPosition, Rect (0, 0, 0, (64+ml)*10));	
 		
-		if(GUI.Button(Rect( 0,0,128,64 ),m1)) addM1Box();
+		if(GUI.Button(Rect( 0,0,128,64 ),m1)) {addM1Box();draggingObject = moduls[moduls.Count-1];Debug.Log(moduls.Count);}
 		GUI.Button(Rect( 0,(64+ml),128,64 ),m2);
 		GUI.Button(Rect( 0,(64+ml)*2,128,64 ),m3);
 		GUI.Button(Rect( 0,(64+ml)*3,128,64 ),m4);
