@@ -55,8 +55,8 @@ function Start (){
 			sc.center.x =  0.5;
 			sc.center.y =  0;
 			sc.center.z =  -1 * 0.5;
-			sc.size.x = 0.9999999;
-			sc.size.y = 0.9999999;
+			sc.size.x = 0.99;
+			sc.size.y = 0.99;
 			
 			
 			
@@ -261,6 +261,7 @@ if(params["baseHeight"] == 0){
 		//Debug.Log("Baza yarat");
 		params["baseHeight"] = size;
 		var baseElement: GameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+		baseElement.name = "Base";
 		baseElement.transform.localScale = Vector3(w,size,depth-2);
 		baseElement.transform.position.x = elementContainer.transform.position.x + w * 0.5;
 		baseElement.transform.position.z = elementContainer.transform.position.z - depth * 0.5 + 1;

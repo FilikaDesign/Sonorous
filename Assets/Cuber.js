@@ -26,10 +26,12 @@ private var variableScript : Element;
 private var tempPosition : Vector3 = new Vector3(0,0,0);
 private var draggingObject : GameObject;
 private var preDraggingObj:GameObject;
-private var draggingElementId : int;
+private var draggingElementId : int = -1;
 
 
-private var snapFactor	: float = 2;
+private var snapFactorX	: float = 5;
+private var snapFactorY	: float = 2;
+private var cameraShift : float = 5;
 private var snapEnable 	: boolean = true;
 
 // GUI
@@ -40,6 +42,18 @@ private var guiNotification:String = "";
 // toggle state
 private var inch2:boolean = false;
 private var inch8:boolean = false;
+// Material Change
+private var setFront:boolean = false;
+private var setFrontUp:boolean = false;
+private var setFrontDown:boolean = false;
+private var setLeft:boolean = false;
+private var setRight:boolean = false;
+private var setBack:boolean = false;
+private var setBottom:boolean = false;
+private var setTop:boolean = false;
+
+// Scroll Position
+var scrollPosition : Vector2 = Vector2.zero;
 
 private var elementSize:String = "0x0";
 private var elementType:String = "default";
@@ -57,14 +71,33 @@ private var ml:int = 5;
 private var mt:int = 8;
 private var bMargin:int = 5;
 private var tfH:int = 20;
-
+private var tglH:int = 20;
 public var sonorousGUISkin:GUISkin;
-
-private var prevHighlighted : GameObject;
-
-
 //
 
+var setRoomSize : boolean = false;
+private var textWidth:String = "800";
+private var textHeight:String = "300";
+var logo:Texture2D;
+
+// Modul Item Images
+var m1:Texture2D;
+var m2:Texture2D;
+var m3:Texture2D;
+var m4:Texture2D;
+var m5:Texture2D;
+
+// Moudl Textures
+var t1:Texture2D;
+var t2:Texture2D;
+var t3:Texture2D;
+var t4:Texture2D;
+//private var prevHighlighted : GameObject;
+private var prevHighlightedId : int;
+private var modulDestroyed:boolean = false;
+
+private var ww:float;
+private var hh:float;
 
 function Start () {
 	
@@ -78,10 +111,12 @@ function Start () {
 	
 	// Add the light component
 	lightGameObject.AddComponent(Light);
+	
 	// Set color and position
 	lightGameObject.light.color = Color.white;
 	lightGameObject.light.type = LightType.Directional;
 	lightGameObject.light.intensity = 0.4;
+	
 	// Set the position (or any transform property) after
 	// adding the light component.
 	lightGameObject.transform.position = Vector3(0, 500, 0);
@@ -97,6 +132,7 @@ function Start () {
 	pointLightGameObject.light.type = LightType.Point;
 	pointLightGameObject.light.intensity = 1;
 	pointLightGameObject.light.range = 130;
+	
 	// Set the position (or any transform property) after
 	// adding the light component.
 	pointLightGameObject.transform.position = Vector3(60, 140, -31);
@@ -104,12 +140,15 @@ function Start () {
 	
 	
 	//create Background Wall and Floor
+	ww = float.Parse(textWidth);
+	hh = float.Parse(textHeight);
+	
 	wall = GameObject.CreatePrimitive(PrimitiveType.Cube);
 	wall.name = "Wall";
 	var wallBoxCollider : BoxCollider = wall.GetComponent("BoxCollider");
 	wallBoxCollider.enabled = false;
-	wall.transform.position = Vector3(0,150,30);
-	wall.transform.localScale = Vector3(800,2,300);
+	wall.transform.position = Vector3(0,hh*0.5,10);
+	wall.transform.localScale = Vector3(ww,2,hh);
 	wall.transform.Rotate(90,0,0);
 	wall.renderer.material.mainTexture = Resources.Load("wall", Texture2D);
 	wall.renderer.material.mainTextureScale = Vector2 (11,11);
@@ -119,8 +158,8 @@ function Start () {
 	floor.name = "Floor";
 	var floorBoxCollider : BoxCollider = floor.GetComponent("BoxCollider");
 	floorBoxCollider.enabled = false;
-	floor.transform.position = Vector3(0,-1,-120);
-	floor.transform.localScale = Vector3(800,2,300);
+	floor.transform.position = Vector3(0,-1,-hh*0.5+10);
+	floor.transform.localScale = Vector3(ww,2,hh);
 	floor.transform.Rotate(0,0,0);
 	floor.renderer.material.mainTexture = Resources.Load("wooden-floor-texture", Texture2D);
 	floor.renderer.material.mainTextureScale = Vector2 (11,11);
@@ -210,175 +249,161 @@ function Start () {
                         "isRigid":1,
                         "baseHeight":0
                         };   
-	                                        
+                        
+                        
+	addModul(myStuffTex,"0");
+	addModul(myStuffTex2,"1");
+	addModul(myStuffTex3,"2");
+	addModul(myStuffTex4,"3");                                        
     //////
-           
-	//Add parameter data to ArrayList
-	parameters.Add(myStuffTex);
-	parameters.Add(myStuffTex2);
-	parameters.Add(myStuffTex3);
-	parameters.Add(myStuffTex4);
-	/////
+     
 	
 	
-	// Create moduls 1
-	var eleman : GameObject = new GameObject("Kutu");
+}
+
+/* ADD MODUL METHOD */
+function addModul(modulParams:Hashtable, id:String) {
+	
+	parameters.Add(modulParams);
+	
+	var eleman : GameObject = new GameObject("Kutu"+id);
 	eleman.AddComponent("Element");
 	
 	
 	var other : Element = eleman.GetComponent("Element");
-	other.params = parameters[0];
+	other.params = parameters[parameters.Count-1];
 	
-	
-	/////// 2
-	var eleman2 : GameObject = new GameObject("Kutu2");
-	eleman2.AddComponent("Element");
-	
-	
-	var other2 : Element = eleman2.GetComponent("Element");
-	other2.params = parameters[1];
-
-
-	//////// 3
-	var eleman3 : GameObject = new GameObject("Kutu3");
-	eleman3.AddComponent("Element");
-	
-	var other3 : Element = eleman3.GetComponent("Element");
-	other3.params = parameters[2];
-	
-	//////// 4
-	var eleman4 : GameObject = new GameObject("Kutu4");
-	eleman4.AddComponent("Element");
-	
-	var other4 : Element = eleman4.GetComponent("Element");
-	other4.params = parameters[3];
-	
-	
-	prevHighlighted = new GameObject("prevHighlighted");
-	
+	moduls.Add(eleman);
 
 }
 
 function Update () {
-
-	var mainCamera = Camera.main;
-	var hit : RaycastHit;
-	
-	//gizmo
-	
-	
-	Debug.DrawLine (Vector3 (0, 0, 0), Vector3 (100, 0, 0), Color.red);
-	Debug.DrawLine (Vector3 (0, 0, 0), Vector3 (0, 100, 0), Color.blue);
-	Debug.DrawLine (Vector3 (0, 0, 0), Vector3 (0, 0, -100), Color.green);	
-	
-
-	if (Input.GetMouseButtonDown (0) && iSwitch){
-	
-		if( Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition),  hit ) ) {
+	if(setRoomSize) {
+		var mainCamera = Camera.main;
+		var hit : RaycastHit;
 		
-			 if(hit.rigidbody.gameObject.GetComponent("BoxCollider")){
-				draggingObject = hit.collider.gameObject;
+		//gizmo
+		
+		
+		Debug.DrawLine (Vector3 (0, 0, 0), Vector3 (100, 0, 0), Color.red);
+		Debug.DrawLine (Vector3 (0, 0, 0), Vector3 (0, 100, 0), Color.blue);
+		Debug.DrawLine (Vector3 (0, 0, 0), Vector3 (0, 0, -100), Color.green);	
+		
+	
+		if (Input.GetMouseButtonDown (0)/* && iSwitch*/){
+		
+			if( Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition),  hit ) ) {
+			
+				 if(hit.rigidbody.gameObject.GetComponent("BoxCollider")){
+					draggingObject = hit.collider.gameObject;
+					
+					tempPosition = hit.transform.position;
+					
+					mouseScreen = Vector3(Input.mousePosition.x,Input.mousePosition.y,-1 * mainCamera.transform.position.z);
+					
+					mouseWorld = mainCamera.ScreenToWorldPoint(mouseScreen);
+					
+					offSet = mouseWorld-hit.transform.position;		
 				
-				tempPosition = hit.transform.position;
+					
+					/* GUI Parameter */	
+					variableScript = draggingObject.GetComponent("Element");
+					draggingElementId = variableScript.elementID;
+					
+					var w:int = parameters[draggingElementId]["w"];
+					var h:int = parameters[draggingElementId]["h"];
+					var d:int = parameters[draggingElementId]["depth"];
+					elementType = parameters[draggingElementId]["elementType"];
+					elementSize = w.ToString() + "x" + h.ToString() + "x" + d.ToString();
+					elementF 	= parameters[draggingElementId]["Front"];
+					elementFU 	= parameters[draggingElementId]["FrontUp"];
+					elementFD 	= parameters[draggingElementId]["FrontDown"];
+					elementB 	= parameters[draggingElementId]["Back"];
+					elementL 	= parameters[draggingElementId]["Left"];
+					elementR 	= parameters[draggingElementId]["Right"];
+					elementBO 	= parameters[draggingElementId]["Bottom"];
+					elementT 	= parameters[draggingElementId]["Top"];
+					
+					
+					Debug.Log("draggingElementId : "+draggingElementId);
+					ToggleLight();
+
+				}
+			}else{
+				clearAllHighlightedModuls();
+			}
 				
+		
+		}
+		
+		if (Input.GetMouseButton (0) /*&& iSwitch*/){
+		
+			if(draggingObject){
+			
+		
 				mouseScreen = Vector3(Input.mousePosition.x,Input.mousePosition.y,-1 * mainCamera.transform.position.z);
-				
+					
 				mouseWorld = mainCamera.ScreenToWorldPoint(mouseScreen);
-				
-				offSet = mouseWorld-hit.transform.position;		
-			
-				
-				/* GUI Parameter */	
+					
 				variableScript = draggingObject.GetComponent("Element");
+				
 				draggingElementId = variableScript.elementID;
+						
+						
+				if(snapEnable){
+					draggingObject.transform.position.x = (snapFactorX * Mathf.Floor((mouseWorld.x- offSet.x)/snapFactorX)); 
+		       		draggingObject.transform.position.y = (snapFactorY * Mathf.Floor((mouseWorld.y- offSet.y)/snapFactorY)); 
+		       		
+		       		//Debug.Log(draggingObject.transform.position);
+						
+				}
+				else{
+					draggingObject.transform.position.x = mouseWorld.x - offSet.x;
+					draggingObject.transform.position.y = mouseWorld.y - offSet.y;		
+				}		
 				
-				var w:int = parameters[draggingElementId]["w"];
-				var h:int = parameters[draggingElementId]["h"];
-				var d:int = parameters[draggingElementId]["depth"];
-				elementType = parameters[draggingElementId]["elementType"];
-				elementSize = w.ToString() + "x" + h.ToString() + "x" + d.ToString();
-				elementF 	= parameters[draggingElementId]["Front"];
-				elementFU 	= parameters[draggingElementId]["FrontUp"];
-				elementFD 	= parameters[draggingElementId]["FrontDown"];
-				elementB 	= parameters[draggingElementId]["Back"];
-				elementL 	= parameters[draggingElementId]["Left"];
-				elementR 	= parameters[draggingElementId]["Right"];
-				elementBO 	= parameters[draggingElementId]["Bottom"];
-				elementT 	= parameters[draggingElementId]["Top"];
-				//
 				
-				ToggleLight(draggingObject);
+				
+		    	var dragBaseHeight : int = parameters[draggingElementId]["baseHeight"];
+				
+				if(draggingObject.transform.position.y - draggingObject.transform.localScale.y * 0.5 - dragBaseHeight
+					< floor.gameObject.transform.position.y - floor.gameObject.transform.localScale.y * 0.5){
+					draggingObject.transform.position.y = draggingObject.transform.localScale.y * 0.5 + dragBaseHeight;			
+				}
+				
+				draggingObject.transform.position.z = 0;
 			}
+		   
+	
 		}
-			
-	
-	}
-	
-	if (Input.GetMouseButton (0)&& iSwitch){
-	
-		if(draggingObject){
 		
-	
-			mouseScreen = Vector3(Input.mousePosition.x,Input.mousePosition.y,-1 * mainCamera.transform.position.z);
+		if (Input.GetMouseButtonUp (0) /*&& iSwitch*/){
+		
+			if(draggingObject){
 				
-			mouseWorld = mainCamera.ScreenToWorldPoint(mouseScreen);
 				
-			variableScript = draggingObject.GetComponent("Element");
-			
-			draggingElementId = variableScript.elementID;
-					
-					
-			if(snapEnable){
-				draggingObject.transform.position.x = (snapFactor * Mathf.Floor((mouseWorld.x- offSet.x)/snapFactor)); 
-	       		draggingObject.transform.position.y = (snapFactor * Mathf.Floor((mouseWorld.y- offSet.y)/snapFactor)); 
-	       		
-	       		//Debug.Log(snapX);
-					
+				
+				if(variableScript.isColliding == 1){
+					//Collide ederken mouse burakırsa
+					draggingObject.transform.position = tempPosition;
+					//draggingObject.transform.position.x = snapX;
+					//draggingObject.transform.position.y = snapY;
+				} 
+				
+				parameters[draggingElementId]["x"] = draggingObject.transform.position.x;
+				parameters[draggingElementId]["y"] = draggingObject.transform.position.y;
+				
+				RulesEngine();
+				
+				preDraggingObj = moduls[draggingElementId];
+				draggingObject = null;
 			}
-			else{
-				draggingObject.transform.position.x = mouseWorld.x - offSet.x;
-				draggingObject.transform.position.y = mouseWorld.y - offSet.y;		
-			}		
-			
-			
-			
-	    	var dragBaseHeight : int = parameters[draggingElementId]["baseHeight"];
-			
-			if(draggingObject.transform.position.y - draggingObject.transform.localScale.y * 0.5 - dragBaseHeight
-				< floor.gameObject.transform.position.y - floor.gameObject.transform.localScale.y * 0.5){
-				draggingObject.transform.position.y = draggingObject.transform.localScale.y * 0.5 + dragBaseHeight;			
-			}
-			
-			draggingObject.transform.position.z = 0;
 		}
-	   
+		
 
-	}
+	} // Set room size condition
 	
-	if (Input.GetMouseButtonUp (0)&& iSwitch){
-	
-		if(draggingObject){
-			
-			
-			
-			if(variableScript.isColliding == 1){
-				//Collide ederken mouse burakırsa
-				draggingObject.transform.position = tempPosition;
-				//draggingObject.transform.position.x = snapX;
-				//draggingObject.transform.position.y = snapY;
-			} 
-			
-			parameters[draggingElementId]["x"] = draggingObject.transform.position.x;
-			parameters[draggingElementId]["y"] = draggingObject.transform.position.y;
-			
-			RulesEngine();
-			
-			preDraggingObj = draggingObject;
-			draggingObject = null;
-		}
-	}
-	
-
+	setMouseZoom();
 }
 
 
@@ -387,47 +412,65 @@ function Update () {
 **************** GUI *****************************************************************************
 **************************************************************************************************/
 private var guiRect:LTRect = new LTRect( Screen.width, 0,w, Screen.height );
+
+private var welcomeRect = new LTRect(0,0,Screen.width,Screen.height);
+
 private var guiPosX:int = Screen.width;
 function OnGUI() {
 	
+	GUI.depth = 2000;
 	GUI.skin = sonorousGUISkin;
+		
 	
+	// Enable Keyboard Interaction
+	initKeyboardInteraction();
+	
+	// Menu Buttons
 	if(GUI.Button(Rect(0,0,100,25),"Inspector")) {
-		guiState = "default";
 		openInspector();
 	}
 	
-	
-	
-	/* Keyboard Control */
-	if (Event.current.Equals (Event.KeyboardEvent ("up")) || Event.current.Equals (Event.KeyboardEvent ("w"))) {
-		
-		setPositionArray("up");
-		
-	}else if(Event.current.Equals (Event.KeyboardEvent ("down")) || Event.current.Equals (Event.KeyboardEvent ("s"))) {
-	
-		setPositionArray("down");
-	
-	
-	}else if(Event.current.Equals (Event.KeyboardEvent ("left")) || Event.current.Equals (Event.KeyboardEvent ("a"))) {
-		setPositionArray("left");
-	
-	}else if(Event.current.Equals (Event.KeyboardEvent ("right")) || Event.current.Equals (Event.KeyboardEvent ("d"))) {
-	
-		setPositionArray("right");
-	
+	// Screen Shot Button
+	else if(GUI.Button(Rect(101,0,100,25),"Screen Shot")) {
+		Application.CaptureScreenshot("Screenshot.png",1);
 	}
+	
+	// Delete Button
+	else if(GUI.Button(Rect(202,0,100,25),"Delete Modul")) {
+		Destroy(moduls[draggingElementId]);
+		modulDestroyed = true;
+	}
+	
+	// Change Material
+	else if(GUI.Button(Rect(303,0,100,25),"Chage Material")) {
+		guiState = "modul_edit";
+		openInspector();
+	}
+	
+	// Delete All Button
+	else if(GUI.Button(Rect(404,0,100,25),"Delete All")) {
+		for(var i:int=0; i < moduls.Count; i++) {
+			Destroy(moduls[i]);
+		}
+		modulDestroyed = true;
+	}
+	
+	// Set Room Size
+	else if(GUI.Button(Rect(505,0,100,25),"Room Size")){
+		setRoomSize = false;
+	}
+	
 	
 	/* GUI State */
 	var customButton : GUIStyle;
 	GUI.BeginGroup (guiRect.rect);
 	
-	//GUI.backgroundColor = Color(0,0,0,0.7);
 	GUI.color.a = 0.9;
 	GUI.Box(Rect(0, 0, w, Screen.height),"");
 	
 	
 	if(guiState == "default") {
+		// Modul Info
 		GUI.Label(Rect(ml,ml,w,20),"Element Type");
 		GUI.Label(Rect(ml,ml+tfH,w,20),"Element Size");
 		GUI.Label(Rect(ml,ml+tfH*2,w,20),"Texture Front");
@@ -452,8 +495,164 @@ function OnGUI() {
 		GUI.Label(Rect(ml+startx,ml+tfH*8,w,20),": " + elementBO);
 		GUI.Label(Rect(ml+startx,ml+tfH*9,w,20),": " + elementT);
 		
-		if(GUI.Button(Rect(ml,ml+tfH*10+mt,w-ml*2,20),"Add Element")) {
-			var myStuffTex5:Hashtable = {"elementId":4,
+		GUI.Label(Rect(ml,ml+tfH*10+mt,w-ml*2,20),"Add Element");
+		
+		// Select Modul to Add Screen
+		scrollPosition = GUI.BeginScrollView (Rect (ml,ml+tfH*11+5+mt,w-10,Screen.height - 20*12-ml),
+		scrollPosition, Rect (0, 0, 0, (64+ml)*10));	
+		
+		if(GUI.Button(Rect( 0,0,128,64 ),m1)) {addM1Box();draggingObject = moduls[moduls.Count-1];Debug.Log(moduls.Count);}
+		GUI.Button(Rect( 0,(64+ml),128,64 ),m2);
+		GUI.Button(Rect( 0,(64+ml)*2,128,64 ),m3);
+		GUI.Button(Rect( 0,(64+ml)*3,128,64 ),m4);
+		GUI.Button(Rect( 0,(64+ml)*4,128,64 ),m5);
+		GUI.Button(Rect( 0,(64+ml)*5,128,64 ),m1);
+		GUI.Button(Rect( 0,(64+ml)*6,128,64 ),m2);
+		GUI.Button(Rect( 0,(64+ml)*7,128,64 ),m3);
+		GUI.Button(Rect( 0,(64+ml)*8,128,64 ),m4);
+		GUI.Button(Rect( 0,(64+ml)*9,128,64 ),m5);
+		
+		GUI.EndScrollView ();
+		
+		
+	}
+	
+	else if(guiState == "select_base") {
+		GUI.Label(Rect(ml,ml,w,20),"UYARI");
+		GUI.Label(Rect(ml,ml+tfH,w,Screen.height),guiNotification);
+		
+		if(GUI.Toggle(Rect(ml,ml+tfH*5,100,30),inch2," 2 cm")) {
+			inch2 = true;
+			inch8 = false;
+			GameObject.Find(preDraggingObj.name).SendMessage("createBase",2);
+			preDraggingObj.transform.position.y = 2 + preDraggingObj.transform.localScale.y*0.5;	
+			parameters[draggingElementId]["y"] = 2 + preDraggingObj.transform.localScale.y*0.5;
+		}
+		
+		if(GUI.Toggle(Rect(ml+100,ml+tfH*5,200,30),inch8," 8 cm")) {
+			inch2 = false;
+			inch8 = true;
+			GameObject.Find(preDraggingObj.name).SendMessage("createBase",8);
+			preDraggingObj.transform.position.y = 8 + preDraggingObj.transform.localScale.y*0.5;	
+			parameters[draggingElementId]["y"] = 8 + preDraggingObj.transform.localScale.y*0.5;
+		}
+	}
+	
+	// Change Material GUI
+	else if(guiState == "modul_edit" && draggingElementId > -1) {
+		
+		var tex:String = "wall";
+		
+		var num:int = parameters[draggingElementId]["nFrontFace"];
+		var minusFac:int = 0;
+		
+		GUI.Label(Rect(ml,ml+tfH*(0),w,tfH),"1- Select Surface...");
+		
+		if(num > 1) {
+			setFrontUp = (GUI.Toggle(Rect(ml,ml+tfH*1,w,tglH),setFrontUp," Set Front Up Material"));
+			
+			setFrontDown = (GUI.Toggle(Rect(ml,ml+tfH*2,w,tglH),setFrontDown," Set Front Down Material"));
+			
+			minusFac = 1;
+		}else{
+		
+			setFront = (GUI.Toggle(Rect(ml,ml+tfH*1,w,tglH),setFront," Set Front Material"));
+			
+			minusFac=2;
+		}
+		
+		setLeft = (GUI.Toggle(Rect(ml,ml+tfH*(4-minusFac),w,tglH),setLeft," Set Left Material"));
+		
+		
+		setRight = (GUI.Toggle(Rect(ml,ml+tfH*(5-minusFac),w,tglH),setRight," Set Right Material"));
+		
+		
+		setBack = (GUI.Toggle(Rect(ml,ml+tfH*(6-minusFac),w,tglH),setBack," Set Back Material"));
+		
+		
+		setBottom = (GUI.Toggle(Rect(ml,ml+tfH*(7-minusFac),w,tglH),setBottom," Set Bottom Material"));
+		
+		
+		setTop = (GUI.Toggle(Rect(ml,ml+tfH*(8-minusFac),w,tglH),setTop," Set Top Material"));
+		
+		
+		GUI.Label(Rect(ml,ml+tfH*(10-minusFac),w,tfH),"2- Click on Material");
+		
+		if(GUI.Button(Rect( ml,ml+tfH*(11-minusFac),55,55 ),t1)) 
+		{	
+			tex = "t1";
+			setTextures(tex);
+		}
+		
+		if(GUI.Button(Rect( ml+60,ml+tfH*(11-minusFac),55,55 ),t2)) 
+		{	
+			tex = "t2";
+			setTextures(tex);
+		}
+		
+		if(GUI.Button(Rect( ml+120,ml+tfH*(11-minusFac),55,55 ),t3)) 
+		{	
+			tex = "t3";
+			setTextures(tex);
+		}
+		
+		if(GUI.Button(Rect( ml,ml+tfH*(11-minusFac)+60,55,55 ),t4)) 
+		{	
+			tex = "t4";
+			setTextures(tex);
+		}
+	}
+	
+	
+	
+	GUI.EndGroup ();
+	
+	// Welcome Screen
+	initSetRoomSize();
+	
+}
+
+
+function setTextures(tex:String) {
+	variableScript = moduls[draggingElementId].GetComponent("Element");
+	if(setFrontUp) 
+	{
+		variableScript.cubeFrontUp.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
+	}
+	
+	if(setFrontDown) {
+		variableScript.cubeFrontDown.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
+	}
+	
+	if(setFront) {
+		variableScript.cubeFront.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
+	}
+	
+	if(setLeft) {
+		variableScript.cubeLeft.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
+	}
+		
+	if(setRight) {
+		variableScript.cubeRight.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
+	}
+	
+	if(setBack) {
+		variableScript.cubeBack.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
+	}
+	
+	if(setBottom) {
+		variableScript.cubeBottom.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
+	}
+	
+	if(setTop) {
+		variableScript.cubeTop.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
+	}
+}
+/* 
+*** ADD SELECTED MODUL TO STGE AND SET ACTIVE
+*/
+function addM1Box() {
+	var myStuffTex5:Hashtable = {"elementId":4,
 							"elementType":"EX",
 							"Front":"H3375_ST22",
 	                        "FrontUp":"200s",
@@ -473,116 +672,176 @@ function OnGUI() {
 	                        "isRigid":1,
 	                        "baseHeight":0
 	                        };
-	        
-	        parameters.Add(myStuffTex5);
-	        
-	        var eleman4 : GameObject = new GameObject("Kutu5");
-			eleman4.AddComponent("Element");
-		
-	        var other4 : Element = eleman4.GetComponent("Element");
-			other4.params = parameters[4];
-		}
-	}else{
-		if(guiState == "select_base") {
-			GUI.Label(Rect(ml,ml,w,20),"UYARI");
-			GUI.Label(Rect(ml,ml+tfH,w,Screen.height),guiNotification);
-			
-			if(GUI.Toggle(Rect(ml,ml+tfH*5,100,30),inch2," 2 cm")) {
-				inch2 = true;
-				inch8 = false;
-				GameObject.Find(preDraggingObj.name).SendMessage("createBase",2);
-				preDraggingObj.transform.position.y = 2 + preDraggingObj.transform.localScale.y*0.5;	
-				parameters[draggingElementId]["y"] = 2 + preDraggingObj.transform.localScale.y*0.5;
-			}
-			
-			if(GUI.Toggle(Rect(ml+100,ml+tfH*5,200,30),inch8," 8 cm")) {
-				inch2 = false;
-				inch8 = true;
-				GameObject.Find(preDraggingObj.name).SendMessage("createBase",8);
-				preDraggingObj.transform.position.y = 8 + preDraggingObj.transform.localScale.y*0.5;	
-				parameters[draggingElementId]["y"] = 8 + preDraggingObj.transform.localScale.y*0.5;
-			}
-			
-			//GUI.Toggle(Rect(),
-		}
-	}
-	
-	
-	GUI.EndGroup ();
+	        var id:String= (moduls.Count-1).ToString();
+	        addModul(myStuffTex5,id);
 }
 
+/*
+*** OPEN INSPECTOR PANEL
+*/
 function openInspector() {
 	if(iSwitch) {
-			guiPosX = Screen.width-w;
-		}else{
-			guiPosX = guiPosX+w;
-			resetGUIParams();
-		}
-		LeanTween.move( guiRect, Vector2(guiPosX, 0), 0.25 );
-		//d.setOnComplete( tweenFinished );
-		
-		iSwitch =  !iSwitch;
+		guiPosX = Screen.width-w;
+	}else{
+		guiPosX = guiPosX+w;
+		resetGUIParams();
+	}
+	LeanTween.move( guiRect, Vector2(guiPosX, 0), 0.25 );
+	//d.setOnComplete( tweenFinished );
+	
+	iSwitch =  !iSwitch;
 }
 
+/*
+*** RESET GUI PAREMETERS
+*/
 function resetGUIParams() {
 	inch2 = false;
 	inch8 = false;
+	guiState = "default";
 }
 
 function tweenFinished() {
 	//LeanTween.move( guiRect, Vector2(Screen.width, 0), 0.25 ).setOnComplete(tweenFinished);
-	Debug.Log(guiRect.rect.x);
 }
 
+function clearAllHighlightedModuls() {
+	//clear Highlighted Elements
+	if(draggingElementId != -1 && moduls.Count != 0){
+		if(!modulDestroyed)
+			var allChildren = moduls[prevHighlightedId].GetComponentsInChildren(Transform);
 
-function hideInspector() {
-
-}
-
-function setPositionArray(direction : String) {
-
-	
-	if(variableScript.isColliding == 0){
-		
-		tempPosition = preDraggingObj.transform.position;
-	} else{
-		Debug.Log("isColliding");
-		//Collide ederken mouse burakırsa
-		preDraggingObj.transform.position = tempPosition;
-		
+		for (var child : Transform in allChildren) {
+		// do whatever with child transform here
+			if(child.renderer != null){
+    			if(child.renderer.gameObject.name !="Base"){
+	    			child.renderer.material.color = Color.white;
+	   			 }
+	    		else{
+	   				 child.renderer.material.color = Color.gray;
+	   			 }
+    			variableScript.highlighted = false;
+			}
+  		}
 	}
-	
+}
+
+/*
+*** INIT ROOM SIZE
+*/
+function initSetRoomSize() {
+
+	if(!setRoomSize) {
+		GUI.color.a = 0.9;
+		GUI.BeginGroup(welcomeRect.rect);
+		GUI.Box(Rect(0,0,Screen.width,Screen.height),"");
+		GUI.Box(Rect((Screen.width-logo.width)*0.5,50,logo.width,logo.height),logo);
+		textWidth = GUI.TextField(Rect(Screen.width*0.5-35,150,70,20),textWidth);
+		textHeight = GUI.TextField(Rect(Screen.width*0.5-35,174,70,20),textHeight);
+		
+		if(GUI.Button(Rect(Screen.width*0.5-50,210,100,30),"OK")) {
+			wall.transform.localScale = Vector3(parseInt(textWidth),2,parseInt(textHeight));
+			wall.transform.position = Vector3(0,parseInt(textHeight)*0.5,10);
+			floor.transform.localScale = Vector3(parseInt(textWidth),2,parseInt(textHeight));
+			floor.transform.position = Vector3(0,-1,-parseInt(textHeight)*0.5+10);
+			setRoomSize = true;			
+		}
+		
+		GUI.EndGroup();
+	}
+}
+
+function setCameraPosition(direction : String) {
+
 	switch(direction){
 	
+		case "zoomin":
+			this.gameObject.transform.position.z = this.gameObject.transform.position.z + cameraShift;	
+			break;
+		case "zoomout":
+			this.gameObject.transform.position.z = this.gameObject.transform.position.z - cameraShift;	
+			break;
 		case "up":
-			preDraggingObj.transform.position.y = preDraggingObj.transform.position.y + snapFactor;	
+			this.gameObject.transform.position.y = this.gameObject.transform.position.y + cameraShift;	
 			break;
 		case "down":
-			preDraggingObj.transform.position.y = preDraggingObj.transform.position.y - snapFactor;	
+			this.gameObject.transform.position.y = this.gameObject.transform.position.y - cameraShift;	
 			break;
 		case "right":
-			preDraggingObj.transform.position.x = preDraggingObj.transform.position.x + snapFactor;	
+			this.gameObject.transform.position.x = this.gameObject.transform.position.x + cameraShift;	
 			break;
 		case "left":
-			preDraggingObj.transform.position.x = preDraggingObj.transform.position.x - snapFactor;	
+			this.gameObject.transform.position.x = this.gameObject.transform.position.x - cameraShift;	
 			break;
 		default :
 			break;
 	
 	
 	}
-	Debug.Log(variableScript.isColliding);
+	
 	
 			
-	RulesEngine();
+	//RulesEngine();
 	
-	parameters[draggingElementId]["x"] = preDraggingObj.transform.position.x;
-	parameters[draggingElementId]["y"] = preDraggingObj.transform.position.y;
+	//parameters[draggingElementId]["x"] = preDraggingObj.transform.position.x;
+	//parameters[draggingElementId]["y"] = preDraggingObj.transform.position.y;
 	
 	
 }
 
+/* Mouse Control */
+// Todo control scene when mouse + cmd pressed
+function setMouseZoom() {
+	if(iSwitch) {
+		this.gameObject.transform.position.z = this.gameObject.transform.position.z + Input.GetAxis("Mouse ScrollWheel")*cameraShift;
+		if(Input.GetKey(KeyCode.LeftApple) && Input.GetMouseButton) {
+			
+			//this.gameObject.transform.position = this.gameObject.transform.position + Input.mousePosition;
+		}	
+	}
+}
 
+/* Keyboard Control */
+function initKeyboardInteraction() {
+	
+	if(setRoomSize) {
+		if (Event.current.Equals (Event.KeyboardEvent ("up")) ) {
+			
+			setCameraPosition("zoomin");
+			
+		}else if(Event.current.Equals (Event.KeyboardEvent ("down")) ) {
+		
+			setCameraPosition("zoomout");
+		
+		
+		}else if(Event.current.Equals (Event.KeyboardEvent ("left")) ) {
+			setCameraPosition("left");
+		
+		}else if(Event.current.Equals (Event.KeyboardEvent ("right")) ) {
+		
+			setCameraPosition("right");
+		
+		}
+		else if(Event.current.Equals (Event.KeyboardEvent ("z")) || Event.current.Equals (Event.KeyboardEvent ("Z"))) {
+		
+			setCameraPosition("up");
+		
+		}
+		else if(Event.current.Equals (Event.KeyboardEvent ("x")) || Event.current.Equals (Event.KeyboardEvent ("X"))) {
+		
+			setCameraPosition("down");
+		
+		}
+	}else{
+		if(Event.current.Equals (Event.KeyboardEvent ("return"))) {
+		
+			wall.transform.localScale = Vector3(parseInt(textWidth),2,parseInt(textHeight));
+			floor.transform.localScale = Vector3(parseInt(textWidth),2,parseInt(textHeight));
+			setRoomSize = true;
+		
+		}
+	}
+}
 function RulesEngine(){
 
 		var othersX	: int;
@@ -800,7 +1059,7 @@ function RulesEngine(){
 		
 		if(parameters[draggingElementId]["elementType"] == "ED"){
 			
-			if(considerY - considerH * 0.5 < snapFactor){
+			if(considerY - considerH * 0.5 < snapFactorY){
 				Debug.Log("4 : ED YERDE OLAMAZ");
 			
 			}
@@ -812,7 +1071,7 @@ function RulesEngine(){
 		
 		if(parameters[draggingElementId]["elementType"] == "EX"){
 			
-			if(considerY - considerH * 0.5 >= snapFactor){
+			if(considerY - considerH * 0.5 >= snapFactorY){
 				Debug.Log("5 : EX DUVARDA OLAMAZ (ASILAMAZ). HER ZAMAN YERDE OLMALI");
 			
 			}else{
@@ -828,17 +1087,14 @@ function RulesEngine(){
 		}
 }
 
-function ToggleLight( go : GameObject ){
+function ToggleLight(){
 
 
- 	
- 	
- 	var childObject : GameObject = go.gameObject;
- 	
- 	var allChildren = childObject.GetComponentsInChildren(Transform);
+	//highlight
+	var allChildren = moduls[draggingElementId].GetComponentsInChildren(Transform);
  	
 
- 	variableScript = childObject.GetComponent("Element");
+ 	variableScript = moduls[draggingElementId].GetComponent("Element");
 		
 	for (var child : Transform in allChildren) {
     // do whatever with child transform here
@@ -850,21 +1106,31 @@ function ToggleLight( go : GameObject ){
 	    }
 	       
 	}
- 
-	allChildren = prevHighlighted.GetComponentsInChildren(Transform);
 	
-	for (var child : Transform in allChildren) {
-    // do whatever with child transform here
-	    if(child.renderer != null){
-	    
-		    child.renderer.material.color = Color.white;
-		    variableScript.highlighted = false;
-		   
-	    }
-	       
+ 	if(prevHighlightedId != draggingElementId){
+	 	//de-highlight
+	 	if(!modulDestroyed)
+			allChildren = moduls[prevHighlightedId].GetComponentsInChildren(Transform);
+		
+		for (var child : Transform in allChildren) {
+	    // do whatever with child transform here
+		    if(child.renderer != null){
+		    	if(child.renderer.gameObject.name !="Base"){
+			    child.renderer.material.color = Color.white;
+			    
+			    }
+			    else{
+			    child.renderer.material.color = Color.gray;
+			    
+			    }
+			    variableScript.highlighted = false;
+			   
+		    }
+		       
+		}
+		
+		prevHighlightedId = draggingElementId;
+		modulDestroyed = false;
+	
 	}
-	
-	prevHighlighted = childObject;
-	
-
 }
