@@ -3,7 +3,10 @@
 // Import Array List Class
 // Reference http://forum.unity3d.com/threads/69281-Resizeable-array-for-javascript-Arraylist
 import System.Collections.Generic;
+import System.IO;
 
+private var secretKey="x91{7&85,[cN5.S";//server side
+private var billofmaterialsUrl="http://www.filikatasarim.com/clients/sonorous/writeElement.php?"; //be sure to add a ? to your url
 
 
 private var wall 		: GameObject;
@@ -831,6 +834,10 @@ function initKeyboardInteraction() {
 		
 			setCameraPosition("down");
 		
+		}else if(Event.current.Equals (Event.KeyboardEvent ("b")) || Event.current.Equals (Event.KeyboardEvent ("B"))) {
+		
+			BillofMaterials();
+		
 		}
 	}else{
 		if(Event.current.Equals (Event.KeyboardEvent ("return"))) {
@@ -1133,4 +1140,156 @@ function ToggleLight(){
 		modulDestroyed = false;
 	
 	}
+}
+
+function BillofMaterials(){
+
+	var elementid_www : int;
+	var elementType_www : String = "";
+	var front_www : String = "";
+	var frontUp_www : String = "";
+	var frontDown_www : String = "";
+	var back_www : String = "";
+	var left_www : String = "";
+	var right_www : String = "";
+	var bottom_www : String = "";
+	var top_www : String = "";
+	var hole_www : int;
+	var nFrontFace_www : int;
+	var w_www : int;
+	var h_www : int;
+	var depth_www : int;
+	var x_www : int;
+	var y_www : int;
+	var isRigid_www : int;
+	var baseHeight_www : int;
+	
+	
+	var the_JSON_string:String = "{\"elementArray\": [";
+
+	
+	for(var i : int = 0; i < parameters.Count; i++){
+			
+		elementid_www = parameters[i]["elementId"];
+		elementType_www = parameters[i]["elementType"];	
+		front_www = parameters[i]["Front"];
+		frontUp_www = parameters[i]["FrontUp"];
+		frontDown_www = parameters[i]["FrontDown"];
+		back_www = parameters[i]["Back"];
+		left_www = parameters[i]["Left"];
+		right_www = parameters[i]["Right"];
+		bottom_www = parameters[i]["Bottom"];
+		top_www = parameters[i]["Top"];
+		hole_www = parameters[i]["Hole"];
+		nFrontFace_www = parameters[i]["nFrontFace"];
+		w_www = parameters[i]["w"];
+		h_www = parameters[i]["h"];
+		depth_www = parameters[i]["depth"];
+		x_www = parameters[i]["x"];
+		y_www = parameters[i]["y"];
+		isRigid_www = parameters[i]["isRigid"];
+		baseHeight_www = parameters[i]["baseHeight"];
+		
+		the_JSON_string += "{\"elementid\":"+elementid_www
+		+",\"elementType\":\""+elementType_www+"\""
+		+",\"front\":\""+front_www+"\""
+		+",\"frontUp\":\""+frontUp_www+"\""
+		+",\"frontDown\":\""+frontDown_www+"\""
+		+",\"back\":\""+back_www+"\""
+		+",\"left\":\""+left_www+"\""
+		+",\"right\":\""+right_www+"\""
+		+",\"bottom\":\""+bottom_www+"\""
+		+",\"top\":\""+top_www+"\""
+		+",\"hole\":\""+hole_www+"\""
+		+",\"nFrontFace\":\""+nFrontFace_www+"\""
+		+",\"w\":\""+w_www+"\""
+		+",\"h\":\""+h_www+"\""
+		+",\"depth\":\""+depth_www+"\""
+		+",\"x\":\""+x_www+"\""
+		+",\"y\":\""+y_www+"\""
+		+",\"isRigid\":\""+isRigid_www+"\""
+		+",\"baseHeight\":\""+baseHeight_www+"\"}";
+		
+		if(i!=parameters.Count-1){
+			the_JSON_string += ",";
+		}		
+	}
+
+	the_JSON_string += "]}";
+	
+	
+	Debug.Log(the_JSON_string);
+	
+	
+	var hash=md5functions.Md5Sum(secretKey);
+	 
+	var post_url = billofmaterialsUrl 
+	+ "jsonString=" + the_JSON_string
+	+ "&hash=" + hash;
+	var hs_post = WWW(post_url);
+	
+	Debug.Log(post_url);
+	yield hs_post; // Wait until the download is done
+    if(hs_post.error) {
+        print("There was an error posting the high score: " + hs_post.error);
+    }
+	
+	
+}
+
+function SaveState(){
+/*
+	
+	var sw : StreamWriter = new System.IO.StreamWriter("BillofMaterials.txt");
+	
+	
+	for(var i : int = 0; i < parameters.Count; i++){
+	 sw.WriteLine("Bill of Materials");
+	 sw.WriteLine("");
+	 sw.Write("Element Id : ");
+	 sw.WriteLine(parameters[i]["elementId"]);
+	 sw.Write("Element Type : ");
+	 sw.WriteLine(parameters[i]["elementType"]);
+	 sw.Write("Front : ");
+	 sw.WriteLine(parameters[i]["Front"]);
+	 sw.Write("Front Up : ");
+	 sw.WriteLine(parameters[i]["FrontUp"]);
+	 sw.Write("Front Down : ");
+	 sw.WriteLine(parameters[i]["FrontDown"]);
+	 sw.Write("Back : ");
+	 sw.WriteLine(parameters[i]["Back"]);
+	 sw.Write("Left : ");
+	 sw.WriteLine(parameters[i]["Left"]);
+	 sw.Write("Right : ");
+	 sw.WriteLine(parameters[i]["Right"]);
+	 sw.Write("Bottom : ");
+	 sw.WriteLine(parameters[i]["Bottom"]);
+	 sw.Write("Top : ");
+	 sw.WriteLine(parameters[i]["Top"]);
+	 sw.Write("Hole : ");
+	 sw.WriteLine(parameters[i]["Hole"]);
+	 sw.Write("nFrontFace : ");
+	 sw.WriteLine(parameters[i]["nFrontFace"]);
+	 sw.Write("w : ");
+	 sw.WriteLine(parameters[i]["w"]);
+	 sw.Write("h : ");
+	 sw.WriteLine(parameters[i]["h"]);
+	 sw.Write("depth : ");
+	 sw.WriteLine(parameters[i]["depth"]);
+	 sw.Write("x : ");
+	 sw.WriteLine(parameters[i]["x"]);
+	 sw.Write("y : ");
+	 sw.WriteLine(parameters[i]["y"]);
+	 sw.Write("isRigid : ");
+	 sw.WriteLine(parameters[i]["isRigid"]);
+	 sw.Write("Base Height : ");
+	 sw.WriteLine(parameters[i]["baseHeight"]);
+	
+	}
+	
+	
+	sw.Close();
+	*/
+
+
 }
