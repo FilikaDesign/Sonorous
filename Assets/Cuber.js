@@ -1165,7 +1165,7 @@ function BillofMaterials(){
 	var baseHeight_www : int;
 	
 	
-	var the_JSON_string:String = "{\"elementArray\": [";
+	var the_JSON_string:String = "{\"elementArray\":[";
 
 	
 	for(var i : int = 0; i < parameters.Count; i++){
@@ -1217,21 +1217,29 @@ function BillofMaterials(){
 
 	the_JSON_string += "]}";
 	
-	
-	Debug.Log(the_JSON_string);
-	
+	var sw : StreamWriter = new System.IO.StreamWriter("BillofMaterials.txt");
+	sw.Write(the_JSON_string);
+	sw.Close();
 	
 	var hash=md5functions.Md5Sum(secretKey);
+	
 	 
 	var post_url = billofmaterialsUrl 
 	+ "jsonString=" + the_JSON_string
 	+ "&hash=" + hash;
+	
 	var hs_post = WWW(post_url);
 	
-	Debug.Log(post_url);
+	
+	
 	yield hs_post; // Wait until the download is done
-    if(hs_post.error) {
-        print("There was an error posting the high score: " + hs_post.error);
+    if(hs_post.isDone) {
+        Debug.Log("no po");
+        Application.OpenURL ("http://filikatasarim.com/clients/sonorous/pdfci.php");
+		
+    }else{
+    	Debug.Log("request problemli");
+    
     }
 	
 	
