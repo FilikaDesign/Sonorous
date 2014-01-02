@@ -42,6 +42,15 @@ private var guiNotification:String = "";
 // toggle state
 private var inch2:boolean = false;
 private var inch8:boolean = false;
+// Material Change
+private var setFront:boolean = false;
+private var setFrontUp:boolean = false;
+private var setFrontDown:boolean = false;
+private var setLeft:boolean = false;
+private var setRight:boolean = false;
+private var setBack:boolean = false;
+private var setBottom:boolean = false;
+private var setTop:boolean = false;
 
 // Scroll Position
 var scrollPosition : Vector2 = Vector2.zero;
@@ -62,7 +71,7 @@ private var ml:int = 5;
 private var mt:int = 8;
 private var bMargin:int = 5;
 private var tfH:int = 20;
-
+private var tglH:int = 20;
 public var sonorousGUISkin:GUISkin;
 //
 
@@ -78,6 +87,11 @@ var m3:Texture2D;
 var m4:Texture2D;
 var m5:Texture2D;
 
+// Moudl Textures
+var t1:Texture2D;
+var t2:Texture2D;
+var t3:Texture2D;
+var t4:Texture2D;
 //private var prevHighlighted : GameObject;
 private var prevHighlightedId : int;
 private var modulDestroyed:boolean = false;
@@ -311,7 +325,7 @@ function Update () {
 					elementT 	= parameters[draggingElementId]["Top"];
 					
 					
-					
+					Debug.Log("draggingElementId : "+draggingElementId);
 					ToggleLight();
 
 				}
@@ -413,7 +427,6 @@ function OnGUI() {
 	
 	// Menu Buttons
 	if(GUI.Button(Rect(0,0,100,25),"Inspector")) {
-		//guiState = "default";
 		openInspector();
 	}
 	
@@ -425,13 +438,17 @@ function OnGUI() {
 	// Delete Button
 	else if(GUI.Button(Rect(202,0,100,25),"Delete Modul")) {
 		Destroy(moduls[draggingElementId]);
-		
 		modulDestroyed = true;
-		
+	}
+	
+	// Change Material
+	else if(GUI.Button(Rect(303,0,100,25),"Chage Material")) {
+		guiState = "modul_edit";
+		openInspector();
 	}
 	
 	// Delete All Button
-	else if(GUI.Button(Rect(303,0,100,25),"Delete All")) {
+	else if(GUI.Button(Rect(404,0,100,25),"Delete All")) {
 		for(var i:int=0; i < moduls.Count; i++) {
 			Destroy(moduls[i]);
 		}
@@ -439,7 +456,7 @@ function OnGUI() {
 	}
 	
 	// Set Room Size
-	else if(GUI.Button(Rect(404,0,100,25),"Room Size")){
+	else if(GUI.Button(Rect(505,0,100,25),"Room Size")){
 		setRoomSize = false;
 	}
 	
@@ -478,9 +495,7 @@ function OnGUI() {
 		GUI.Label(Rect(ml+startx,ml+tfH*8,w,20),": " + elementBO);
 		GUI.Label(Rect(ml+startx,ml+tfH*9,w,20),": " + elementT);
 		
-		if(GUI.Button(Rect(ml,ml+tfH*10+mt,w-ml*2,20),"Add Element")) {
-			
-		}
+		GUI.Label(Rect(ml,ml+tfH*10+mt,w-ml*2,20),"Add Element");
 		
 		// Select Modul to Add Screen
 		scrollPosition = GUI.BeginScrollView (Rect (ml,ml+tfH*11+5+mt,w-10,Screen.height - 20*12-ml),
@@ -523,6 +538,71 @@ function OnGUI() {
 		}
 	}
 	
+	// Change Material GUI
+	else if(guiState == "modul_edit" && draggingElementId > -1) {
+		
+		var tex:String = "wall";
+		
+		var num:int = parameters[draggingElementId]["nFrontFace"];
+		var minusFac:int = 0;
+		
+		GUI.Label(Rect(ml,ml+tfH*(0),w,tfH),"1- Select Surface...");
+		
+		if(num > 1) {
+			setFrontUp = (GUI.Toggle(Rect(ml,ml+tfH*1,w,tglH),setFrontUp," Set Front Up Material"));
+			
+			setFrontDown = (GUI.Toggle(Rect(ml,ml+tfH*2,w,tglH),setFrontDown," Set Front Down Material"));
+			
+			minusFac = 1;
+		}else{
+		
+			setFront = (GUI.Toggle(Rect(ml,ml+tfH*1,w,tglH),setFront," Set Front Material"));
+			
+			minusFac=2;
+		}
+		
+		setLeft = (GUI.Toggle(Rect(ml,ml+tfH*(4-minusFac),w,tglH),setLeft," Set Left Material"));
+		
+		
+		setRight = (GUI.Toggle(Rect(ml,ml+tfH*(5-minusFac),w,tglH),setRight," Set Right Material"));
+		
+		
+		setBack = (GUI.Toggle(Rect(ml,ml+tfH*(6-minusFac),w,tglH),setBack," Set Back Material"));
+		
+		
+		setBottom = (GUI.Toggle(Rect(ml,ml+tfH*(7-minusFac),w,tglH),setBottom," Set Bottom Material"));
+		
+		
+		setTop = (GUI.Toggle(Rect(ml,ml+tfH*(8-minusFac),w,tglH),setTop," Set Top Material"));
+		
+		
+		GUI.Label(Rect(ml,ml+tfH*(10-minusFac),w,tfH),"2- Click on Material");
+		
+		if(GUI.Button(Rect( ml,ml+tfH*(11-minusFac),55,55 ),t1)) 
+		{	
+			tex = "t1";
+			setTextures(tex);
+		}
+		
+		if(GUI.Button(Rect( ml+60,ml+tfH*(11-minusFac),55,55 ),t2)) 
+		{	
+			tex = "t2";
+			setTextures(tex);
+		}
+		
+		if(GUI.Button(Rect( ml+120,ml+tfH*(11-minusFac),55,55 ),t3)) 
+		{	
+			tex = "t3";
+			setTextures(tex);
+		}
+		
+		if(GUI.Button(Rect( ml,ml+tfH*(11-minusFac)+60,55,55 ),t4)) 
+		{	
+			tex = "t4";
+			setTextures(tex);
+		}
+	}
+	
 	
 	
 	GUI.EndGroup ();
@@ -532,6 +612,42 @@ function OnGUI() {
 	
 }
 
+
+function setTextures(tex:String) {
+	variableScript = moduls[draggingElementId].GetComponent("Element");
+	if(setFrontUp) 
+	{
+		variableScript.cubeFrontUp.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
+	}
+	
+	if(setFrontDown) {
+		variableScript.cubeFrontDown.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
+	}
+	
+	if(setFront) {
+		variableScript.cubeFront.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
+	}
+	
+	if(setLeft) {
+		variableScript.cubeLeft.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
+	}
+		
+	if(setRight) {
+		variableScript.cubeRight.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
+	}
+	
+	if(setBack) {
+		variableScript.cubeBack.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
+	}
+	
+	if(setBottom) {
+		variableScript.cubeBottom.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
+	}
+	
+	if(setTop) {
+		variableScript.cubeTop.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
+	}
+}
 /* 
 *** ADD SELECTED MODUL TO STGE AND SET ACTIVE
 */
@@ -582,6 +698,7 @@ function openInspector() {
 function resetGUIParams() {
 	inch2 = false;
 	inch8 = false;
+	guiState = "default";
 }
 
 function tweenFinished() {
