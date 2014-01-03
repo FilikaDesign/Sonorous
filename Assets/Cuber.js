@@ -1235,8 +1235,18 @@ function BillofMaterials(){
 	yield hs_post; // Wait until the download is done
     if(hs_post.isDone) {
         Debug.Log("no po");
-        Application.OpenURL ("http://filikatasarim.com/clients/sonorous/pdfci.php");
+        var pdf_post = WWW("http://filikatasarim.com/clients/sonorous/pdfci.php");
+        //Application.OpenURL ("http://filikatasarim.com/clients/sonorous/pdfci.php");
+		yield pdf_post;
 		
+		var bytes = pdf_post.bytes;
+		
+		var fs : FileStream = FileStream("./myfile.pdf", FileMode.CreateNew);
+		var w : BinaryWriter = BinaryWriter(fs);
+		w.Write(bytes);
+		w.Close();
+		fs.Close();
+
     }else{
     	Debug.Log("request problemli");
     
