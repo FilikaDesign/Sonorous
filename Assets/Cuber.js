@@ -1217,9 +1217,7 @@ function BillofMaterials(){
 
 	the_JSON_string += "]}";
 	
-	var sw : StreamWriter = new System.IO.StreamWriter("BillofMaterials.txt");
-	sw.Write(the_JSON_string);
-	sw.Close();
+	
 	
 	var hash=md5functions.Md5Sum(secretKey);
 	
@@ -1230,28 +1228,83 @@ function BillofMaterials(){
 	
 	var hs_post = WWW(post_url);
 	
-	
-	
 	yield hs_post; // Wait until the download is done
+	
+	/*UPLOAD*/
+	
+	// We should only read the screen after all rendering is complete 
+	yield WaitForEndOfFrame();
+
+    // Create a texture the size of the screen, RGB24 format
+    var width = Screen.width;
+    var height = Screen.height;
+    var tex = new Texture2D( width, height, TextureFormat.RGB24, false );
+    // Read screen contents into the texture
+    tex.ReadPixels( Rect(0, 0, width, height), 0, 0 );
+    tex.Apply();
+ 
+    // Encode texture into PNG
+    var bytes = tex.EncodeToPNG();
+    Destroy( tex );
+ 
+    // Create a Web Form
+    var form = new WWWForm();
+    form.AddField ( "action", "Upload Image" );
+    form.AddBinaryData("file", bytes, "screenSgghot.png", "image/png");
+    
+    var screenShotURL = "http://filikatasarim.com/clients/sonorous/upload.php";
+ 
+    // Upload to a cgi script    
+    var w = WWW(screenShotURL, form);
+    yield w;
+    if (w.error != null){
+        print(w.error);
+        Application.ExternalCall( "debug", w.error);
+        //print(screenShotURL);
+    }  
+    else{
+        print("Finished Uploading Screenshot");
+        //print(screenShotURL);
+        Application.ExternalCall( "debug", "Finished Uploading Screenshot");
+    }
+	
+	
+	/*UPLOAD*/
+	/*
     if(hs_post.isDone) {
-        Debug.Log("no po");
-        var pdf_post = WWW("http://filikatasarim.com/clients/sonorous/pdfci.php");
-        //Application.OpenURL ("http://filikatasarim.com/clients/sonorous/pdfci.php");
-		yield pdf_post;
+        Debug.Log("no problem");
+        
+        this.transform.position.z = -400;//better placement is required
+        
+        var combinationID = hs_post.text;
+        var pdf_url = "http://filikatasarim.com/clients/sonorous/pdfci.php?combinationID="+combinationID;
+        var pdf_post = WWW(pdf_url);
+        //print(pdf_url);
+        
+        yield pdf_post;
 		
-		var bytes = pdf_post.bytes;
+		if(pdf_post.isDone) {
 		
-		var fs : FileStream = FileStream("./myfile.pdf", FileMode.CreateNew);
-		var w : BinaryWriter = BinaryWriter(fs);
-		w.Write(bytes);
-		w.Close();
-		fs.Close();
+			var path = EditorUtility.SaveFilePanel(
+					"Save as PDF",
+					"",
+					"",
+					"pdf");
+					
+			var pdf_bytes = pdf_post.bytes;
+			
+			var fs : FileStream = FileStream(path, FileMode.CreateNew);
+			var bw : BinaryWriter = BinaryWriter(fs);
+			bw.Write(pdf_bytes);
+			bw.Close();
+			fs.Close();
+		}
 
     }else{
     	Debug.Log("request problemli");
     
     }
-	
+	*/
 	
 }
 
