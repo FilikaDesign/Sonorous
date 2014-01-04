@@ -434,8 +434,9 @@ function OnGUI() {
 	}
 	
 	// Screen Shot Button
-	else if(GUI.Button(Rect(101,0,100,25),"Screen Shot")) {
-		Application.CaptureScreenshot("Screenshot.png",1);
+	else if(GUI.Button(Rect(101,0,100,25),"Export")) {
+		//Application.CaptureScreenshot("Screenshot.png",1);
+		BillofMaterials();
 	}
 	
 	// Delete Button
@@ -834,10 +835,6 @@ function initKeyboardInteraction() {
 		
 			setCameraPosition("down");
 		
-		}else if(Event.current.Equals (Event.KeyboardEvent ("b")) || Event.current.Equals (Event.KeyboardEvent ("B"))) {
-		
-			BillofMaterials();
-		
 		}
 	}else{
 		if(Event.current.Equals (Event.KeyboardEvent ("return"))) {
@@ -1226,12 +1223,8 @@ function BillofMaterials(){
 	+ "jsonString=" + the_JSON_string
 	+ "&hash=" + hash;
 	
-	var hs_post = WWW(post_url);
-	
-	yield hs_post; // Wait until the download is done
-	
-	/*UPLOAD*/
-	
+	/*UPLOAD SCREENSHOT*/
+	this.transform.position.z = -400;//better placement is required
 	// We should only read the screen after all rendering is complete 
 	yield WaitForEndOfFrame();
 
@@ -1247,34 +1240,31 @@ function BillofMaterials(){
     var bytes = tex.EncodeToPNG();
     Destroy( tex );
  
+ 	
     // Create a Web Form
     var form = new WWWForm();
-    form.AddField ( "action", "Upload Image" );
-    form.AddBinaryData("file", bytes, "screenSgghot.png", "image/png");
+    form.AddField ("action","Upload Image");
+    form.AddBinaryData("fileUpload", bytes, "screenShot.png", "image/png");
     
-    var screenShotURL = "http://filikatasarim.com/clients/sonorous/upload.php";
- 
-    // Upload to a cgi script    
-    var w = WWW(screenShotURL, form);
-    yield w;
-    if (w.error != null){
-        print(w.error);
-        Application.ExternalCall( "debug", w.error);
-        //print(screenShotURL);
-    }  
-    else{
-        print("Finished Uploading Screenshot");
-        //print(screenShotURL);
+    var hs_post = WWW(post_url, form);
+    
+    while(hs_post.isDone != true){
+    print(hs_post.uploadProgress);
+    EditorUtility.DisplayProgressBar(
+					"Combination Upload",
+					"Uploading ... Please wait!",
+					hs_post.uploadProgress);
+	}
+	EditorUtility.ClearProgressBar();
+	
+	yield hs_post; // Wait until the download is done
+
+	
+    if (hs_post.error != null){
+       Application.ExternalCall( "debug", hs_post.error);
+    }else
+    {
         Application.ExternalCall( "debug", "Finished Uploading Screenshot");
-    }
-	
-	
-	/*UPLOAD*/
-	/*
-    if(hs_post.isDone) {
-        Debug.Log("no problem");
-        
-        this.transform.position.z = -400;//better placement is required
         
         var combinationID = hs_post.text;
         var pdf_url = "http://filikatasarim.com/clients/sonorous/pdfci.php?combinationID="+combinationID;
@@ -1299,12 +1289,8 @@ function BillofMaterials(){
 			bw.Close();
 			fs.Close();
 		}
-
-    }else{
-    	Debug.Log("request problemli");
-    
     }
-	*/
+
 	
 }
 

@@ -22,3 +22,5 @@ if(GUI.Button(Rect(ml+ 100+(w-200)*0.5+bMargin*0.5,mt+tfH*13 ,100,20),"Right")) 
 if(GUI.Button(Rect(ml+(w-100)*0.5,mt+2+tfH*14 ,100,20),"Down")) {
 	
 }*/
+
+//EditorUtility.DisplayDialog
