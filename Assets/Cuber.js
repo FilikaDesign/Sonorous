@@ -43,6 +43,19 @@ private var snapEnable 	: boolean = true;
 private var iSwitch:boolean = true;  
 private var guiState:String = "default";
 private var guiNotification:String = "";
+private var w:int = 240;
+private var btnW:int = 40;
+private var ml:int = 5;
+private var mt:int = 8;
+private var bMargin:int = 5;
+private var tfH:int = 20;
+private var tglH:int = 20;
+public var sonorousGUISkin:GUISkin;
+private var guiRect:LTRect = new LTRect( Screen.width, 0,w, Screen.height );
+private var guiRectBounds:Rect = new Rect( Screen.width-w, 0,w, Screen.height );
+private var welcomeRect = new LTRect(0,0,Screen.width,Screen.height);
+
+private var guiPosX:int = Screen.width;
 
 // toggle state
 private var inch2:boolean = false;
@@ -71,14 +84,6 @@ private var elementB:String = "none";
 private var elementBO:String = "none";
 private var elementT:String = "none";
 
-private var w:int = 240;
-private var btnW:int = 40;
-private var ml:int = 5;
-private var mt:int = 8;
-private var bMargin:int = 5;
-private var tfH:int = 20;
-private var tglH:int = 20;
-public var sonorousGUISkin:GUISkin;
 //
 
 var setRoomSize : boolean = false;
@@ -200,6 +205,12 @@ function addModul(modulParams:Hashtable, id:String) {
 
 function Update () {
 	if(setRoomSize) {
+		 
+		
+		if (guiRectBounds.Contains(Input.mousePosition))  
+			iSwitch = false; else  iSwitch = true; 
+			
+		
 		var mainCamera = Camera.main;
 		var hit : RaycastHit;
 		
@@ -212,7 +223,7 @@ function Update () {
 		
 		
 	
-		if (Input.GetMouseButtonDown (0)/* && iSwitch*/){
+		if (Input.GetMouseButtonDown (0) && iSwitch){
 		
 			if( Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition),  hit ) ) {
 				
@@ -260,7 +271,7 @@ function Update () {
 		
 		}
 		
-		if (Input.GetMouseButton (0) /*&& iSwitch*/){
+		if (Input.GetMouseButton (0) && iSwitch){
 		
 			if(draggingObject){
 			
@@ -301,7 +312,7 @@ function Update () {
 	
 		}
 		
-		if (Input.GetMouseButtonUp (0) /*&& iSwitch*/){
+		if (Input.GetMouseButtonUp (0) && iSwitch){
 		
 			if(draggingObject){
 				
@@ -335,11 +346,7 @@ function Update () {
 /*************************************************************************************************
 **************** GUI *****************************************************************************
 **************************************************************************************************/
-private var guiRect:LTRect = new LTRect( Screen.width, 0,w, Screen.height );
 
-private var welcomeRect = new LTRect(0,0,Screen.width,Screen.height);
-
-private var guiPosX:int = Screen.width;
 function OnGUI() {
 	
 	GUI.depth = 2000;
@@ -605,7 +612,7 @@ function openInspector() {
 	LeanTween.move( guiRect, Vector2(guiPosX, 0), 0.25 );
 	//d.setOnComplete( tweenFinished );
 	
-	iSwitch =  !iSwitch;
+	//iSwitch =  !iSwitch;
 }
 
 /*
