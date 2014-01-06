@@ -24,5 +24,8 @@ if(GUI.Button(Rect(ml+(w-100)*0.5,mt+2+tfH*14 ,100,20),"Down")) {
 }*/
 
 //EditorUtility.DisplayDialog
+<<<<<<< HEAD
 
 //http://wiki.unity3d.com/index.php?title=Saving_and_Loading_Data:_XmlSerializer#Reading
+=======
+>>>>>>> c1889531d74cdc97b966a21423c2edee011e7cd5

@@ -2,10 +2,15 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Cuber.js">
     <Files>
+<<<<<<< HEAD
       <File FileName="Assets/Cuber.js" Line="580" Column="39" />
       <File FileName="Assets/GUITextures.js" Line="1" Column="1" />
       <File FileName="Assets/Element.js" Line="20" Column="21" />
       <File FileName="Assets/ModulsParams.js" Line="28" Column="32" />
+=======
+      <File FileName="Assets\Cuber.js" Line="838" Column="4" />
+      <File FileName="Assets\snippets.js" Line="1" Column="1" />
+>>>>>>> c1889531d74cdc97b966a21423c2edee011e7cd5
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
