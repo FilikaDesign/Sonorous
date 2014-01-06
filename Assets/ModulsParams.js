@@ -6,7 +6,7 @@ static function type_Ex(type:String) {
 	switch (type)
 	{
 		case "EX":
-		myStuffTex = {"elementId":4,
+		myStuffTex = {"elementId":0,
 							"elementType":"EX",
 							"Front":"textures/H3375_ST22",
 	                        "FrontUp":"textures/200s",
@@ -29,7 +29,7 @@ static function type_Ex(type:String) {
 	   break;
 	   
 	   case "ED":
-	   myStuffTex = {"elementId":4,
+	   myStuffTex = {"elementId":0,
 							"elementType":"ED",
 							"Front":"textures/H3375_ST22",
 	                        "FrontUp":"textures/200s",
@@ -52,7 +52,7 @@ static function type_Ex(type:String) {
 	   break;
 	   
 	   default:
-	   myStuffTex = {"elementId":4,
+	   myStuffTex = {"elementId":0,
 							"elementType":"EX",
 							"Front":"textures/H3375_ST22",
 	                        "FrontUp":"textures/200s",

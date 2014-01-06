@@ -157,7 +157,6 @@ function Start () {
 	wall.transform.Rotate(90,0,0);
 	wall.renderer.material.mainTexture = Resources.Load("textures/wall", Texture2D);
 	wall.renderer.material.mainTextureScale = Vector2 (11,11);
-	
 	//floor
 	floor = GameObject.CreatePrimitive(PrimitiveType.Cube);
 	floor.name = "Floor";
@@ -182,6 +181,7 @@ function Start () {
 function addModul(modulParams:Hashtable, id:String) {
 	
 	parameters.Add(modulParams);
+	parameters[parameters.Count-1]["elementId"] = parameters.Count-1;
 	
 	var eleman : GameObject = new GameObject("Kutu"+id);
 	eleman.AddComponent("Element");
@@ -190,7 +190,11 @@ function addModul(modulParams:Hashtable, id:String) {
 	var other : Element = eleman.GetComponent("Element");
 	other.params = parameters[parameters.Count-1];
 	
+	
+	
 	moduls.Add(eleman);
+	
+	
 
 }
 
@@ -206,11 +210,12 @@ function Update () {
 		Debug.DrawLine (Vector3 (0, 0, 0), Vector3 (0, 100, 0), Color.blue);
 		Debug.DrawLine (Vector3 (0, 0, 0), Vector3 (0, 0, -100), Color.green);	
 		
+		
 	
 		if (Input.GetMouseButtonDown (0)/* && iSwitch*/){
 		
 			if( Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition),  hit ) ) {
-			
+				
 				 if(hit.rigidbody.gameObject.GetComponent("BoxCollider")){
 					draggingObject = hit.collider.gameObject;
 					
@@ -222,10 +227,11 @@ function Update () {
 					
 					offSet = mouseWorld-hit.transform.position;		
 				
-					
 					/* GUI Parameter */	
 					vs = draggingObject.GetComponent("Element");
 					draggingElementId = vs.elementID;
+					
+					Debug.Log(parameters[0]["elementId"]);
 					Debug.Log("Moduls Len : "+moduls.Count + " / ");
 					Debug.Log("Current id : "+draggingElementId);
 					var w:int = parameters[draggingElementId]["w"];
@@ -618,7 +624,7 @@ function tweenFinished() {
 function clearAllHighlightedModuls() {
 	//clear Highlighted Elements
 	if(draggingElementId != -1 && moduls.Count > 0){
-		if(!modulDestroyed)
+		
 			var allChildren = moduls[prevHighlightedId].GetComponentsInChildren(Transform);
 
 		for (var child : Transform in allChildren) {
