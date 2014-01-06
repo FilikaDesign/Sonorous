@@ -360,7 +360,11 @@ function OnGUI() {
 	
 	// Screen Shot Button
 <<<<<<< HEAD
+<<<<<<< HEAD
 	else if(GUI.Button(Rect((btnW+1)*3,0,btnW,btnW),GUITextures.tex_export())) {
+=======
+	else if(GUI.Button(Rect(101,0,100,25),"Export")) {
+>>>>>>> c1889531d74cdc97b966a21423c2edee011e7cd5
 =======
 	else if(GUI.Button(Rect(101,0,100,25),"Export")) {
 >>>>>>> c1889531d74cdc97b966a21423c2edee011e7cd5
@@ -740,6 +744,7 @@ function initKeyboardInteraction() {
 			setCameraPosition("down");
 		
 <<<<<<< HEAD
+<<<<<<< HEAD
 		}/*else if(Event.current.Equals (Event.KeyboardEvent ("s")) || Event.current.Equals (Event.KeyboardEvent ("S"))) {
 			SaveState();
 	
@@ -747,6 +752,8 @@ function initKeyboardInteraction() {
 			LoadState();
 		}*/
 =======
+=======
+>>>>>>> c1889531d74cdc97b966a21423c2edee011e7cd5
 		}
 >>>>>>> c1889531d74cdc97b966a21423c2edee011e7cd5
 	}else{
