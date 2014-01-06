@@ -503,27 +503,27 @@ function OnGUI() {
 		
 		GUI.Label(Rect(ml,ml+tfH*(10-minusFac),w,tfH),"2- Click on Material");
 		
-		if(GUI.Button(Rect( ml,ml+tfH*(11-minusFac),55,55 ),t1)) 
+		if(GUI.Button(Rect( ml,ml+tfH*(11-minusFac),55,55 ),GUITextures.load_tex("textures/t1"))) 
 		{	
-			tex = "t1";
+			tex = "textures/t1";
 			setTextures(tex);
 		}
 		
-		if(GUI.Button(Rect( ml+60,ml+tfH*(11-minusFac),55,55 ),t2)) 
+		if(GUI.Button(Rect( ml+60,ml+tfH*(11-minusFac),55,55 ),GUITextures.load_tex("textures/t2"))) 
 		{	
-			tex = "t2";
+			tex = "textures/t2";
 			setTextures(tex);
 		}
 		
-		if(GUI.Button(Rect( ml+120,ml+tfH*(11-minusFac),55,55 ),t3)) 
+		if(GUI.Button(Rect( ml+120,ml+tfH*(11-minusFac),55,55 ),GUITextures.load_tex("textures/t3"))) 
 		{	
-			tex = "t3";
+			tex = "textures/t3";
 			setTextures(tex);
 		}
 		
-		if(GUI.Button(Rect( ml,ml+tfH*(11-minusFac)+60,55,55 ),t4)) 
+		if(GUI.Button(Rect( ml,ml+tfH*(11-minusFac)+60,55,55 ),GUITextures.load_tex("textures/t4"))) 
 		{	
-			tex = "t4";
+			tex = "textures/t4";
 			setTextures(tex);
 		}
 	}
@@ -617,7 +617,7 @@ function tweenFinished() {
 
 function clearAllHighlightedModuls() {
 	//clear Highlighted Elements
-	if(draggingElementId != -1 && moduls.Count != 0){
+	if(draggingElementId != -1 && moduls.Count > 0){
 		if(!modulDestroyed)
 			var allChildren = moduls[prevHighlightedId].GetComponentsInChildren(Transform);
 
@@ -642,6 +642,7 @@ function clearAllHighlightedModuls() {
 function initSetRoomSize() {
 
 	if(!setRoomSize) {
+		clearAllHighlightedModuls();
 		GUI.color.a = 0.9;
 		
 		GUI.BeginGroup(welcomeRect.rect);
