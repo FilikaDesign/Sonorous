@@ -41,6 +41,7 @@ private var snapEnable 	: boolean = true;
 
 // GUI
 private var iSwitch:boolean = true;  
+private var isGUIClosed:boolean = true;
 private var guiState:String = "default";
 private var guiNotification:String = "";
 private var w:int = 240;
@@ -90,18 +91,6 @@ var setRoomSize : boolean = false;
 private var textWidth:String = "800";
 private var textHeight:String = "300";
 
-// Modul Item Images
-var m1:Texture2D;
-var m2:Texture2D;
-var m3:Texture2D;
-var m4:Texture2D;
-var m5:Texture2D;
-
-// Moudl Textures
-var t1:Texture2D;
-var t2:Texture2D;
-var t3:Texture2D;
-var t4:Texture2D;
 //private var prevHighlighted : GameObject;
 private var prevHighlightedId : int;
 private var modulDestroyed:boolean = false;
@@ -603,7 +592,7 @@ function addMBox(type:String) {
 *** OPEN INSPECTOR PANEL
 */
 function openInspector() {
-	if(iSwitch) {
+	if(isGUIClosed) {
 		guiPosX = Screen.width-w;
 	}else{
 		guiPosX = guiPosX+w;
@@ -612,7 +601,7 @@ function openInspector() {
 	LeanTween.move( guiRect, Vector2(guiPosX, 0), 0.25 );
 	//d.setOnComplete( tweenFinished );
 	
-	//iSwitch =  !iSwitch;
+	isGUIClosed =  !isGUIClosed;
 }
 
 /*
