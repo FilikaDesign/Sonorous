@@ -21,9 +21,11 @@ private var woodThickness : float = 1;
 
 private var parameters : List.<Hashtable> = new List.<Hashtable>();
 private var moduls : List.<GameObject> = new List.<GameObject>();
-
+private var thumbs : List.<Hashtable> = new List.<Hashtable>();
+private var thumbTypes : Array = new Array();
 
 private var variableScript : Element;
+private var vs : Element;
 
 //drag edilen nesnenin koordinatı
 private var tempPosition : Vector3 = new Vector3(0,0,0);
@@ -70,6 +72,7 @@ private var elementBO:String = "none";
 private var elementT:String = "none";
 
 private var w:int = 240;
+private var btnW:int = 40;
 private var ml:int = 5;
 private var mt:int = 8;
 private var bMargin:int = 5;
@@ -81,7 +84,6 @@ public var sonorousGUISkin:GUISkin;
 var setRoomSize : boolean = false;
 private var textWidth:String = "800";
 private var textHeight:String = "300";
-var logo:Texture2D;
 
 // Modul Item Images
 var m1:Texture2D;
@@ -153,7 +155,7 @@ function Start () {
 	wall.transform.position = Vector3(0,hh*0.5,10);
 	wall.transform.localScale = Vector3(ww,2,hh);
 	wall.transform.Rotate(90,0,0);
-	wall.renderer.material.mainTexture = Resources.Load("wall", Texture2D);
+	wall.renderer.material.mainTexture = Resources.Load("textures/wall", Texture2D);
 	wall.renderer.material.mainTextureScale = Vector2 (11,11);
 	
 	//floor
@@ -164,104 +166,16 @@ function Start () {
 	floor.transform.position = Vector3(0,-1,-hh*0.5+10);
 	floor.transform.localScale = Vector3(ww,2,hh);
 	floor.transform.Rotate(0,0,0);
-	floor.renderer.material.mainTexture = Resources.Load("wooden-floor-texture", Texture2D);
-	floor.renderer.material.mainTextureScale = Vector2 (11,11);
-
-	
-	//create Parameter Data
-	var myStuffTex:Hashtable = {"elementId":0,
-						"elementType":"EX",
-						"Front":"H3375_ST22",
-                        "FrontUp":"200s",
-                        "FrontDown":"200s",
-                        "Back":"H3375_ST22",
-                        "Left":"H3375_ST22",
-                        "Right":"H3375_ST22",
-                        "Bottom":"H3375_ST22",
-                        "Top":"200s",
-                        "Hole":0,
-                        "nFrontFace":1,
-                        "w":130,
-                        "h":40,
-                        "depth":50,
-                        "x":0,
-                        "y":20,
-                        "isRigid":1,
-                        "baseHeight":0
-                        };
-                        
-    var myStuffTex2:Hashtable = {"elementId":1,
-   						"elementType":"EX",
-    					"Front":"H3375_ST22",
-                        "FrontUp":"200s",
-                        "FrontDown":"200s",
-                        "Back":"H3375_ST22",
-                        "Left":"H3375_ST22",
-                        "Right":"H3375_ST22",
-                        "Bottom":"H3375_ST22",
-                        "Top":"200s",
-                        "Hole":1,
-                        "nFrontFace":1,
-                        "w":130,
-                        "h":40,
-                        "depth":50,
-                        "x":130,
-                        "y":0,
-                        "isRigid":1,
-                        "baseHeight":0
-                        };
-                        
-    var myStuffTex3:Hashtable = {"elementId":2,
-    					"elementType":"ED",
-    					"Front":"H3375_ST22",
-                        "FrontUp":"200s",
-                        "FrontDown":"200s",
-                        "Back":"H3375_ST22",
-                        "Left":"H3375_ST22",
-                        "Right":"H3375_ST22",
-                        "Bottom":"H3375_ST22",
-                        "Top":"200s",
-                        "Hole":0,
-                        "nFrontFace":2,
-                        "w":65,
-                        "h":40,
-                        "depth":50,
-                        "x":260,
-                        "y":40,
-                        "isRigid":1,
-                        "baseHeight":0
-                        };
-                        
-    var myStuffTex4:Hashtable = {"elementId":3,
-    					"elementType":"ED",
-    					"Front":"H3375_ST22",
-                        "FrontUp":"200s",
-                        "FrontDown":"200s",
-                        "Back":"H3375_ST22",
-                        "Left":"H3375_ST22",
-                        "Right":"H3375_ST22",
-                        "Bottom":"H3375_ST22",
-                        "Top":"200s",
-                        "Hole":0,
-                        "nFrontFace":2,
-                        "w":65,
-                        "h":40,
-                        "depth":50,
-                        "x":-65,
-                        "y":60,
-                        "isRigid":1,
-                        "baseHeight":0
-                        };   
-                        
-                        
-	addModul(myStuffTex,"0");
-	addModul(myStuffTex2,"1");
-	addModul(myStuffTex3,"2");
-	addModul(myStuffTex4,"3");                                        
-    //////
-     
+	floor.renderer.material.mainTexture = Resources.Load("textures/wooden-floor-texture", Texture2D);
+	floor.renderer.material.mainTextureScale = Vector2 (11,11);	
 	
 	
+	thumbTypes = ["EX","ED","EL","TT","EX"];
+	// Load Thumbnails
+	for(var p:int = 1; p < 6; p++) {
+		var hh:Hashtable = {"src":"thumbs/"+p.ToString(),"type":thumbTypes[p-1]};
+		thumbs.Add(hh);
+	}
 }
 
 /* ADD MODUL METHOD */
@@ -310,9 +224,10 @@ function Update () {
 				
 					
 					/* GUI Parameter */	
-					variableScript = draggingObject.GetComponent("Element");
-					draggingElementId = variableScript.elementID;
-					
+					vs = draggingObject.GetComponent("Element");
+					draggingElementId = vs.elementID;
+					Debug.Log("Moduls Len : "+moduls.Count + " / ");
+					Debug.Log("Current id : "+draggingElementId);
 					var w:int = parameters[draggingElementId]["w"];
 					var h:int = parameters[draggingElementId]["h"];
 					var d:int = parameters[draggingElementId]["depth"];
@@ -348,9 +263,9 @@ function Update () {
 					
 				mouseWorld = mainCamera.ScreenToWorldPoint(mouseScreen);
 					
-				variableScript = draggingObject.GetComponent("Element");
+				vs = draggingObject.GetComponent("Element");
 				
-				draggingElementId = variableScript.elementID;
+				draggingElementId = vs.elementID;
 						
 						
 				if(snapEnable){
@@ -386,7 +301,7 @@ function Update () {
 				
 				
 				
-				if(variableScript.isColliding == 1){
+				if(vs.isColliding == 1){
 					//Collide ederken mouse burakırsa
 					draggingObject.transform.position = tempPosition;
 					//draggingObject.transform.position.x = snapX;
@@ -424,45 +339,54 @@ function OnGUI() {
 	GUI.depth = 2000;
 	GUI.skin = sonorousGUISkin;
 		
-	
 	// Enable Keyboard Interaction
 	initKeyboardInteraction();
 	
 	// Menu Buttons
-	if(GUI.Button(Rect(0,0,100,25),"Inspector")) {
+	if(GUI.Button(Rect(0,0,btnW,btnW),GUITextures.tex_inspector())) {
 		openInspector();
 	}
 	
+	// Load
+	else if(GUI.Button(Rect(btnW+1,0,btnW,btnW),GUITextures.tex_load())) {
+		LoadState();
+	}
+	
+	// Save
+	else if(GUI.Button(Rect((btnW+1)*2,0,btnW,btnW),GUITextures.tex_save())) {
+		SaveState();
+	}
+	
+	
 	// Screen Shot Button
-	else if(GUI.Button(Rect(101,0,100,25),"Screen Shot")) {
-		Application.CaptureScreenshot("Screenshot.png",1);
+	else if(GUI.Button(Rect((btnW+1)*3,0,btnW,btnW),GUITextures.tex_export())) {
+		//Application.CaptureScreenshot("Screenshot.png",1);
+		BillofMaterials();
 	}
 	
 	// Delete Button
-	else if(GUI.Button(Rect(202,0,100,25),"Delete Modul")) {
-		Destroy(moduls[draggingElementId]);
-		modulDestroyed = true;
+	else if(GUI.Button(Rect((btnW+1)*4,0,btnW,btnW),GUITextures.tex_delete())) {
+		removeAndDestroyAt(draggingElementId);
+	}
+	
+	// Delete All Button
+	else if(GUI.Button(Rect((btnW+1)*5,0,btnW,btnW),GUITextures.tex_new_scene())) {
+		removeAndDestroy();
 	}
 	
 	// Change Material
-	else if(GUI.Button(Rect(303,0,100,25),"Chage Material")) {
+	else if(GUI.Button(Rect((btnW+1)*6,0,btnW,btnW),GUITextures.tex_material())) {
 		guiState = "modul_edit";
 		openInspector();
 	}
 	
-	// Delete All Button
-	else if(GUI.Button(Rect(404,0,100,25),"Delete All")) {
-		for(var i:int=0; i < moduls.Count; i++) {
-			Destroy(moduls[i]);
-		}
-		modulDestroyed = true;
-	}
-	
 	// Set Room Size
-	else if(GUI.Button(Rect(505,0,100,25),"Room Size")){
+	else if(GUI.Button(Rect((btnW+1)*7,0,btnW,btnW),GUITextures.tex_room_size())){
 		setRoomSize = false;
 	}
 	
+	// Tooltip
+	GUI.Label (Rect ((btnW+2)*8,12,200,40), GUI.tooltip);
 	
 	/* GUI State */
 	var customButton : GUIStyle;
@@ -504,16 +428,14 @@ function OnGUI() {
 		scrollPosition = GUI.BeginScrollView (Rect (ml,ml+tfH*11+5+mt,w-10,Screen.height - 20*12-ml),
 		scrollPosition, Rect (0, 0, 0, (64+ml)*10));	
 		
-		if(GUI.Button(Rect( 0,0,128,64 ),m1)) {addM1Box();draggingObject = moduls[moduls.Count-1];Debug.Log(moduls.Count);}
-		GUI.Button(Rect( 0,(64+ml),128,64 ),m2);
-		GUI.Button(Rect( 0,(64+ml)*2,128,64 ),m3);
-		GUI.Button(Rect( 0,(64+ml)*3,128,64 ),m4);
-		GUI.Button(Rect( 0,(64+ml)*4,128,64 ),m5);
-		GUI.Button(Rect( 0,(64+ml)*5,128,64 ),m1);
-		GUI.Button(Rect( 0,(64+ml)*6,128,64 ),m2);
-		GUI.Button(Rect( 0,(64+ml)*7,128,64 ),m3);
-		GUI.Button(Rect( 0,(64+ml)*8,128,64 ),m4);
-		GUI.Button(Rect( 0,(64+ml)*9,128,64 ),m5);
+		/*if(GUI.Button(Rect( 0,0,128,64 ),m1)) {addM1Box();draggingObject = moduls[moduls.Count-1];}*/
+		
+		for(var t:int=0; t < thumbs.Count; t++) {
+			if(GUI.Button(Rect( 0,(64+ml)*t,128,64 ),GUITextures.load_tex(thumbs[t]["src"]))) {
+				addMBox(thumbs[t]["type"]);
+				
+			}
+		}
 		
 		GUI.EndScrollView ();
 		
@@ -615,7 +537,9 @@ function OnGUI() {
 	
 }
 
-
+/*
+* SET EDIT TEXTURES OF SELECTED MODUL
+*/
 function setTextures(tex:String) {
 	variableScript = moduls[draggingElementId].GetComponent("Element");
 	if(setFrontUp) 
@@ -654,29 +578,12 @@ function setTextures(tex:String) {
 /* 
 *** ADD SELECTED MODUL TO STGE AND SET ACTIVE
 */
-function addM1Box() {
-	var myStuffTex5:Hashtable = {"elementId":4,
-							"elementType":"EX",
-							"Front":"H3375_ST22",
-	                        "FrontUp":"200s",
-	                        "FrontDown":"200s",
-	                        "Back":"H3375_ST22",
-	                        "Left":"H3375_ST22",
-	                        "Right":"H3375_ST22",
-	                        "Bottom":"H3375_ST22",
-	                        "Top":"200s",
-	                        "Hole":0,
-	                        "nFrontFace":1,
-	                        "w":130,
-	                        "h":80,
-	                        "depth":50,
-	                        "x":-230,
-	                        "y":20,
-	                        "isRigid":1,
-	                        "baseHeight":0
-	                        };
-	        var id:String= (moduls.Count-1).ToString();
-	        addModul(myStuffTex5,id);
+function addMBox(type:String) {
+
+    var idM:String = (moduls.Count).ToString();
+    addModul(ModulsParams.type_Ex(type),idM);
+   
+    //draggingObject = moduls[moduls.Count-1];
 }
 
 /*
@@ -736,11 +643,14 @@ function initSetRoomSize() {
 
 	if(!setRoomSize) {
 		GUI.color.a = 0.9;
+		
 		GUI.BeginGroup(welcomeRect.rect);
 		GUI.Box(Rect(0,0,Screen.width,Screen.height),"");
-		GUI.Box(Rect((Screen.width-logo.width)*0.5,50,logo.width,logo.height),logo);
+		GUI.skin.box.normal.background = null;
+		GUI.Box(Rect((Screen.width-GUITextures.tex_logo().width)*0.5,50,GUITextures.tex_logo().width,GUITextures.tex_logo().height),GUITextures.tex_logo());
 		textWidth = GUI.TextField(Rect(Screen.width*0.5-35,150,70,20),textWidth);
 		textHeight = GUI.TextField(Rect(Screen.width*0.5-35,174,70,20),textHeight);
+		GUI.skin.box.normal.background = GUITextures.tex_box_bg();
 		
 		if(GUI.Button(Rect(Screen.width*0.5-50,210,100,30),"OK")) {
 			wall.transform.localScale = Vector3(parseInt(textWidth),2,parseInt(textHeight));
@@ -781,15 +691,6 @@ function setCameraPosition(direction : String) {
 	
 	
 	}
-	
-	
-			
-	//RulesEngine();
-	
-	//parameters[draggingElementId]["x"] = preDraggingObj.transform.position.x;
-	//parameters[draggingElementId]["y"] = preDraggingObj.transform.position.y;
-	
-	
 }
 
 /* Mouse Control */
@@ -834,11 +735,12 @@ function initKeyboardInteraction() {
 		
 			setCameraPosition("down");
 		
-		}else if(Event.current.Equals (Event.KeyboardEvent ("b")) || Event.current.Equals (Event.KeyboardEvent ("B"))) {
-		
-			BillofMaterials();
-		
-		}
+		}/*else if(Event.current.Equals (Event.KeyboardEvent ("s")) || Event.current.Equals (Event.KeyboardEvent ("S"))) {
+			SaveState();
+	
+		}else if(Event.current.Equals (Event.KeyboardEvent ("l")) || Event.current.Equals (Event.KeyboardEvent ("L"))) {
+			LoadState();
+		}*/
 	}else{
 		if(Event.current.Equals (Event.KeyboardEvent ("return"))) {
 		
@@ -848,250 +750,6 @@ function initKeyboardInteraction() {
 		
 		}
 	}
-}
-function RulesEngine(){
-
-		var othersX	: int;
-		var othersY : int;
-		var othersH : int;
-		var othersW : int;
-		
-		var deltaW : int;
-		
-		var considerX : int;
-		var considerY : int;
-		var considerH : int;
-		var considerW : int;
-		
-		considerX = parameters[draggingElementId]["x"];
-		considerY = parameters[draggingElementId]["y"];
-		considerH = parameters[draggingElementId]["h"];
-		considerW = parameters[draggingElementId]["w"];
-
-		// Rule 1 : EX ÜST ÜSTE OLMAZ
-		
-		if(parameters[draggingElementId]["elementType"] == "EX"){
-			
-			Debug.Log("1 : EX rule");
-			for(var i : int = 0; i < parameters.Count; i++){
-			
-				if(i != draggingElementId && parameters[i]["elementType"] == "EX"){
-				
-					othersX = parameters[i]["x"];
-					othersY = parameters[i]["y"];
-					othersH = parameters[i]["h"];
-					othersW = parameters[i]["w"];
-					
-					if(Mathf.Min(othersX,considerX) == othersX){
-						
-							//others solda
-							deltaW = othersW;
-						
-					}else{
-							//others solda
-							deltaW = considerW;
-						
-					}
-					
-				
-					if(//conditions
-					
-					(Mathf.Abs(othersY - considerY) == considerH) //yukarda aşağıda
-					
-					&&
-					
-					(Mathf.Abs(othersX - considerX) < deltaW) // arasında
-					
-					
-					){
-						
-						Debug.Log("1 : EX ust uste olmaaaaz");
-						break;
-					}
-				
-				}
-				
-			}
-		
-		}
-		
-		// Rule 2 : ED ÜST ÜSTE OLMAZ
-		
-		if(parameters[draggingElementId]["elementType"] == "ED"){
-			
-			Debug.Log("2 : ED rule");
-			for(var j : int = 0; j < parameters.Count; j++){
-			
-				if(j != draggingElementId && parameters[j]["elementType"] == "ED"){
-					
-					othersX = parameters[j]["x"];
-					othersY = parameters[j]["y"];
-					othersH = parameters[j]["h"];
-					othersW = parameters[j]["w"];
-					
-					if(Mathf.Min(othersX,considerX) == othersX){
-						
-							//others solda
-							deltaW = othersW;
-						
-					}else{
-							//others solda
-							deltaW = considerW;
-						
-					}
-		
-					if(//conditions
-
-					
-					(Mathf.Abs(othersY - considerY) == considerH) //yukarda aşağıda
-					
-					&&
-					
-					(Mathf.Abs(othersX - considerX) < deltaW) // arasında
-					
-					
-					){
-						
-						Debug.Log("2 : ED ust uste olmaaaaz");
-						break;
-					}
-				
-				}
-				
-			}
-		
-		}
-		
-		// Rule 3 : ED EX’in ÜSTÜNE GELEBİLİR. TAM TERSİ OLAMAZ. = EX ED'in üstüne gelemez
-		
-		if(parameters[draggingElementId]["elementType"] == "EX"){
-		
-			Debug.Log("3 : ED EX rule");
-		
-			for(var k : int = 0; k < parameters.Count; k++){
-			
-				if(k != draggingElementId && parameters[k]["elementType"] == "ED"){
-						//static ED'ler
-						othersX = parameters[k]["x"];
-						othersY = parameters[k]["y"];
-						othersH = parameters[k]["h"];
-						othersW = parameters[k]["w"];
-						
-						
-						
-						if(Mathf.Min(othersX,considerX) == othersX){
-						
-							//others solda
-							deltaW = othersW;
-						
-						}else{
-							//others solda
-							deltaW = considerW;
-						
-						}
-						
-						if(//conditions
-
-					
-						(considerY - othersY == considerH) //yukarda 
-						
-						&&
-						
-						(Mathf.Abs(othersX - considerX) < deltaW) // arasında
-						
-						
-						){
-							
-							Debug.Log("3 : EX ED'in üstüne gelemez");
-							break;
-						}
-				
-				
-				}
-			
-			
-			}
-		}
-		
-		if(parameters[draggingElementId]["elementType"] == "ED"){
-		
-			Debug.Log("3 : ED EX rule");
-		
-			for(var m : int = 0; m < parameters.Count; m++){
-			
-				if(m != draggingElementId && parameters[m]["elementType"] == "EX"){
-						//static EX'ler
-						othersX = parameters[m]["x"];
-						othersY = parameters[m]["y"];
-						othersH = parameters[m]["h"];
-						othersW = parameters[m]["w"];
-						
-						
-						
-						if(Mathf.Min(othersX,considerX) == othersX){
-						
-							//others solda
-							deltaW = othersW;
-						
-						}else{
-							//others solda
-							deltaW = considerW;
-						
-						}
-						
-						if(//conditions
-
-					
-						(othersY - considerY == considerH) //yukarda aşağıda
-						
-						&&
-						
-						(Mathf.Abs(othersX - considerX) < deltaW) // arasında
-						
-						
-						){
-							
-							Debug.Log("3 : EX ED'in üstüne gelemez");
-							break;
-						}
-				
-				
-				}
-			
-			
-			}
-		}
-		
-		// Rule 4 : ED YERDE OLAMAZ.
-		
-		if(parameters[draggingElementId]["elementType"] == "ED"){
-			
-			if(considerY - considerH * 0.5 < snapFactorY){
-				Debug.Log("4 : ED YERDE OLAMAZ");
-			
-			}
-		
-		}
-		
-		// Rule 5 : EX DUVARDA OLAMAZ (ASILAMAZ). HER ZAMAN YERDE OLMALI
-		// Rule 6 : Yerdeki tüm ürünler (EX) bir baza seçeneğine sahip olmak zorunda.
-		
-		if(parameters[draggingElementId]["elementType"] == "EX"){
-			
-			if(considerY - considerH * 0.5 >= snapFactorY){
-				Debug.Log("5 : EX DUVARDA OLAMAZ (ASILAMAZ). HER ZAMAN YERDE OLMALI");
-			
-			}else{
-				//EX YERDE DEMEK
-				guiNotification="Yerdeki tüm ürünler (EX) bir baza seçeneğine sahip olmak zorunda. Lütfen baza yüksekliği seçin.";
-				guiState = "select_base";
-				openInspector();
-				//Debug.Log("6 : Yerdeki tüm ürünler (EX) bir baza seçeneğine sahip olmak zorunda.");
-				
-				
-			}
-		
-		}
 }
 
 function ToggleLight(){
@@ -1165,7 +823,7 @@ function BillofMaterials(){
 	var baseHeight_www : int;
 	
 	
-	var the_JSON_string:String = "{\"elementArray\": [";
+	var the_JSON_string:String = "{\"elementArray\":[";
 
 	
 	for(var i : int = 0; i < parameters.Count; i++){
@@ -1218,78 +876,595 @@ function BillofMaterials(){
 	the_JSON_string += "]}";
 	
 	
-	Debug.Log(the_JSON_string);
-	
 	
 	var hash=md5functions.Md5Sum(secretKey);
+	
 	 
 	var post_url = billofmaterialsUrl 
 	+ "jsonString=" + the_JSON_string
 	+ "&hash=" + hash;
-	var hs_post = WWW(post_url);
 	
-	Debug.Log(post_url);
+	/*UPLOAD SCREENSHOT*/
+	this.transform.position.z = -400;//better placement is required
+	// We should only read the screen after all rendering is complete 
+	yield WaitForEndOfFrame();
+
+    // Create a texture the size of the screen, RGB24 format
+    var width = Screen.width;
+    var height = Screen.height;
+    var tex = new Texture2D( width, height, TextureFormat.RGB24, false );
+    // Read screen contents into the texture
+    tex.ReadPixels( Rect(0, 0, width, height), 0, 0 );
+    tex.Apply();
+ 
+    // Encode texture into PNG
+    var bytes = tex.EncodeToPNG();
+    Destroy( tex );
+ 
+ 	
+    // Create a Web Form
+    var form = new WWWForm();
+    form.AddField ("action","Upload Image");
+    form.AddBinaryData("fileUpload", bytes, "screenShot.png", "image/png");
+    
+    var hs_post = WWW(post_url, form);
+    
+    while(hs_post.isDone != true){
+    print(hs_post.uploadProgress);
+    EditorUtility.DisplayProgressBar(
+					"Combination Upload",
+					"Uploading ... Please wait!",
+					hs_post.uploadProgress);
+	}
+	EditorUtility.ClearProgressBar();
+	
 	yield hs_post; // Wait until the download is done
-    if(hs_post.error) {
-        print("There was an error posting the high score: " + hs_post.error);
-    }
+
 	
+    if (hs_post.error != null){
+       Application.ExternalCall( "debug", hs_post.error);
+    }else
+    {
+        Application.ExternalCall( "debug", "Finished Uploading Screenshot");
+        
+        var combinationID = hs_post.text;
+        var pdf_url = "http://filikatasarim.com/clients/sonorous/pdfci.php?combinationID="+combinationID;
+        var pdf_post = WWW(pdf_url);
+        //print(pdf_url);
+        
+        yield pdf_post;
+		
+		if(pdf_post.isDone) {
+		
+			var path = EditorUtility.SaveFilePanel(
+					"Save as PDF",
+					"",
+					"",
+					"pdf");
+					
+			var pdf_bytes = pdf_post.bytes;
+			
+			var fs : FileStream = FileStream(path, FileMode.CreateNew);
+			var bw : BinaryWriter = BinaryWriter(fs);
+			bw.Write(pdf_bytes);
+			bw.Close();
+			fs.Close();
+		}
+    }
+
 	
 }
 
 function SaveState(){
-/*
+
 	
-	var sw : StreamWriter = new System.IO.StreamWriter("BillofMaterials.txt");
-	
+	var xmlDoc : XmlDocument = new XmlDocument();
+	var CombinationXML : XmlElement = xmlDoc.CreateElement("Combination");
+	xmlDoc.AppendChild(CombinationXML);
+	var ElementsXML : XmlElement = xmlDoc.CreateElement("Elements");
+	CombinationXML.AppendChild(ElementsXML);
 	
 	for(var i : int = 0; i < parameters.Count; i++){
-	 sw.WriteLine("Bill of Materials");
-	 sw.WriteLine("");
-	 sw.Write("Element Id : ");
-	 sw.WriteLine(parameters[i]["elementId"]);
-	 sw.Write("Element Type : ");
-	 sw.WriteLine(parameters[i]["elementType"]);
-	 sw.Write("Front : ");
-	 sw.WriteLine(parameters[i]["Front"]);
-	 sw.Write("Front Up : ");
-	 sw.WriteLine(parameters[i]["FrontUp"]);
-	 sw.Write("Front Down : ");
-	 sw.WriteLine(parameters[i]["FrontDown"]);
-	 sw.Write("Back : ");
-	 sw.WriteLine(parameters[i]["Back"]);
-	 sw.Write("Left : ");
-	 sw.WriteLine(parameters[i]["Left"]);
-	 sw.Write("Right : ");
-	 sw.WriteLine(parameters[i]["Right"]);
-	 sw.Write("Bottom : ");
-	 sw.WriteLine(parameters[i]["Bottom"]);
-	 sw.Write("Top : ");
-	 sw.WriteLine(parameters[i]["Top"]);
-	 sw.Write("Hole : ");
-	 sw.WriteLine(parameters[i]["Hole"]);
-	 sw.Write("nFrontFace : ");
-	 sw.WriteLine(parameters[i]["nFrontFace"]);
-	 sw.Write("w : ");
-	 sw.WriteLine(parameters[i]["w"]);
-	 sw.Write("h : ");
-	 sw.WriteLine(parameters[i]["h"]);
-	 sw.Write("depth : ");
-	 sw.WriteLine(parameters[i]["depth"]);
-	 sw.Write("x : ");
-	 sw.WriteLine(parameters[i]["x"]);
-	 sw.Write("y : ");
-	 sw.WriteLine(parameters[i]["y"]);
-	 sw.Write("isRigid : ");
-	 sw.WriteLine(parameters[i]["isRigid"]);
-	 sw.Write("Base Height : ");
-	 sw.WriteLine(parameters[i]["baseHeight"]);
-	
+			
+		var ElementXML : XmlElement = xmlDoc.CreateElement("Element");
+		ElementsXML.AppendChild(ElementXML);
+		
+		var elementIdXML : XmlElement = xmlDoc.CreateElement("elementId");
+		ElementXML.AppendChild(elementIdXML);
+		var elementId : int = parameters[i]["elementId"];
+		elementIdXML.InnerText = elementId.ToString();
+		
+		var elementTypeXML : XmlElement = xmlDoc.CreateElement("elementType");
+		ElementXML.AppendChild(elementTypeXML);
+		var elementType : String = parameters[i]["elementType"];
+		elementTypeXML.InnerText = elementType.ToString();
+		
+		var FrontXML : XmlElement = xmlDoc.CreateElement("Front");
+		ElementXML.AppendChild(FrontXML);
+		var Front : String = parameters[i]["Front"];
+		FrontXML.InnerText = Front.ToString();
+		
+		var FrontUpXML : XmlElement = xmlDoc.CreateElement("FrontUp");
+		ElementXML.AppendChild(FrontUpXML);
+		var FrontUp : String = parameters[i]["FrontUp"];
+		FrontUpXML.InnerText = FrontUp.ToString();
+		
+		var FrontDownXML : XmlElement = xmlDoc.CreateElement("FrontDown");
+		ElementXML.AppendChild(FrontDownXML);
+		var FrontDown : String = parameters[i]["FrontDown"];
+		FrontDownXML.InnerText = FrontDown.ToString();
+		
+		var BackXML : XmlElement = xmlDoc.CreateElement("Back");
+		ElementXML.AppendChild(BackXML);
+		var Back : String = parameters[i]["Back"];
+		BackXML.InnerText = Back.ToString();
+		
+		var LeftXML : XmlElement = xmlDoc.CreateElement("Left");
+		ElementXML.AppendChild(LeftXML);
+		var Left : String = parameters[i]["Left"];
+		LeftXML.InnerText = Left.ToString();
+		
+		var RightXML : XmlElement = xmlDoc.CreateElement("Right");
+		ElementXML.AppendChild(RightXML);
+		var Right : String = parameters[i]["Right"];
+		RightXML.InnerText = Right.ToString();
+		
+		var BottomXML : XmlElement = xmlDoc.CreateElement("Bottom");
+		ElementXML.AppendChild(BottomXML);
+		var Bottom : String = parameters[i]["Bottom"];
+		BottomXML.InnerText = Bottom.ToString();
+		
+		var TopXML : XmlElement = xmlDoc.CreateElement("Top");
+		ElementXML.AppendChild(TopXML);
+		var Top : String = parameters[i]["Top"];
+		TopXML.InnerText = Top.ToString();
+		
+		var HoleXML : XmlElement = xmlDoc.CreateElement("Hole");
+		ElementXML.AppendChild(HoleXML);
+		var Hole : int = parameters[i]["Hole"];
+		HoleXML.InnerText = Hole.ToString();
+		
+		var nFrontFaceXML : XmlElement = xmlDoc.CreateElement("nFrontFace");
+		ElementXML.AppendChild(nFrontFaceXML);
+		var nFrontFace : int = parameters[i]["nFrontFace"];
+		nFrontFaceXML.InnerText = nFrontFace.ToString();
+		
+		var wXML : XmlElement = xmlDoc.CreateElement("w");
+		ElementXML.AppendChild(wXML);
+		var w : int = parameters[i]["w"];
+		wXML.InnerText = w.ToString();
+		
+		var hXML : XmlElement = xmlDoc.CreateElement("h");
+		ElementXML.AppendChild(hXML);
+		var h : int = parameters[i]["h"];
+		hXML.InnerText = h.ToString();
+		
+		var depthXML : XmlElement = xmlDoc.CreateElement("depth");
+		ElementXML.AppendChild(depthXML);
+		var depth : int = parameters[i]["depth"];
+		depthXML.InnerText = depth.ToString();
+		
+		var xXML : XmlElement = xmlDoc.CreateElement("x");
+		ElementXML.AppendChild(xXML);
+		var x : int = parameters[i]["x"];
+		xXML.InnerText = x.ToString();
+		
+		var yXML : XmlElement = xmlDoc.CreateElement("y");
+		ElementXML.AppendChild(yXML);
+		var y : int = parameters[i]["y"];
+		yXML.InnerText = y.ToString();
+		
+		var isRigidXML : XmlElement = xmlDoc.CreateElement("isRigid");
+		ElementXML.AppendChild(isRigidXML);
+		var isRigid : boolean = parameters[i]["isRigid"];
+		isRigidXML.InnerText = isRigid.ToString();
+		
+		var baseHeightXML : XmlElement = xmlDoc.CreateElement("baseHeight");
+		ElementXML.AppendChild(baseHeightXML);
+		var baseHeight : int = parameters[i]["baseHeight"];
+		baseHeightXML.InnerText = baseHeight.ToString();
+
 	}
 	
-	
-	sw.Close();
+
+	/*
+	var path = EditorUtility.SaveFilePanel(
+						"Save",
+						"",
+						"",
+						"xml");
+		
+	xmlDoc.Save(path);
+									
 	*/
+	xmlDoc.Save(Application.dataPath+"/XmlDocs/"+"Save"+".xml");
+	
 
 
+}
+
+/**
+* DESTROY EVERYTHING
+*/
+function removeAndDestroy() {
+
+	clearAllHighlightedModuls();
+	
+	for(var i:int=0; i < moduls.Count; i++) {
+		Destroy(moduls[i]);
+	}
+	
+	moduls.Clear();
+	parameters.Clear();
+	modulDestroyed = true;
+}
+
+/**
+* DESTROY SELECTED MODUL
+*/
+function removeAndDestroyAt(rId:int) {
+	
+	if(moduls.Count > 0) {
+		clearAllHighlightedModuls();
+		
+		Destroy(moduls[rId]);
+		moduls.RemoveAt(rId);
+		parameters.RemoveAt(rId);
+		
+		for(var m:int = 0; m < moduls.Count; m++) {
+			variableScript = moduls[m].GetComponent("Element");
+			variableScript.elementID = m;
+			
+			var elementid_www : int;
+			var elementType_www : String = "";
+			var front_www : String = "";
+			var frontUp_www : String = "";
+			var frontDown_www : String = "";
+			var back_www : String = "";
+			var left_www : String = "";
+			var right_www : String = "";
+			var bottom_www : String = "";
+			var top_www : String = "";
+			var hole_www : int;
+			var nFrontFace_www : int;
+			var w_www : int;
+			var h_www : int;
+			var depth_www : int;
+			var x_www : int;
+			var y_www : int;
+			var isRigid_www : int;
+			var baseHeight_www : int;
+			parameters[m]["elementId"] = m;
+			/*
+			parameters[m] = parameters[m]["elementId"];
+			elementType_www = parameters[m]["elementType"];	
+			front_www = parameters[m]["Front"];
+			frontUp_www = parameters[m]["FrontUp"];
+			frontDown_www = parameters[m]["FrontDown"];
+			back_www = parameters[m]["Back"];
+			left_www = parameters[m]["Left"];
+			right_www = parameters[m]["Right"];
+			bottom_www = parameters[m]["Bottom"];
+			top_www = parameters[m]["Top"];
+			hole_www = parameters[m]["Hole"];
+			nFrontFace_www = parameters[m]["nFrontFace"];
+			w_www = parameters[m]["w"];
+			h_www = parameters[m]["h"];
+			depth_www = parameters[m]["depth"];
+			x_www = parameters[m]["x"];
+			y_www = parameters[m]["y"];
+			isRigid_www = parameters[m]["isRigid"];
+			baseHeight_www = parameters[m]["baseHeight"];*/
+		}
+	
+		modulDestroyed = true;
+	}
+}
+
+function LoadState(){
+
+  var myLoad : Combination = Combination.Load(Application.dataPath+"/XmlDocs/"+"Save"+".xml");
+	
+  //Debug.Log(myLoad.Elements.Count);
+			
+  //Debug.Log(myLoad.Elements[0].Back);
+  
+  removeAndDestroy();
+  
+  for(var j:int=0; j < myLoad.Elements.Count; j++) {
+  
+  			var elementId : int = myLoad.Elements[j].elementId;
+  			var elementType : String = myLoad.Elements[j].elementType;
+  			var Front : String = myLoad.Elements[j].Front;
+  			var FrontUp : String = myLoad.Elements[j].FrontUp;
+  			var FrontDown : String = myLoad.Elements[j].FrontDown;
+  			var Back : String = myLoad.Elements[j].Back;
+  			var Left : String = myLoad.Elements[j].Front;
+  			var Right : String = myLoad.Elements[j].FrontUp;
+  			var Bottom : String = myLoad.Elements[j].FrontDown;
+  			var Top : String = myLoad.Elements[j].Back;
+  			var Hole : int = myLoad.Elements[j].Hole;
+  			var nFrontFace : int = myLoad.Elements[j].nFrontFace;
+  			var w : int = myLoad.Elements[j].w;
+  			var h : int = myLoad.Elements[j].h;
+  			var depth : int = myLoad.Elements[j].depth;
+  			var x : int = myLoad.Elements[j].x;
+  			var y : int = myLoad.Elements[j].y;
+  			var isRigid : String = myLoad.Elements[j].isRigid;//problem
+  			var baseHeight : int = myLoad.Elements[j].baseHeight;
+			
+			var myStuffTex:Hashtable = {"elementId":elementId,
+							"elementType":elementType,
+							"Front":Front,
+	                        "FrontUp":FrontUp,
+	                        "FrontDown":FrontDown,
+	                        "Back":Back,
+	                        "Left":Left,
+	                        "Right":Right,
+	                        "Bottom":Bottom,
+	                        "Top":Top,
+	                        "Hole":Hole,
+	                        "nFrontFace":nFrontFace,
+	                        "w":w,
+	                        "h":h,
+	                        "depth":depth,
+	                        "x":x,
+	                        "y":y,
+	                        "isRigid":true,
+	                        "baseHeight":0
+	                        };
+	         var index = j.ToString();               
+	         addModul(myStuffTex,index);               
+  }
+  
+   
+  
+  
+ 
+
+}
+
+function RulesEngine(){
+
+		var othersX	: int;
+		var othersY : int;
+		var othersH : int;
+		var othersW : int;
+		
+		var deltaW : int;
+		
+		var considerX : int;
+		var considerY : int;
+		var considerH : int;
+		var considerW : int;
+		
+		considerX = parameters[draggingElementId]["x"];
+		considerY = parameters[draggingElementId]["y"];
+		considerH = parameters[draggingElementId]["h"];
+		considerW = parameters[draggingElementId]["w"];
+
+		// Rule 1 : EX ÜST ÜSTE OLMAZ
+		
+		if(parameters[draggingElementId]["elementType"] == "EX"){
+			
+			//Debug.Log("1 : EX rule");
+			for(var i : int = 0; i < parameters.Count; i++){
+			
+				if(i != draggingElementId && parameters[i]["elementType"] == "EX"){
+				
+					othersX = parameters[i]["x"];
+					othersY = parameters[i]["y"];
+					othersH = parameters[i]["h"];
+					othersW = parameters[i]["w"];
+					
+					if(Mathf.Min(othersX,considerX) == othersX){
+						
+							//others solda
+							deltaW = othersW;
+						
+					}else{
+							//others solda
+							deltaW = considerW;
+						
+					}
+					
+				
+					if(//conditions
+					
+					(Mathf.Abs(othersY - considerY) == considerH) //yukarda aşağıda
+					
+					&&
+					
+					(Mathf.Abs(othersX - considerX) < deltaW) // arasında
+					
+					
+					){
+						
+						//Debug.Log("1 : EX ust uste olmaaaaz");
+						break;
+					}
+				
+				}
+				
+			}
+		
+		}
+		
+		// Rule 2 : ED ÜST ÜSTE OLMAZ
+		
+		if(parameters[draggingElementId]["elementType"] == "ED"){
+			
+			//Debug.Log("2 : ED rule");
+			for(var j : int = 0; j < parameters.Count; j++){
+			
+				if(j != draggingElementId && parameters[j]["elementType"] == "ED"){
+					
+					othersX = parameters[j]["x"];
+					othersY = parameters[j]["y"];
+					othersH = parameters[j]["h"];
+					othersW = parameters[j]["w"];
+					
+					if(Mathf.Min(othersX,considerX) == othersX){
+						
+							//others solda
+							deltaW = othersW;
+						
+					}else{
+							//others solda
+							deltaW = considerW;
+						
+					}
+		
+					if(//conditions
+
+					
+					(Mathf.Abs(othersY - considerY) == considerH) //yukarda aşağıda
+					
+					&&
+					
+					(Mathf.Abs(othersX - considerX) < deltaW) // arasında
+					
+					
+					){
+						
+						//Debug.Log("2 : ED ust uste olmaaaaz");
+						break;
+					}
+				
+				}
+				
+			}
+		
+		}
+		
+		// Rule 3 : ED EX’in ÜSTÜNE GELEBİLİR. TAM TERSİ OLAMAZ. = EX ED'in üstüne gelemez
+		
+		if(parameters[draggingElementId]["elementType"] == "EX"){
+		
+			//Debug.Log("3 : ED EX rule");
+		
+			for(var k : int = 0; k < parameters.Count; k++){
+			
+				if(k != draggingElementId && parameters[k]["elementType"] == "ED"){
+						//static ED'ler
+						othersX = parameters[k]["x"];
+						othersY = parameters[k]["y"];
+						othersH = parameters[k]["h"];
+						othersW = parameters[k]["w"];
+						
+						
+						
+						if(Mathf.Min(othersX,considerX) == othersX){
+						
+							//others solda
+							deltaW = othersW;
+						
+						}else{
+							//others solda
+							deltaW = considerW;
+						
+						}
+						
+						if(//conditions
+
+					
+						(considerY - othersY == considerH) //yukarda 
+						
+						&&
+						
+						(Mathf.Abs(othersX - considerX) < deltaW) // arasında
+						
+						
+						){
+							
+							//Debug.Log("3 : EX ED'in üstüne gelemez");
+							break;
+						}
+				
+				
+				}
+			
+			
+			}
+		}
+		
+		if(parameters[draggingElementId]["elementType"] == "ED"){
+		
+			//Debug.Log("3 : ED EX rule");
+		
+			for(var m : int = 0; m < parameters.Count; m++){
+			
+				if(m != draggingElementId && parameters[m]["elementType"] == "EX"){
+						//static EX'ler
+						othersX = parameters[m]["x"];
+						othersY = parameters[m]["y"];
+						othersH = parameters[m]["h"];
+						othersW = parameters[m]["w"];
+						
+						
+						
+						if(Mathf.Min(othersX,considerX) == othersX){
+						
+							//others solda
+							deltaW = othersW;
+						
+						}else{
+							//others solda
+							deltaW = considerW;
+						
+						}
+						
+						if(//conditions
+
+					
+						(othersY - considerY == considerH) //yukarda aşağıda
+						
+						&&
+						
+						(Mathf.Abs(othersX - considerX) < deltaW) // arasında
+						
+						
+						){
+							
+							//Debug.Log("3 : EX ED'in üstüne gelemez");
+							break;
+						}
+				
+				
+				}
+			
+			
+			}
+		}
+		
+		// Rule 4 : ED YERDE OLAMAZ.
+		
+		if(parameters[draggingElementId]["elementType"] == "ED"){
+			
+			if(considerY - considerH * 0.5 < snapFactorY){
+				//Debug.Log("4 : ED YERDE OLAMAZ");
+			
+			}
+		
+		}
+		
+		// Rule 5 : EX DUVARDA OLAMAZ (ASILAMAZ). HER ZAMAN YERDE OLMALI
+		// Rule 6 : Yerdeki tüm ürünler (EX) bir baza seçeneğine sahip olmak zorunda.
+		
+		if(parameters[draggingElementId]["elementType"] == "EX"){
+			
+			if(considerY - considerH * 0.5 >= snapFactorY){
+				//Debug.Log("5 : EX DUVARDA OLAMAZ (ASILAMAZ). HER ZAMAN YERDE OLMALI");
+			
+			}else{
+				//EX YERDE DEMEK
+				guiNotification="Yerdeki tüm ürünler (EX) bir baza seçeneğine sahip olmak zorunda. Lütfen baza yüksekliği seçin.";
+				guiState = "select_base";
+				openInspector();
+				//Debug.Log("6 : Yerdeki tüm ürünler (EX) bir baza seçeneğine sahip olmak zorunda.");
+				
+				
+			}
+		
+		}
 }

@@ -15,9 +15,9 @@ var cubeBottom 		: GameObject;
 var cubeTop 		: GameObject;
 var cubeHole 		: GameObject;
 var woodThickness 	: float = 1;
-var w				:float;
-var h				:float;
-var depth			:float;
+var w				: float;
+var h				: float;
+var depth			: float;
 
 var xPos				: int = 0;
 var yPos				: int = 0;
