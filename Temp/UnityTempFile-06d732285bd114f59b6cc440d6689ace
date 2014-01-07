@@ -41,5 +41,6 @@
 'Assets/ElementData.js'
 'Assets/GUITextures.js'
 'Assets/ModulsParams.js'
+'Assets/Notification.js'
 'Assets/md5functions.js'
 'Assets/snippets.js'

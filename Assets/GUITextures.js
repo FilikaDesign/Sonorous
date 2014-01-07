@@ -73,6 +73,13 @@ static function tex_box_bg()
 	return tex;
 }
 
+static function tex_box_bg_hover() 
+{
+	var tex:Texture2D = Resources.Load("GUISkin/sonorous_gui_button_hover", Texture2D);
+ 
+	return tex;
+}
+
 static function load_tex(src:String) 
 {
 	var tex:Texture2D = Resources.Load(src, Texture2D);

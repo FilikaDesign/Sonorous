@@ -40,6 +40,7 @@ private var cameraShift : float = 5;
 private var snapEnable 	: boolean = true;
 
 // GUI
+private var notify:boolean = false;
 private var iSwitch:boolean = true;  
 private var isGUIClosed:boolean = true;
 private var guiState:String = "default";
@@ -195,10 +196,10 @@ function addModul(modulParams:Hashtable, id:String) {
 function Update () {
 	if(setRoomSize) {
 		 
-		
-		if (guiRectBounds.Contains(Input.mousePosition))  
-			iSwitch = false; else  iSwitch = true; 
-			
+		if(!isGUIClosed) {
+			if (guiRectBounds.Contains(Input.mousePosition))  
+				iSwitch = false; else  iSwitch = true; 
+		}
 		
 		var mainCamera = Camera.main;
 		var hit : RaycastHit;
@@ -340,7 +341,7 @@ function OnGUI() {
 	
 	GUI.depth = 2000;
 	GUI.skin = sonorousGUISkin;
-		
+	
 	// Enable Keyboard Interaction
 	initKeyboardInteraction();
 	
@@ -388,7 +389,7 @@ function OnGUI() {
 	}
 	
 	// Tooltip
-	GUI.Label (Rect ((btnW+2)*8,12,200,40), GUI.tooltip);
+	GUI.Label (Rect ((btnW+2)*8,3,200,40), GUI.tooltip);
 	
 	/* GUI State */
 	var customButton : GUIStyle;
@@ -530,7 +531,7 @@ function OnGUI() {
 		}
 	}
 	
-	
+	//Notification.message(guiNotification,notify);
 	
 	GUI.EndGroup ();
 	
@@ -1284,6 +1285,8 @@ function RulesEngine(){
 					){
 						
 						//Debug.Log("1 : EX ust uste olmaaaaz");
+						notify = true;
+						guiNotification = "1 : EX Type Moduls cannot be superposed";
 						break;
 					}
 				
@@ -1331,6 +1334,9 @@ function RulesEngine(){
 					){
 						
 						//Debug.Log("2 : ED ust uste olmaaaaz");
+			
+						notify = true;
+						guiNotification = "2 : ED Type Moduls cannot be superposed";
 						break;
 					}
 				
@@ -1381,6 +1387,8 @@ function RulesEngine(){
 						){
 							
 							//Debug.Log("3 : EX ED'in üstüne gelemez");
+							notify = true;
+							guiNotification = "3 : EX Type Moduls cannot be placed onto ED Modul";
 							break;
 						}
 				
@@ -1430,6 +1438,8 @@ function RulesEngine(){
 						){
 							
 							//Debug.Log("3 : EX ED'in üstüne gelemez");
+							notify = true;
+							guiNotification = "3 : EX Type Moduls cannot be placed onto ED Moduls";
 							break;
 						}
 				
@@ -1446,6 +1456,8 @@ function RulesEngine(){
 			
 			if(considerY - considerH * 0.5 < snapFactorY){
 				//Debug.Log("4 : ED YERDE OLAMAZ");
+				notify = true;
+				guiNotification = "4 : ED Type Moduls cannot be on the floor";
 			
 			}
 		

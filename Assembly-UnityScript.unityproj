@@ -50,6 +50,7 @@
      <Compile Include="Assets\ElementData.js" />
      <Compile Include="Assets\GUITextures.js" />
      <Compile Include="Assets\ModulsParams.js" />
+     <Compile Include="Assets\Notification.js" />
      <Compile Include="Assets\md5functions.js" />
      <Compile Include="Assets\snippets.js" />
      <None Include="Assets\XmlDocs\Save.xml" />
