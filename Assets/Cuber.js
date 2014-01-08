@@ -163,10 +163,14 @@ function Start () {
 	floor.renderer.material.mainTextureScale = Vector2 (11,11);	
 	
 	
-	thumbTypes = ["EX","ED","EL","TT","EX"];
+	thumbTypes = ["ed50-f","ed50-u","ex10-dd","ex10-f","ex10-fd","ex10-t","ex10-tf",
+	"ex11-dd","ex11-f","ex11-fd","ex11-t","ex11-tf",
+	"ex12-dd","ex12-dd","ex12-f","ex12-fd","ex12-t","ex12-tf",
+	"ex20-d","ex20-dd","ex20-f","ex20-fd","ex20-t",
+	"ex32-f"];
 	// Load Thumbnails
-	for(var p:int = 1; p < 6; p++) {
-		var hh:Hashtable = {"src":"thumbs/"+p.ToString(),"type":thumbTypes[p-1]};
+	for(var p:int = 0; p < thumbTypes.Count; p++) {
+		var hh:Hashtable = {"src":"thumbs/"+thumbTypes[p],"type":thumbTypes[p]};
 		thumbs.Add(hh);
 	}
 }
@@ -427,18 +431,19 @@ function OnGUI() {
 		GUI.Label(Rect(ml,ml+tfH*10+mt,w-ml*2,20),"Add Element");
 		
 		// Select Modul to Add Screen
-		scrollPosition = GUI.BeginScrollView (Rect (ml,ml+tfH*11+5+mt,w-10,Screen.height - 20*12-ml),
-		scrollPosition, Rect (0, 0, 0, (64+ml)*10));	
+		scrollPosition = GUI.BeginScrollView (Rect (ml,ml+tfH*11+5+mt,w-12,Screen.height - 20*12-ml),
+		scrollPosition, Rect (0, 0, 0, (64+ml)*(thumbs.Count-1)));	
 		
 		/*if(GUI.Button(Rect( 0,0,128,64 ),m1)) {addM1Box();draggingObject = moduls[moduls.Count-1];}*/
 		
+		GUI.skin.button.normal.background  = GUITextures.load_thumb_bg(); 
 		for(var t:int=0; t < thumbs.Count; t++) {
-			if(GUI.Button(Rect( 0,(64+ml)*t,128,64 ),GUITextures.load_tex(thumbs[t]["src"]))) {
+			if(GUI.Button(Rect( 0,(64+1)*t,w-26,64 ),GUITextures.load_tex(thumbs[t]["src"]))) {
 				addMBox(thumbs[t]["type"]);
 				
 			}
 		}
-		
+		GUI.skin.button.normal.background  = GUITextures.tex_box_bg(); 
 		GUI.EndScrollView ();
 		
 		
@@ -581,6 +586,7 @@ function setTextures(tex:String) {
 function addMBox(type:String) {
 
     var idM:String = (moduls.Count).ToString();
+    Debug.Log(type);
     addModul(ModulsParams.type_Ex(type),idM);
    
     //draggingObject = moduls[moduls.Count-1];

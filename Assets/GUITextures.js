@@ -86,3 +86,10 @@ static function load_tex(src:String)
  
 	return tex;
 }
+
+static function load_thumb_bg() 
+{
+	var tex:Texture2D = Resources.Load("GUISkin/bg_thumb", Texture2D);
+ 
+	return tex;
+}
