@@ -24,6 +24,9 @@ private var moduls : List.<GameObject> = new List.<GameObject>();
 private var thumbs : List.<Hashtable> = new List.<Hashtable>();
 private var thumbTypes : Array = new Array();
 
+// TEXTURE THUMBS
+private var textures : Array = new Array();
+
 private var variableScript : Element;
 private var vs : Element;
 
@@ -56,7 +59,7 @@ private var guiRect:LTRect = new LTRect( Screen.width, 0,w, Screen.height );
 private var guiRectBounds:Rect = new Rect( Screen.width-w, 0,w, Screen.height );
 private var welcomeRect = new LTRect(0,0,Screen.width,Screen.height);
 
-private var guiPosX:int = Screen.width;
+private var guiPosX:int = Screen.width; 
 
 // toggle state
 private var inch2:boolean = false;
@@ -92,7 +95,7 @@ private var textWidth:String = "800";
 private var textHeight:String = "300";
 
 //private var prevHighlighted : GameObject;
-private var prevHighlightedId : int;
+private var prevHighlightedId : int = -1;
 private var modulDestroyed:boolean = false;
 
 private var ww:float;
@@ -168,11 +171,14 @@ function Start () {
 	"ex12-dd","ex12-dd","ex12-f","ex12-fd","ex12-t","ex12-tf",
 	"ex20-d","ex20-dd","ex20-f","ex20-fd","ex20-t",
 	"ex32-f"];
+	
 	// Load Thumbnails
 	for(var p:int = 0; p < thumbTypes.Count; p++) {
 		var hh:Hashtable = {"src":"thumbs/"+thumbTypes[p],"type":thumbTypes[p]};
 		thumbs.Add(hh);
 	}
+	
+	textures = ["textures/200s", "textures/black", "textures/capucino", "textures/graphit", "textures/H3375_ST22", "textures/regblack"];
 }
 
 /* ADD MODUL METHOD */
@@ -392,7 +398,7 @@ function OnGUI() {
 	}
 	
 	// Tooltip
-	GUI.Label (Rect ((btnW+2)*8,3,200,40), GUI.tooltip);
+	GUI.Label (Rect ((btnW+2)*8,10,200,40), GUI.tooltip);
 	
 	/* GUI State */
 	var customButton : GUIStyle;
@@ -471,7 +477,7 @@ function OnGUI() {
 	}
 	
 	// Change Material GUI
-	else if(guiState == "modul_edit" && draggingElementId > -1) {
+	else if(guiState == "modul_edit" && draggingElementId > -1 && moduls.Count > 0) {
 		
 		var tex:String = "wall";
 		
@@ -508,30 +514,24 @@ function OnGUI() {
 		setTop = (GUI.Toggle(Rect(ml,ml+tfH*(8-minusFac),w,tglH),setTop," Set Top Material"));
 		
 		
-		GUI.Label(Rect(ml,ml+tfH*(10-minusFac),w,tfH),"2- Click on Material");
+		GUI.Label(Rect(ml,ml+tfH*(10-minusFac),w,tfH),"2- Click on Cabinet and select a texture");
 		
-		if(GUI.Button(Rect( ml,ml+tfH*(11-minusFac),55,55 ),GUITextures.load_tex("textures/t1"))) 
-		{	
-			tex = "textures/t1";
-			setTextures(tex);
-		}
+		var tFloor:int = 0;
+		var lastY:int = ml+tfH*(11-minusFac) ;
 		
-		if(GUI.Button(Rect( ml+60,ml+tfH*(11-minusFac),55,55 ),GUITextures.load_tex("textures/t2"))) 
-		{	
-			tex = "textures/t2";
-			setTextures(tex);
-		}
-		
-		if(GUI.Button(Rect( ml+120,ml+tfH*(11-minusFac),55,55 ),GUITextures.load_tex("textures/t3"))) 
-		{	
-			tex = "textures/t3";
-			setTextures(tex);
-		}
-		
-		if(GUI.Button(Rect( ml,ml+tfH*(11-minusFac)+60,55,55 ),GUITextures.load_tex("textures/t4"))) 
-		{	
-			tex = "textures/t4";
-			setTextures(tex);
+		for(var te:int = 0; te < textures.Count; te++) {
+			if(te % 2 == 0) {
+				if(GUI.Button(Rect( ml,lastY + tFloor*(2+120),(w-ml*2)*0.5,120 ),GUITextures.load_tex(textures[te]))) 
+				{	
+					setTextures(textures[te]);
+				}
+				tFloor++;
+			}else {
+				if(GUI.Button(Rect( ml*2+((w-ml*2)*0.5), lastY + (tFloor-1)*(2+120),(w-ml*2)*0.5,120 ),GUITextures.load_tex(textures[te]))) 
+				{	
+					setTextures(textures[te]);
+				}
+			}
 		}
 	}
 	GUI.EndGroup ();
@@ -550,35 +550,45 @@ function setTextures(tex:String) {
 	if(setFrontUp) 
 	{
 		variableScript.cubeFrontUp.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
+		parameters[draggingElementId]["FrontUp"] = tex;
 	}
 	
 	if(setFrontDown) {
 		variableScript.cubeFrontDown.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
+		parameters[draggingElementId]["FrontDown"] = tex;
 	}
 	
 	if(setFront) {
 		variableScript.cubeFront.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
+		parameters[draggingElementId]["Front"] = tex;
 	}
 	
 	if(setLeft) {
 		variableScript.cubeLeft.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
+		parameters[draggingElementId]["Left"] = tex;
 	}
 		
 	if(setRight) {
 		variableScript.cubeRight.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
+		parameters[draggingElementId]["Right"] = tex;
 	}
 	
 	if(setBack) {
 		variableScript.cubeBack.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
+		parameters[draggingElementId]["Back"] = tex;
 	}
 	
 	if(setBottom) {
 		variableScript.cubeBottom.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
+		parameters[draggingElementId]["Bottom"] = tex;
 	}
 	
 	if(setTop) {
 		variableScript.cubeTop.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
+		parameters[draggingElementId]["Top"] = tex;
 	}
+	
+	setFrontUp = setFrontDown = setLeft = setRight = setBottom = setTop = setBack = setFront = false;
 }
 /* 
 *** ADD SELECTED MODUL TO STGE AND SET ACTIVE
@@ -598,8 +608,10 @@ function addMBox(type:String) {
 function openInspector() {
 	if(isGUIClosed) {
 		guiPosX = Screen.width-w;
+		GUI.skin.button.active.background = GUITextures.tex_box_bg_hover();
 	}else{
 		guiPosX = guiPosX+w;
+		GUI.skin.button.normal.background = GUITextures.tex_box_bg();
 		resetGUIParams();
 	}
 	LeanTween.move( guiRect, Vector2(guiPosX, 0), 0.25 );
@@ -704,7 +716,7 @@ function setCameraPosition(direction : String) {
 // Todo control scene when mouse + cmd pressed
 function setMouseZoom() {
 	if(iSwitch) {
-		this.gameObject.transform.position.z = this.gameObject.transform.position.z + Input.GetAxis("Mouse ScrollWheel")*cameraShift;
+		this.gameObject.transform.position.z = this.gameObject.transform.position.z + Input.GetAxis("Mouse ScrollWheel")*(cameraShift+40);
 		if(Input.GetKey(KeyCode.LeftApple) && Input.GetMouseButton) {
 			
 			//this.gameObject.transform.position = this.gameObject.transform.position + Input.mousePosition;
@@ -761,13 +773,13 @@ function initKeyboardInteraction() {
 
 function ToggleLight(){
 
-
+	print(draggingElementId);
 	//highlight
 	var allChildren = moduls[draggingElementId].GetComponentsInChildren(Transform);
  	
 
  	variableScript = moduls[draggingElementId].GetComponent("Element");
-		
+
 	for (var child : Transform in allChildren) {
     // do whatever with child transform here
 	    if(child.renderer != null){
@@ -798,13 +810,29 @@ function ToggleLight(){
 			    variableScript.highlighted = false;
 			   
 		    }
-		       
+		}
+	}
+	
+		if(prevHighlightedId == -1 ) {
+			if(!modulDestroyed)
+				allChildren = moduls[draggingElementId].GetComponentsInChildren(Transform);
+		
+			for (var child : Transform in allChildren) {
+    		// do whatever with child transform here
+		   		if(child.renderer != null){
+		    
+			    child.renderer.material.color = Color.red;
+			    variableScript.highlighted = true;
+			   
+		    	}
+	       
+			}
 		}
 		
 		prevHighlightedId = draggingElementId;
 		modulDestroyed = false;
+		
 	
-	}
 }
 
 function BillofMaterials(){
@@ -1113,7 +1141,7 @@ function removeAndDestroyAt(rId:int) {
 	
 	if(moduls.Count > 0) {
 		clearAllHighlightedModuls();
-		
+		prevHighlightedId = -1;
 		Destroy(moduls[rId]);
 		moduls.RemoveAt(rId);
 		parameters.RemoveAt(rId);
@@ -1186,10 +1214,10 @@ function LoadState(){
   			var FrontUp : String = myLoad.Elements[j].FrontUp;
   			var FrontDown : String = myLoad.Elements[j].FrontDown;
   			var Back : String = myLoad.Elements[j].Back;
-  			var Left : String = myLoad.Elements[j].Front;
-  			var Right : String = myLoad.Elements[j].FrontUp;
-  			var Bottom : String = myLoad.Elements[j].FrontDown;
-  			var Top : String = myLoad.Elements[j].Back;
+  			var Left : String = myLoad.Elements[j].Left;
+  			var Right : String = myLoad.Elements[j].Right;
+  			var Bottom : String = myLoad.Elements[j].Bottom;
+  			var Top : String = myLoad.Elements[j].Top;
   			var Hole : int = myLoad.Elements[j].Hole;
   			var nFrontFace : int = myLoad.Elements[j].nFrontFace;
   			var w : int = myLoad.Elements[j].w;
