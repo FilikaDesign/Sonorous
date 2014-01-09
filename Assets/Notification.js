@@ -37,3 +37,9 @@ static function tweenFinished () {
 static function tweenClosedFinised () {
 	isNotClosed =  !isNotClosed;
 }
+
+static function closeNotification() {
+	notPosY = notPosY+h;
+	LeanTween.move( notificationRect, Vector2(0, notPosY), 0.25 );
+	isNotClosed =  !isNotClosed;
+}

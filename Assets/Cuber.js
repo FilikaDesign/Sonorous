@@ -1462,25 +1462,36 @@ function RulesEngine(){
 				guiNotification = "4 : ED Type Moduls cannot be on the floor";
 				Notification.showNotification();
 			
+			}else{
+			
+				
 			}
 		
 		}
+		
 		
 		// Rule 5 : EX DUVARDA OLAMAZ (ASILAMAZ). HER ZAMAN YERDE OLMALI
 		// Rule 6 : Yerdeki tüm ürünler (EX) bir baza seçeneğine sahip olmak zorunda.
 		
 		if(parameters[draggingElementId]["elementType"] == "EX"){
+		
+			var baseHeight : int = parameters[draggingElementId]["baseHeight"];
 			
-			if(considerY - considerH * 0.5 >= snapFactorY){
+			if(considerY - considerH * 0.5 - baseHeight> 0){
 				//Debug.Log("5 : EX DUVARDA OLAMAZ (ASILAMAZ). HER ZAMAN YERDE OLMALI");
+				guiNotification = "4 : EX Type Moduls cannot be on the wall";
+				Notification.showNotification();
 			
 			}else{
 				//EX YERDE DEMEK
+				if(baseHeight <= 0){
 				guiNotification="Yerdeki tüm ürünler (EX) bir baza seçeneğine sahip olmak zorunda. Lütfen baza yüksekliği seçin.";
+				}
 				guiState = "select_base";
+				
 				openInspector();
 				//Debug.Log("6 : Yerdeki tüm ürünler (EX) bir baza seçeneğine sahip olmak zorunda.");
-				
+				Notification.closeNotification();
 				
 			}
 		
