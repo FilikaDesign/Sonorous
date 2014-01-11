@@ -194,10 +194,8 @@ function addModul(modulParams:Hashtable, id:String) {
 	var other : Element = eleman.GetComponent("Element");
 	other.params = parameters[parameters.Count-1];
 	
-	
-	
+
 	moduls.Add(eleman);
-	
 	
 
 }
@@ -241,9 +239,9 @@ function Update () {
 					vs = draggingObject.GetComponent("Element");
 					draggingElementId = vs.elementID;
 					
-					Debug.Log(parameters[0]["elementId"]);
-					Debug.Log("Moduls Len : "+moduls.Count + " / ");
-					Debug.Log("Current id : "+draggingElementId);
+					//Debug.Log(parameters[0]["elementId"]);
+					//Debug.Log("Moduls Len : "+moduls.Count + " / ");
+					//Debug.Log("Current id : "+draggingElementId);
 					var w:int = parameters[draggingElementId]["w"];
 					var h:int = parameters[draggingElementId]["h"];
 					var d:int = parameters[draggingElementId]["depth"];
@@ -596,7 +594,7 @@ function setTextures(tex:String) {
 function addMBox(type:String) {
 
     var idM:String = (moduls.Count).ToString();
-    Debug.Log(type);
+    //Debug.Log(type);
     addModul(ModulsParams.type_Ex(type),idM);
    
     //draggingObject = moduls[moduls.Count-1];
@@ -791,7 +789,7 @@ function ToggleLight(){
 	       
 	}
 	
- 	if(prevHighlightedId != draggingElementId){
+ 	if(prevHighlightedId != draggingElementId && prevHighlightedId != -1){
 	 	//de-highlight
 	 	if(!modulDestroyed)
 			allChildren = moduls[prevHighlightedId].GetComponentsInChildren(Transform);
@@ -945,7 +943,7 @@ function BillofMaterials(){
     var hs_post = WWW(post_url, form);
     
     while(hs_post.isDone != true){
-    print(hs_post.uploadProgress);
+    //print(hs_post.uploadProgress);
     EditorUtility.DisplayProgressBar(
 					"Combination Upload",
 					"Uploading ... Please wait!",
@@ -1227,7 +1225,7 @@ function LoadState(){
   			var y : int = myLoad.Elements[j].y;
   			var isRigid : String = myLoad.Elements[j].isRigid;//problem
   			var baseHeight : int = myLoad.Elements[j].baseHeight;
-			
+  			
 			var myStuffTex:Hashtable = {"elementId":elementId,
 							"elementType":elementType,
 							"Front":Front,
@@ -1246,7 +1244,7 @@ function LoadState(){
 	                        "x":x,
 	                        "y":y,
 	                        "isRigid":true,
-	                        "baseHeight":0
+	                        "baseHeight":baseHeight
 	                        };
 	         var index = j.ToString();               
 	         addModul(myStuffTex,index);               
@@ -1514,12 +1512,13 @@ function RulesEngine(){
 				//EX YERDE DEMEK
 				if(baseHeight <= 0){
 				guiNotification="Yerdeki tüm ürünler (EX) bir baza seçeneğine sahip olmak zorunda. Lütfen baza yüksekliği seçin.";
-				}
 				guiState = "select_base";
 				
-				openInspector();
-				//Debug.Log("6 : Yerdeki tüm ürünler (EX) bir baza seçeneğine sahip olmak zorunda.");
+				//openInspector();
+				Debug.Log("6 : Yerdeki tüm ürünler (EX) bir baza seçeneğine sahip olmak zorunda.");
 				Notification.closeNotification();
+				}
+				
 				
 			}
 		

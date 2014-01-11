@@ -9,7 +9,7 @@ static function type_Ex(type:String) {
 		/* EX-10 TYPE CABINETS*/
 		case "ex10-f":
 		myStuffTex = {"elementId":0,
-							"elementType":"edf50-f",
+							"elementType":"EX",
 							"Front":"textures/H3375_ST22",
 	                        "FrontUp":"textures/200s",
 	                        "FrontDown":"textures/200s",
@@ -32,7 +32,7 @@ static function type_Ex(type:String) {
 	   
 	   case "ex10-fd":
 		myStuffTex = {"elementId":0,
-							"elementType":"edf50-f",
+							"elementType":"EX",
 							"Front":"textures/H3375_ST22",
 	                        "FrontUp":"textures/200s",
 	                        "FrontDown":"textures/200s",
@@ -55,7 +55,7 @@ static function type_Ex(type:String) {
 	   
 	    case "ex10-dd":
 		myStuffTex = {"elementId":0,
-							"elementType":"edf50-f",
+							"elementType":"EX",
 							"Front":"textures/H3375_ST22",
 	                        "FrontUp":"textures/200s",
 	                        "FrontDown":"textures/200s",
@@ -78,7 +78,7 @@ static function type_Ex(type:String) {
 	   
 	   case "ex10-t":
 		myStuffTex = {"elementId":0,
-							"elementType":"edf50-f",
+							"elementType":"EX",
 							"Front":"textures/H3375_ST22",
 	                        "FrontUp":"textures/200s",
 	                        "FrontDown":"textures/200s",
@@ -101,7 +101,7 @@ static function type_Ex(type:String) {
 	   
 	    case "ex10-tf":
 		myStuffTex = {"elementId":0,
-							"elementType":"edf50-f",
+							"elementType":"EX",
 							"Front":"textures/H3375_ST22",
 	                        "FrontUp":"textures/200s",
 	                        "FrontDown":"textures/200s",
@@ -126,7 +126,7 @@ static function type_Ex(type:String) {
 	   /* EX-11 TYPE CABINETS*/
 		case "ex11-f":
 		myStuffTex = {"elementId":0,
-							"elementType":"edf50-f",
+							"elementType":"EX",
 							"Front":"textures/H3375_ST22",
 	                        "FrontUp":"textures/200s",
 	                        "FrontDown":"textures/200s",
@@ -149,7 +149,7 @@ static function type_Ex(type:String) {
 	   
 	   case "ex11-fd":
 		myStuffTex = {"elementId":0,
-							"elementType":"edf50-f",
+							"elementType":"EX",
 							"Front":"textures/H3375_ST22",
 	                        "FrontUp":"textures/200s",
 	                        "FrontDown":"textures/200s",
@@ -172,7 +172,7 @@ static function type_Ex(type:String) {
 	   
 	   case "ex11-dd":
 		myStuffTex = {"elementId":0,
-							"elementType":"edf50-f",
+							"elementType":"EX",
 							"Front":"textures/H3375_ST22",
 	                        "FrontUp":"textures/200s",
 	                        "FrontDown":"textures/200s",
@@ -196,7 +196,7 @@ static function type_Ex(type:String) {
 	   
 	   case "ex11-t":
 		myStuffTex = {"elementId":0,
-							"elementType":"edf50-f",
+							"elementType":"EX",
 							"Front":"textures/H3375_ST22",
 	                        "FrontUp":"textures/200s",
 	                        "FrontDown":"textures/200s",
@@ -220,7 +220,7 @@ static function type_Ex(type:String) {
 	   
 	   case "ex11-tf":
 		myStuffTex = {"elementId":0,
-							"elementType":"edf50-f",
+							"elementType":"EX",
 							"Front":"textures/H3375_ST22",
 	                        "FrontUp":"textures/200s",
 	                        "FrontDown":"textures/200s",
@@ -244,7 +244,7 @@ static function type_Ex(type:String) {
 	   /* EX-12 TYPE CABINETS*/
 	   case "ex12-f":
 		myStuffTex = {"elementId":0,
-							"elementType":"edf50-f",
+							"elementType":"EX",
 							"Front":"textures/H3375_ST22",
 	                        "FrontUp":"textures/200s",
 	                        "FrontDown":"textures/200s",
@@ -267,7 +267,7 @@ static function type_Ex(type:String) {
 	   
 	   case "ex12-fd":
 		myStuffTex = {"elementId":0,
-							"elementType":"edf50-f",
+							"elementType":"EX",
 							"Front":"textures/H3375_ST22",
 	                        "FrontUp":"textures/200s",
 	                        "FrontDown":"textures/200s",
@@ -290,7 +290,7 @@ static function type_Ex(type:String) {
 	   
 	   case "ex12-dd":
 		myStuffTex = {"elementId":0,
-							"elementType":"edf50-f",
+							"elementType":"EX",
 							"Front":"textures/H3375_ST22",
 	                        "FrontUp":"textures/200s",
 	                        "FrontDown":"textures/200s",
@@ -313,7 +313,7 @@ static function type_Ex(type:String) {
 	   
 	   case "ex12-t":
 		myStuffTex = {"elementId":0,
-							"elementType":"edf50-f",
+							"elementType":"EX",
 							"Front":"textures/H3375_ST22",
 	                        "FrontUp":"textures/200s",
 	                        "FrontDown":"textures/200s",
@@ -336,7 +336,7 @@ static function type_Ex(type:String) {
 	   
 	   case "ex12-tf":
 		myStuffTex = {"elementId":0,
-							"elementType":"edf50-f",
+							"elementType":"EX",
 							"Front":"textures/H3375_ST22",
 	                        "FrontUp":"textures/200s",
 	                        "FrontDown":"textures/200s",
@@ -360,7 +360,7 @@ static function type_Ex(type:String) {
 	   /* EX-32 TYPE CABINETS*/
 	   case "ex32-f":
 		myStuffTex = {"elementId":0,
-							"elementType":"edf50-f",
+							"elementType":"EX",
 							"Front":"textures/H3375_ST22",
 	                        "FrontUp":"textures/200s",
 	                        "FrontDown":"textures/200s",
@@ -385,7 +385,7 @@ static function type_Ex(type:String) {
 	   /* EX-20 TYPE CABINETS*/
 	   case "ex20-d":
 		myStuffTex = {"elementId":0,
-							"elementType":"edf50-f",
+							"elementType":"EX",
 							"Front":"textures/H3375_ST22",
 	                        "FrontUp":"textures/200s",
 	                        "FrontDown":"textures/200s",
@@ -408,7 +408,7 @@ static function type_Ex(type:String) {
 	   
 	   case "ex20-f":
 		myStuffTex = {"elementId":0,
-							"elementType":"edf50-f",
+							"elementType":"EX",
 							"Front":"textures/H3375_ST22",
 	                        "FrontUp":"textures/200s",
 	                        "FrontDown":"textures/200s",
@@ -431,7 +431,7 @@ static function type_Ex(type:String) {
 	   
 	   case "ex20-dd":
 		myStuffTex = {"elementId":0,
-							"elementType":"edf50-f",
+							"elementType":"EX",
 							"Front":"textures/H3375_ST22",
 	                        "FrontUp":"textures/200s",
 	                        "FrontDown":"textures/200s",
@@ -454,7 +454,7 @@ static function type_Ex(type:String) {
 	   
 	   case "ex20-fd":
 		myStuffTex = {"elementId":0,
-							"elementType":"edf50-f",
+							"elementType":"EX",
 							"Front":"textures/H3375_ST22",
 	                        "FrontUp":"textures/200s",
 	                        "FrontDown":"textures/200s",
@@ -477,7 +477,7 @@ static function type_Ex(type:String) {
 	   
 	   case "ex20-t":
 		myStuffTex = {"elementId":0,
-							"elementType":"edf50-f",
+							"elementType":"EX",
 							"Front":"textures/H3375_ST22",
 	                        "FrontUp":"textures/200s",
 	                        "FrontDown":"textures/200s",
@@ -502,7 +502,7 @@ static function type_Ex(type:String) {
 	   /* ED-50 TYPE CABINETS*/
 	   case "ed50-f":
 		myStuffTex = {"elementId":0,
-							"elementType":"edf50-f",
+							"elementType":"ED",
 							"Front":"textures/H3375_ST22",
 	                        "FrontUp":"textures/200s",
 	                        "FrontDown":"textures/200s",
@@ -525,7 +525,7 @@ static function type_Ex(type:String) {
 	   
 	   case "ed50-u":
 		myStuffTex = {"elementId":0,
-							"elementType":"edf50-f",
+							"elementType":"ED",
 							"Front":"textures/H3375_ST22",
 	                        "FrontUp":"textures/200s",
 	                        "FrontDown":"textures/200s",
@@ -549,7 +549,7 @@ static function type_Ex(type:String) {
 	   /* ES-90 TYPE COFFEE TABLE*/
 	   case "ed50-f":
 		myStuffTex = {"elementId":0,
-							"elementType":"edf50-f",
+							"elementType":"ED",
 							"Front":"textures/H3375_ST22",
 	                        "FrontUp":"textures/200s",
 	                        "FrontDown":"textures/200s",

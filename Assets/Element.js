@@ -25,7 +25,7 @@ var params:Hashtable = {};
 
 var isColliding			: int = 0;
 var highlighted:boolean = false;
-
+var baseHeight			: int = 0;
 
 function Start (){
     	
@@ -45,7 +45,9 @@ function Start (){
 			var y:float = params["y"];
 			
 			this.gameObject.transform.localPosition.y = h*0.5;
-
+			baseHeight = params["baseHeight"];
+			
+			
 
 			//collider
 			//Debug.Log(this.gameObject);
@@ -195,6 +197,22 @@ function Start (){
 			
 			}
 			
+			if(baseHeight > 0){
+			var baseElement: GameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+			baseElement.name = "Base";
+			baseElement.transform.localScale = Vector3(this.w,baseHeight,this.depth-2);
+		
+			
+	
+			baseElement.transform.position.x = w * 0.5;
+			baseElement.transform.position.y = - baseHeight * 0.5;
+			baseElement.transform.position.z = elementContainer.transform.position.z - this.depth * 0.5 + 1;
+		
+			baseElement.renderer.material.color = Color.gray;
+			baseElement.transform.parent = elementContainer.transform;
+			
+			}
+			
 			Place(x,y + h * 0.5);
 			
     	}
@@ -257,18 +275,22 @@ function OnTriggerExit (other : Collider) {
 }
 
 function createBase(size : int){
-if(params["baseHeight"] == 0){
+	if(params["baseHeight"] == 0){
 		//Debug.Log("Baza yarat");
 		params["baseHeight"] = size;
 		var baseElement: GameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
 		baseElement.name = "Base";
-		baseElement.transform.localScale = Vector3(w,size,depth-2);
-		baseElement.transform.position.x = elementContainer.transform.position.x + w * 0.5;
-		baseElement.transform.position.z = elementContainer.transform.position.z - depth * 0.5 + 1;
+		baseElement.transform.localScale = Vector3(this.w,size,this.depth-2);
+		baseElement.transform.position.x = elementContainer.transform.position.x + this.w * 0.5;
+		baseElement.transform.position.y = - size * 0.5;
+		baseElement.transform.position.z = elementContainer.transform.position.z - this.depth * 0.5 + 1;
 		baseElement.renderer.material.color = Color.gray;
 		baseElement.transform.parent = elementContainer.transform;
 	}
 }
+
+
+
 
 
 
