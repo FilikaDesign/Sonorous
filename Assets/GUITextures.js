@@ -59,6 +59,26 @@ static function tex_save()
 	return GUIContent(tex,"Save Combination");
 }
 
+/*
+* warning button
+*/
+static function tex_warning_off()
+{
+	var tex:Texture2D = Resources.Load("GUISkin/gui_btn_warning_off", Texture2D);
+ 
+	return GUIContent(tex,"There is no issue");
+}
+
+/*
+* warning button
+*/
+static function tex_warning_on()
+{
+	var tex:Texture2D = Resources.Load("GUISkin/gui_btn_warning_on", Texture2D);
+ 
+	return GUIContent(tex,"There are some issues. Click to view them!");
+}
+
 static function tex_logo() 
 {
 	var tex:Texture2D = Resources.Load("sonorous_logo", Texture2D);

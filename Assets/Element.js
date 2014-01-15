@@ -213,7 +213,7 @@ function Start (){
 			
 			}
 			
-			Place(x,y + h * 0.5);
+			Place(x,y);
 			
     	}
     	

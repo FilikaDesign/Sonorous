@@ -7,7 +7,7 @@ import System.IO;
 
 private var secretKey="x91{7&85,[cN5.S";//server side
 private var billofmaterialsUrl="http://www.filikatasarim.com/clients/sonorous/writeElement.php?"; //be sure to add a ? to your url
-
+private var baseNoti:String;
 
 private var wall 		: GameObject;
 private var floor 		: GameObject;
@@ -42,6 +42,7 @@ private var snapFactorY	: float = 2;
 private var cameraShift : float = 5;
 private var snapEnable 	: boolean = true;
 
+private var bh:int;
 // GUI
 private var iSwitch:boolean = true;  
 private var isGUIClosed:boolean = true;
@@ -100,6 +101,13 @@ private var modulDestroyed:boolean = false;
 
 private var ww:float;
 private var hh:float;
+
+// Mouse Drag Change Scene view with mouse
+private var preMPosX:float;
+private var MPosX:float;
+
+private var preMPosY:float;
+private var MPosY:float;
 
 function Start () {
 	
@@ -197,6 +205,7 @@ function addModul(modulParams:Hashtable, id:String) {
 
 	moduls.Add(eleman);
 	
+	
 
 }
 
@@ -255,7 +264,6 @@ function Update () {
 					elementR 	= parameters[draggingElementId]["Right"];
 					elementBO 	= parameters[draggingElementId]["Bottom"];
 					elementT 	= parameters[draggingElementId]["Top"];
-					
 					
 					Debug.Log("draggingElementId : "+draggingElementId);
 					ToggleLight();
@@ -332,7 +340,21 @@ function Update () {
 			}
 		}
 		
-
+		if (Input.GetMouseButtonDown (1)){
+			MPosX = Input.mousePosition.x;
+			MPosY = Input.mousePosition.y;
+			preMPosX = MPosX;
+			preMPosY = MPosY;
+		}
+		
+		if (Input.GetMouseButton (1)){
+			MPosX = Input.mousePosition.x;
+			MPosY = Input.mousePosition.y;
+			this.transform.Rotate(Mathf.Floor(MPosY - preMPosY),Mathf.Floor(MPosX - preMPosX),0);
+			preMPosX = MPosX;
+			preMPosY = MPosY;
+		}
+		
 	} // Set room size condition
 	
 	setMouseZoom();
@@ -346,19 +368,26 @@ function Update () {
 
 function OnGUI() {
 	
-	GUI.depth = 2000;
 	GUI.skin = sonorousGUISkin;
 	
 	// Enable Keyboard Interaction
 	initKeyboardInteraction();
 	
 	// Menu Buttons
-	if(GUI.Button(Rect(0,0,btnW,btnW),GUITextures.tex_inspector())) {
-		openInspector();
+	// Check Menu state
+	if(isGUIClosed) {
+		GUI.skin.button.normal.background  = Resources.Load("GUISkin/sonorous_gui_button", Texture2D);
+	}else{
+		GUI.skin.button.normal.background = Resources.Load("GUISkin/sonorous_gui_button_hover", Texture2D);
 	}
 	
+		if(GUI.Button(Rect(0,0,btnW,btnW),GUITextures.tex_inspector())) {
+			openInspector();
+		}
+	GUI.skin.button.normal.background  = Resources.Load("GUISkin/sonorous_gui_button", Texture2D);
+
 	// Load
-	else if(GUI.Button(Rect(btnW+1,0,btnW,btnW),GUITextures.tex_load())) {
+	if(GUI.Button(Rect(btnW+1,0,btnW,btnW),GUITextures.tex_load())) {
 		LoadState();
 	}
 	
@@ -387,7 +416,8 @@ function OnGUI() {
 	// Change Material
 	else if(GUI.Button(Rect((btnW+1)*6,0,btnW,btnW),GUITextures.tex_material())) {
 		guiState = "modul_edit";
-		openInspector();
+		if(isGUIClosed)
+			openInspector();
 	}
 	
 	// Set Room Size
@@ -395,8 +425,35 @@ function OnGUI() {
 		setRoomSize = false;
 	}
 	
+	if(isGUIClosed) {
+		GUI.skin.button.normal.background  = Resources.Load("GUISkin/sonorous_gui_button", Texture2D);
+	}else{
+		if(guiState == "modul_warning")
+			GUI.skin.button.normal.background = Resources.Load("GUISkin/sonorous_gui_button_hover", Texture2D);
+	}
+	// Warning Section
+	// check For Warnings
+	if(Notification.checkForWarning()) {
+		if(GUI.Button(Rect((btnW+1)*8,0,btnW,btnW),GUITextures.tex_warning_on())) {
+			guiState = "modul_warning";
+			
+			if(isGUIClosed)
+				openInspector();
+		}
+	}else{
+		if(GUI.Button(Rect((btnW+1)*8,0,btnW,btnW),GUITextures.tex_warning_off())) {
+		}
+		Notification.notCount = 0;
+	}
+	
+	
+
+		
+	
+	
+	
 	// Tooltip
-	GUI.Label (Rect ((btnW+2)*8,10,200,40), GUI.tooltip);
+	GUI.Label (Rect ((btnW+2)*9,3,200,40), GUI.tooltip);
 	
 	/* GUI State */
 	var customButton : GUIStyle;
@@ -455,7 +512,7 @@ function OnGUI() {
 	
 	else if(guiState == "select_base") {
 		GUI.Label(Rect(ml,ml,w,20),"UYARI");
-		GUI.Label(Rect(ml,ml+tfH,w,Screen.height),guiNotification);
+		GUI.Label(Rect(ml,ml+tfH,w,77),baseNoti);
 		
 		if(GUI.Toggle(Rect(ml,ml+tfH*5,100,30),inch2," 2 cm")) {
 			inch2 = true;
@@ -532,6 +589,11 @@ function OnGUI() {
 			}
 		}
 	}
+	
+	else if(guiState == "modul_warning") {
+		Notification.showNotificationList();
+	}
+	
 	GUI.EndGroup ();
 	
 	Notification.message(guiNotification);
@@ -606,10 +668,9 @@ function addMBox(type:String) {
 function openInspector() {
 	if(isGUIClosed) {
 		guiPosX = Screen.width-w;
-		GUI.skin.button.active.background = GUITextures.tex_box_bg_hover();
+		
 	}else{
 		guiPosX = guiPosX+w;
-		GUI.skin.button.normal.background = GUITextures.tex_box_bg();
 		resetGUIParams();
 	}
 	LeanTween.move( guiRect, Vector2(guiPosX, 0), 0.25 );
@@ -617,6 +678,20 @@ function openInspector() {
 	
 	isGUIClosed =  !isGUIClosed;
 }
+
+function showInspector() {
+	guiPosX = guiPosX-w;
+	
+	LeanTween.move( guiRect, Vector2(guiPosX, 0), 0.25 );/*.setOnComplete( tweenFinished );*/
+	
+}
+
+function tweenFinished() {
+	isGUIClosed =  !isGUIClosed;
+	guiPosX = Screen.width-w;
+	LeanTween.move( guiRect, Vector2(guiPosX, 0), 0.25 );
+}
+
 
 /*
 *** RESET GUI PAREMETERS
@@ -627,9 +702,6 @@ function resetGUIParams() {
 	guiState = "default";
 }
 
-function tweenFinished() {
-	//LeanTween.move( guiRect, Vector2(Screen.width, 0), 0.25 ).setOnComplete(tweenFinished);
-}
 
 function clearAllHighlightedModuls() {
 	//clear Highlighted Elements
@@ -1317,7 +1389,10 @@ function RulesEngine(){
 						
 						guiNotification = "1 : EX Type Moduls cannot be superposed";
 						Notification.showNotification();
+						Notification.notiBool[0] = "1";
 						break;
+					}else{
+						Notification.notiBool[0] = "0";
 					}
 				
 				}
@@ -1366,7 +1441,10 @@ function RulesEngine(){
 						//Debug.Log("2 : ED ust uste olmaaaaz");
 						guiNotification = "2 : ED Type Moduls cannot be superposed";
 						Notification.showNotification();
+						Notification.notiBool[1] = "1";
 						break;
+					}else{
+						Notification.notiBool[1] = "0";
 					}
 				
 				}
@@ -1416,9 +1494,12 @@ function RulesEngine(){
 						){
 							
 							//Debug.Log("3 : EX ED'in üstüne gelemez");
-							guiNotification = "3 : EX Type Moduls cannot be placed onto ED Modul";
+							guiNotification = "3 : EX Type Moduls cannot be placed onto ED Moduls";
 							Notification.showNotification();
+							Notification.notiBool[2] = "1";
 							break;
+						}else{
+							Notification.notiBool[2] = "0";
 						}
 				
 				
@@ -1469,7 +1550,10 @@ function RulesEngine(){
 							//Debug.Log("3 : EX ED'in üstüne gelemez");
 							guiNotification = "3 : EX Type Moduls cannot be placed onto ED Moduls";
 							Notification.showNotification();
+							Notification.notiBool[2] = "1";
 							break;
+						}else{
+							Notification.notiBool[2] = "0";
 						}
 				
 				
@@ -1484,12 +1568,14 @@ function RulesEngine(){
 		if(parameters[draggingElementId]["elementType"] == "ED"){
 			
 			if(considerY - considerH * 0.5 < snapFactorY){
-				//Debug.Log("4 : ED YERDE OLAMAZ");
+				Debug.Log("4 : ED YERDE OLAMAZ");
 				guiNotification = "4 : ED Type Moduls cannot be on the floor";
 				Notification.showNotification();
+				Notification.notiBool[3] = "1";
 			
 			}else{
-			
+				Debug.Log("4 : Tamamdir");
+				Notification.notiBool[3] = "0";
 				
 			}
 		
@@ -1505,20 +1591,30 @@ function RulesEngine(){
 			
 			if(considerY - considerH * 0.5 - baseHeight> 0){
 				//Debug.Log("5 : EX DUVARDA OLAMAZ (ASILAMAZ). HER ZAMAN YERDE OLMALI");
-				guiNotification = "4 : EX Type Moduls cannot be on the wall";
+				guiNotification = "5 : EX Type Moduls cannot be on the wall";
 				Notification.showNotification();
+				Notification.notiBool[4] = "1";
 			
 			}else{
 				//EX YERDE DEMEK
+				Notification.notiBool[4] = "0";
 				if(baseHeight <= 0){
-				guiNotification="Yerdeki tüm ürünler (EX) bir baza seçeneğine sahip olmak zorunda. Lütfen baza yüksekliği seçin.";
-				guiState = "select_base";
-				
-				//openInspector();
-				Debug.Log("6 : Yerdeki tüm ürünler (EX) bir baza seçeneğine sahip olmak zorunda.");
-				Notification.closeNotification();
+					baseNoti="Yerdeki tüm ürünler (EX) bir baza seçeneğine sahip olmak zorunda. Lütfen baza yüksekliği seçin.";
+					guiState = "select_base";
+					
+					if(isGUIClosed) {
+						showInspector();
+						isGUIClosed = false;
+					}
+					
+					Debug.Log("6 : Yerdeki tüm ürünler (EX) bir baza seçeneğine sahip olmak zorunda.");
+					Notification.closeNotification();
+					Notification.notiBool[5] = "1";
+					
+					
+				}else{
+					Notification.notiBool[5] = "0";
 				}
-				
 				
 			}
 		
