@@ -115,6 +115,7 @@ function Start () {
 	resetCameraPos();
 	//Camera.main.fieldOfView -=8;
 	//Camera.main.depth = 3;
+	Camera.main.backgroundColor = Color(0,0,0);
 	
 	// Make a game object
 	
@@ -126,14 +127,14 @@ function Start () {
 	// Set color and position
 	lightGameObject.light.color = Color.white;
 	lightGameObject.light.type = LightType.Directional;
-	lightGameObject.light.intensity = 0.5;
+	lightGameObject.light.intensity = 0.4;
 	
 	// Set the position (or any transform property) after
 	// adding the light component.
 	lightGameObject.transform.position = Vector3(0, 500, 0);
 	lightGameObject.transform.Rotate(40, 5, 200);
 	
-	/*
+	
 	//point light
 	var cameraLightGameObject : GameObject = new GameObject("Camera Light");
 	
@@ -141,15 +142,15 @@ function Start () {
 	cameraLightGameObject.AddComponent(Light);
 	// Set color and position
 	cameraLightGameObject.light.color = Color.white;
-	cameraLightGameObject.light.type = LightType.Point;
-	cameraLightGameObject.light.intensity = 0.1;
-	cameraLightGameObject.light.range = 130;
+	cameraLightGameObject.light.type = LightType.Directional;
+	cameraLightGameObject.light.intensity = 0.2;
+	cameraLightGameObject.transform.Rotate(270,0,0);
 	
 	// Set the position (or any transform property) after
 	// adding the light component.
 	cameraLightGameObject.transform.parent = this.transform;
 	
-	*/
+	
 	//create Background Wall and Floor
 	ww = float.Parse(textWidth);
 	hh = float.Parse(textHeight);
@@ -210,6 +211,27 @@ function addModul(modulParams:Hashtable, id:String) {
 
 }
 
+function changeBaseAll(){
+
+	for(var i:int = 0; i < moduls.Count; i++) {
+			
+		variableScript = moduls[i].GetComponent("Element");
+		
+		var tip:String = variableScript.elementType;
+		
+		
+	
+		if(tip == "EX") {
+			//burasu olacak
+			var mG : GameObject = moduls[i];
+			GameObject.Find(mG.name).SendMessage("createBase",8);
+		}
+			
+	}
+
+
+}
+
 function Update () {
 	if(setRoomSize) {
 		 
@@ -255,7 +277,7 @@ function Update () {
 					var w:int = parameters[draggingElementId]["w"];
 					var h:int = parameters[draggingElementId]["h"];
 					var d:int = parameters[draggingElementId]["depth"];
-					elementType = parameters[draggingElementId]["elementType"];
+					elementType = parameters[draggingElementId]["code"];
 					elementSize = w.ToString() + "x" + h.ToString() + "x" + d.ToString();
 					elementF 	= parameters[draggingElementId]["Front"];
 					elementFU 	= parameters[draggingElementId]["FrontUp"];
@@ -468,27 +490,12 @@ function OnGUI() {
 		// Modul Info
 		GUI.Label(Rect(ml,ml,w,20),"Element Type");
 		GUI.Label(Rect(ml,ml+tfH,w,20),"Element Size");
-		GUI.Label(Rect(ml,ml+tfH*2,w,20),"Texture Front");
-		GUI.Label(Rect(ml,ml+tfH*3,w,20),"Texture FrontUp");
-		GUI.Label(Rect(ml,ml+tfH*4,w,20),"Texture FrontDown");
-		GUI.Label(Rect(ml,ml+tfH*5,w,20),"Texture Back");
-		GUI.Label(Rect(ml,ml+tfH*6,w,20),"Texture Left");
-		GUI.Label(Rect(ml,ml+tfH*7,w,20),"Texture Right");
-		GUI.Label(Rect(ml,ml+tfH*8,w,20),"Texture Bottom");
-		GUI.Label(Rect(ml,ml+tfH*9,w,20),"Texture Top");
+		
 		
 		var startx:int = 122;
 					
 		GUI.Label(Rect(ml+startx,ml,w,20),": "+ elementType);
 		GUI.Label(Rect(ml+startx,ml+tfH,w,20),": "+ elementSize);
-		GUI.Label(Rect(ml+startx,ml+tfH*2,w,20),": " + elementF);
-		GUI.Label(Rect(ml+startx,ml+tfH*3,w,20),": " + elementFU);
-		GUI.Label(Rect(ml+startx,ml+tfH*4,w,20),": " + elementFD);
-		GUI.Label(Rect(ml+startx,ml+tfH*5,w,20),": " + elementB);
-		GUI.Label(Rect(ml+startx,ml+tfH*6,w,20),": " + elementL);
-		GUI.Label(Rect(ml+startx,ml+tfH*7,w,20),": " + elementR);
-		GUI.Label(Rect(ml+startx,ml+tfH*8,w,20),": " + elementBO);
-		GUI.Label(Rect(ml+startx,ml+tfH*9,w,20),": " + elementT);
 		
 		GUI.Label(Rect(ml,ml+tfH*10+mt,w-ml*2,20),"Add Element");
 		
@@ -510,27 +517,11 @@ function OnGUI() {
 		
 		
 	}
-	
+	/*
 	else if(guiState == "select_base") {
-		GUI.Label(Rect(ml,ml,w,20),"UYARI");
-		GUI.Label(Rect(ml,ml+tfH,w,77),baseNoti);
 		
-		if(GUI.Toggle(Rect(ml,ml+tfH*5,100,30),inch2," 2 cm")) {
-			inch2 = true;
-			inch8 = false;
-			GameObject.Find(preDraggingObj.name).SendMessage("createBase",2);
-			preDraggingObj.transform.position.y = 2 + preDraggingObj.transform.localScale.y*0.5;	
-			parameters[draggingElementId]["y"] = 2 + preDraggingObj.transform.localScale.y*0.5;
-		}
-		
-		if(GUI.Toggle(Rect(ml+100,ml+tfH*5,200,30),inch8," 8 cm")) {
-			inch2 = false;
-			inch8 = true;
-			GameObject.Find(preDraggingObj.name).SendMessage("createBase",8);
-			preDraggingObj.transform.position.y = 8 + preDraggingObj.transform.localScale.y*0.5;	
-			parameters[draggingElementId]["y"] = 8 + preDraggingObj.transform.localScale.y*0.5;
-		}
 	}
+	*/
 	
 	// Change Material GUI
 	else if(guiState == "modul_edit" && draggingElementId > -1 && moduls.Count > 0) {
@@ -540,54 +531,61 @@ function OnGUI() {
 		var num:int = parameters[draggingElementId]["nFrontFace"];
 		var minusFac:int = 0;
 		
-		GUI.Label(Rect(ml,ml+tfH*(0),w,tfH),"1- Select Surface...");
+		GUI.Label(Rect(ml,ml,w,20),"Element Type");
+		GUI.Label(Rect(ml,ml+tfH,w,20),"Element Size");
+					
+		GUI.Label(Rect(ml+122,ml,w,20),": "+ elementType);
+		GUI.Label(Rect(ml+122,ml+tfH,w,20),": "+ elementSize);
 		
-		if(num > 1) {
-			setFrontUp = (GUI.Toggle(Rect(ml,ml+tfH*1,w,tglH),setFrontUp," Set Front Up Material"));
-			
-			setFrontDown = (GUI.Toggle(Rect(ml,ml+tfH*2,w,tglH),setFrontDown," Set Front Down Material"));
-			
-			minusFac = 1;
-		}else{
-		
-			setFront = (GUI.Toggle(Rect(ml,ml+tfH*1,w,tglH),setFront," Set Front Material"));
-			
-			minusFac=2;
-		}
-		
-		setLeft = (GUI.Toggle(Rect(ml,ml+tfH*(4-minusFac),w,tglH),setLeft," Set Left Material"));
-		
-		
-		setRight = (GUI.Toggle(Rect(ml,ml+tfH*(5-minusFac),w,tglH),setRight," Set Right Material"));
-		
-		
-		setBack = (GUI.Toggle(Rect(ml,ml+tfH*(6-minusFac),w,tglH),setBack," Set Back Material"));
-		
-		
-		setBottom = (GUI.Toggle(Rect(ml,ml+tfH*(7-minusFac),w,tglH),setBottom," Set Bottom Material"));
-		
-		
-		setTop = (GUI.Toggle(Rect(ml,ml+tfH*(8-minusFac),w,tglH),setTop," Set Top Material"));
-		
-		
-		GUI.Label(Rect(ml,ml+tfH*(10-minusFac),w,tfH),"2- Click on Cabinet and select a texture");
+		GUI.Label(Rect(ml,ml+tfH*2,w,tfH),"Click on Cabinet and select a texture");
 		
 		var tFloor:int = 0;
-		var lastY:int = ml+tfH*(11-minusFac) ;
+		var lastY:int = ml+tfH*3 ;
+		var cType:String = parameters[draggingElementId]["code"];
 		
 		for(var te:int = 0; te < textures.Count; te++) {
 			if(te % 2 == 0) {
 				if(GUI.Button(Rect( ml,lastY + tFloor*(2+120),(w-ml*2)*0.5,120 ),GUITextures.load_tex(textures[te]))) 
 				{	
-					setTextures(textures[te]);
+					setTextures(textures[te],num,cType);
 				}
 				tFloor++;
 			}else {
 				if(GUI.Button(Rect( ml*2+((w-ml*2)*0.5), lastY + (tFloor-1)*(2+120),(w-ml*2)*0.5,120 ),GUITextures.load_tex(textures[te]))) 
 				{	
-					setTextures(textures[te]);
+					setTextures(textures[te],num,cType);
 				}
 			}
+		}
+		
+		
+		/// EX için baza seçimi
+		
+		var tipo : String = parameters[draggingElementId]["elementType"];
+		
+		if(tipo == "EX"){
+			GUI.Label(Rect(ml,lastY + (tFloor)*(2+120),w,20),"UYARI");
+			GUI.Label(Rect(ml,lastY + (tFloor)*(2+120)+tfH,w,77),baseNoti);
+			
+			if(GUI.Toggle(Rect(ml,lastY + (tFloor)*(2+120)+tfH*4+ml,100,30),inch2," 2 cm")) {
+				inch2 = true;
+				inch8 = false;
+				GameObject.Find(preDraggingObj.name).SendMessage("createBase",2);
+				preDraggingObj.transform.position.y = 2 + preDraggingObj.transform.localScale.y*0.5;	
+				parameters[draggingElementId]["y"] = 2 + preDraggingObj.transform.localScale.y*0.5;
+				changeBaseAll();
+			}
+			
+			if(GUI.Toggle(Rect(ml+100,lastY + (tFloor)*(2+120)+tfH*4+ml,200,30),inch8," 8 cm")) {
+				inch2 = false;
+				inch8 = true;
+				GameObject.Find(preDraggingObj.name).SendMessage("createBase",8);
+				preDraggingObj.transform.position.y = 8 + preDraggingObj.transform.localScale.y*0.5;	
+				parameters[draggingElementId]["y"] = 8 + preDraggingObj.transform.localScale.y*0.5;
+				changeBaseAll();
+			}
+			
+			
 		}
 	}
 	
@@ -606,48 +604,72 @@ function OnGUI() {
 /*
 * SET EDIT TEXTURES OF SELECTED MODUL
 */
-function setTextures(tex:String) {
+function setTextures(tex:String,coverCount:int,cType:String) {
 	variableScript = moduls[draggingElementId].GetComponent("Element");
-	if(setFrontUp) 
-	{
-		variableScript.cubeFrontUp.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
-		parameters[draggingElementId]["FrontUp"] = tex;
-	}
 	
-	if(setFrontDown) {
+	var tip:String = (cType.Substring(5,cType.Length-5));
+	
+	if(coverCount>1) {
+		if(tip != "tf") {
+			variableScript.cubeFrontUp.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
+			parameters[draggingElementId]["FrontUp"] = tex;
+		}
+		
 		variableScript.cubeFrontDown.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
 		parameters[draggingElementId]["FrontDown"] = tex;
+	}else{
+		if(tip != "t") {
+			variableScript.cubeFront.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
+			parameters[draggingElementId]["Front"] = tex;
+		}
 	}
 	
-	if(setFront) {
-		variableScript.cubeFront.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
-		parameters[draggingElementId]["Front"] = tex;
-	}
+	variableScript.cubeLeft.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
+	parameters[draggingElementId]["Left"] = tex;
 	
-	if(setLeft) {
-		variableScript.cubeLeft.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
-		parameters[draggingElementId]["Left"] = tex;
-	}
+	variableScript.cubeRight.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
+	parameters[draggingElementId]["Right"] = tex;
+
+	variableScript.cubeBack.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
+	parameters[draggingElementId]["Back"] = tex;
+
+	variableScript.cubeBottom.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
+	parameters[draggingElementId]["Bottom"] = tex;
+
+	variableScript.cubeTop.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
+	parameters[draggingElementId]["Top"] = tex;
+	
+	var decor:String = parameters[draggingElementId]["Top"];
+	cType = cType.Substring(0,5);
+	switch(decor) {
+		case "textures/black":
+		parameters[draggingElementId]["code"] = cType + "-AMZ" ;
+		break;
 		
-	if(setRight) {
-		variableScript.cubeRight.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
-		parameters[draggingElementId]["Right"] = tex;
+		case "textures/regblack":
+		parameters[draggingElementId]["code"] = cType + "-BLK" ;
+		break;
+		
+		case "textures/capucino":
+		parameters[draggingElementId]["code"] = cType + "-CPN" ;
+		break;
+		
+		case "textures/H3375_ST22":
+		parameters[draggingElementId]["code"] = cType + "-OAK" ;
+		break;
+		
+		case "textures/200s":
+		parameters[draggingElementId]["code"] = cType + "-WHT" ;
+		break;
+		
+		case "textures/graphit":
+		parameters[draggingElementId]["code"] = cType + "-GRP" ;
+		break;
+		
 	}
 	
-	if(setBack) {
-		variableScript.cubeBack.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
-		parameters[draggingElementId]["Back"] = tex;
-	}
+elementType = parameters[draggingElementId]["code"];
 	
-	if(setBottom) {
-		variableScript.cubeBottom.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
-		parameters[draggingElementId]["Bottom"] = tex;
-	}
-	
-	if(setTop) {
-		variableScript.cubeTop.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
-		parameters[draggingElementId]["Top"] = tex;
-	}
 	
 	setFrontUp = setFrontDown = setLeft = setRight = setBottom = setTop = setBack = setFront = false;
 }
@@ -1171,6 +1193,11 @@ function SaveState(){
 		ElementXML.AppendChild(baseHeightXML);
 		var baseHeight : int = parameters[i]["baseHeight"];
 		baseHeightXML.InnerText = baseHeight.ToString();
+		
+		var codeXML : XmlElement = xmlDoc.CreateElement("code");
+		ElementXML.AppendChild(codeXML);
+		var code : String = parameters[i]["code"];
+		codeXML.InnerText = code.ToString();
 
 	}
 	
@@ -1223,46 +1250,8 @@ function removeAndDestroyAt(rId:int) {
 			variableScript = moduls[m].GetComponent("Element");
 			variableScript.elementID = m;
 			
-			var elementid_www : int;
-			var elementType_www : String = "";
-			var front_www : String = "";
-			var frontUp_www : String = "";
-			var frontDown_www : String = "";
-			var back_www : String = "";
-			var left_www : String = "";
-			var right_www : String = "";
-			var bottom_www : String = "";
-			var top_www : String = "";
-			var hole_www : int;
-			var nFrontFace_www : int;
-			var w_www : int;
-			var h_www : int;
-			var depth_www : int;
-			var x_www : int;
-			var y_www : int;
-			var isRigid_www : int;
-			var baseHeight_www : int;
 			parameters[m]["elementId"] = m;
-			/*
-			parameters[m] = parameters[m]["elementId"];
-			elementType_www = parameters[m]["elementType"];	
-			front_www = parameters[m]["Front"];
-			frontUp_www = parameters[m]["FrontUp"];
-			frontDown_www = parameters[m]["FrontDown"];
-			back_www = parameters[m]["Back"];
-			left_www = parameters[m]["Left"];
-			right_www = parameters[m]["Right"];
-			bottom_www = parameters[m]["Bottom"];
-			top_www = parameters[m]["Top"];
-			hole_www = parameters[m]["Hole"];
-			nFrontFace_www = parameters[m]["nFrontFace"];
-			w_www = parameters[m]["w"];
-			h_www = parameters[m]["h"];
-			depth_www = parameters[m]["depth"];
-			x_www = parameters[m]["x"];
-			y_www = parameters[m]["y"];
-			isRigid_www = parameters[m]["isRigid"];
-			baseHeight_www = parameters[m]["baseHeight"];*/
+			
 		}
 	
 		modulDestroyed = true;
@@ -1300,6 +1289,7 @@ function LoadState(){
   			var y : int = myLoad.Elements[j].y;
   			var isRigid : String = myLoad.Elements[j].isRigid;//problem
   			var baseHeight : int = myLoad.Elements[j].baseHeight;
+  			var code : String = myLoad.Elements[j].code;
   			
 			var myStuffTex:Hashtable = {"elementId":elementId,
 							"elementType":elementType,
@@ -1319,7 +1309,8 @@ function LoadState(){
 	                        "x":x,
 	                        "y":y,
 	                        "isRigid":true,
-	                        "baseHeight":baseHeight
+	                        "baseHeight":baseHeight,
+	                        "code":code
 	                        };
 	         var index = j.ToString();               
 	         addModul(myStuffTex,index);               
@@ -1334,7 +1325,7 @@ function LoadState(){
 
 function resetCameraPos(){
 
-	this.transform.position = Vector3(0 ,100,-300);
+	this.transform.position = Vector3(0 ,160,-400);
 
 }
 
@@ -1609,7 +1600,7 @@ function RulesEngine(){
 				Notification.notiBool[4] = "0";
 				if(baseHeight <= 0){
 					baseNoti="Yerdeki tüm ürünler (EX) bir baza seçeneğine sahip olmak zorunda. Lütfen baza yüksekliği seçin.";
-					guiState = "select_base";
+					guiState = "modul_edit";
 					
 					if(isGUIClosed) {
 						showInspector();

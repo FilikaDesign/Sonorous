@@ -23,10 +23,11 @@ static function type_Ex(type:String) {
 	                        "w":130,
 	                        "h":40,
 	                        "depth":50,
-	                        "x":-200,
-	                        "y":20,
+	                        "x":-65,
+	                        "y":200,
 	                        "isRigid":1,
-	                        "baseHeight":0
+	                        "baseHeight":0,
+	                        "code":type
 	                        };
 	   break;
 	   
@@ -46,10 +47,11 @@ static function type_Ex(type:String) {
 	                        "w":130,
 	                        "h":40,
 	                        "depth":50,
-	                        "x":-200,
-	                        "y":20,
+	                        "x":-65,
+	                        "y":200,
 	                        "isRigid":1,
-	                        "baseHeight":0
+	                        "baseHeight":0,
+	                        "code":type
 	                        };
 	   break;
 	   
@@ -69,19 +71,20 @@ static function type_Ex(type:String) {
 	                        "w":130,
 	                        "h":40,
 	                        "depth":50,
-	                        "x":-200,
-	                        "y":20,
+	                        "x":-65,
+	                        "y":200,
 	                        "isRigid":1,
-	                        "baseHeight":0
+	                        "baseHeight":0,
+	                        "code":type
 	                        };
 	   break;
 	   
 	   case "ex10-t":
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
-							"Front":"textures/H3375_ST22",
-	                        "FrontUp":"textures/200s",
-	                        "FrontDown":"textures/200s",
+							"Front":"textures/speakertexture",
+	                        "FrontUp":"",
+	                        "FrontDown":"",
 	                        "Back":"textures/H3375_ST22",
 	                        "Left":"textures/H3375_ST22",
 	                        "Right":"textures/H3375_ST22",
@@ -92,18 +95,19 @@ static function type_Ex(type:String) {
 	                        "w":130,
 	                        "h":40,
 	                        "depth":50,
-	                        "x":-200,
-	                        "y":20,
+	                        "x":-65,
+	                        "y":200,
 	                        "isRigid":1,
-	                        "baseHeight":0
+	                        "baseHeight":0,
+	                        "code":type
 	                        };
 	   break;
 	   
 	    case "ex10-tf":
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
-							"Front":"textures/H3375_ST22",
-	                        "FrontUp":"textures/200s",
+							"Front":"",
+	                        "FrontUp":"textures/speakertexture",
 	                        "FrontDown":"textures/200s",
 	                        "Back":"textures/H3375_ST22",
 	                        "Left":"textures/H3375_ST22",
@@ -115,10 +119,11 @@ static function type_Ex(type:String) {
 	                        "w":130,
 	                        "h":40,
 	                        "depth":50,
-	                        "x":-200,
-	                        "y":20,
+	                        "x":-65,
+	                        "y":200,
 	                        "isRigid":1,
-	                        "baseHeight":0
+	                        "baseHeight":0,
+	                        "code":type
 	                        };
 	   break;
 	   
@@ -140,10 +145,11 @@ static function type_Ex(type:String) {
 	                        "w":130,
 	                        "h":40,
 	                        "depth":50,
-	                        "x":-200,
-	                        "y":20,
+	                        "x":-65,
+	                        "y":200,
 	                        "isRigid":1,
-	                        "baseHeight":0
+	                        "baseHeight":0,
+	                        "code":type
 	                        };
 	   break;
 	   
@@ -163,10 +169,11 @@ static function type_Ex(type:String) {
 	                        "w":130,
 	                        "h":40,
 	                        "depth":50,
-	                        "x":-200,
-	                        "y":20,
+	                        "x":-65,
+	                        "y":200,
 	                        "isRigid":1,
-	                        "baseHeight":0
+	                        "baseHeight":0,
+	                        "code":type
 	                        };
 	   break;
 	   
@@ -186,10 +193,11 @@ static function type_Ex(type:String) {
 	                        "w":130,
 	                        "h":40,
 	                        "depth":50,
-	                        "x":-200,
-	                        "y":20,
+	                        "x":-65,
+	                        "y":200,
 	                        "isRigid":1,
-	                        "baseHeight":0
+	                        "baseHeight":0,
+	                        "code":type
 	                        };
 	   break;
 	   
@@ -197,7 +205,7 @@ static function type_Ex(type:String) {
 	   case "ex11-t":
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
-							"Front":"textures/H3375_ST22",
+							"Front":"textures/speakertexture",
 	                        "FrontUp":"textures/200s",
 	                        "FrontDown":"textures/200s",
 	                        "Back":"textures/H3375_ST22",
@@ -210,10 +218,11 @@ static function type_Ex(type:String) {
 	                        "w":130,
 	                        "h":40,
 	                        "depth":50,
-	                        "x":-200,
-	                        "y":20,
+	                        "x":-65,
+	                        "y":200,
 	                        "isRigid":1,
-	                        "baseHeight":0
+	                        "baseHeight":0,
+	                        "code":type
 	                        };
 	   break;
 	   
@@ -222,7 +231,7 @@ static function type_Ex(type:String) {
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
 							"Front":"textures/H3375_ST22",
-	                        "FrontUp":"textures/200s",
+	                        "FrontUp":"textures/speakertexture",
 	                        "FrontDown":"textures/200s",
 	                        "Back":"textures/H3375_ST22",
 	                        "Left":"textures/H3375_ST22",
@@ -234,10 +243,11 @@ static function type_Ex(type:String) {
 	                        "w":130,
 	                        "h":40,
 	                        "depth":50,
-	                        "x":-200,
-	                        "y":20,
+	                        "x":-65,
+	                        "y":200,
 	                        "isRigid":1,
-	                        "baseHeight":0
+	                        "baseHeight":0,
+	                        "code":type
 	                        };
 	   break;
 	   
@@ -258,10 +268,11 @@ static function type_Ex(type:String) {
 	                        "w":130,
 	                        "h":40,
 	                        "depth":50,
-	                        "x":-200,
-	                        "y":20,
+	                        "x":-65,
+	                        "y":200,
 	                        "isRigid":1,
-	                        "baseHeight":0
+	                        "baseHeight":0,
+	                        "code":type
 	                        };
 	   break;
 	   
@@ -281,10 +292,11 @@ static function type_Ex(type:String) {
 	                        "w":130,
 	                        "h":40,
 	                        "depth":50,
-	                        "x":-200,
-	                        "y":20,
+	                        "x":-65,
+	                        "y":200,
 	                        "isRigid":1,
-	                        "baseHeight":0
+	                        "baseHeight":0,
+	                        "code":type
 	                        };
 	   break;
 	   
@@ -304,17 +316,18 @@ static function type_Ex(type:String) {
 	                        "w":130,
 	                        "h":40,
 	                        "depth":50,
-	                        "x":-200,
-	                        "y":20,
+	                        "x":-65,
+	                        "y":200,
 	                        "isRigid":1,
-	                        "baseHeight":0
+	                        "baseHeight":0,
+	                        "code":type
 	                        };
 	   break;
 	   
 	   case "ex12-t":
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
-							"Front":"textures/H3375_ST22",
+							"Front":"textures/speakertexture",
 	                        "FrontUp":"textures/200s",
 	                        "FrontDown":"textures/200s",
 	                        "Back":"textures/H3375_ST22",
@@ -327,10 +340,11 @@ static function type_Ex(type:String) {
 	                        "w":130,
 	                        "h":40,
 	                        "depth":50,
-	                        "x":-200,
-	                        "y":20,
+	                        "x":-65,
+	                        "y":200,
 	                        "isRigid":1,
-	                        "baseHeight":0
+	                        "baseHeight":0,
+	                        "code":type
 	                        };
 	   break;
 	   
@@ -338,7 +352,7 @@ static function type_Ex(type:String) {
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
 							"Front":"textures/H3375_ST22",
-	                        "FrontUp":"textures/200s",
+	                        "FrontUp":"textures/speakertexture",
 	                        "FrontDown":"textures/200s",
 	                        "Back":"textures/H3375_ST22",
 	                        "Left":"textures/H3375_ST22",
@@ -350,10 +364,11 @@ static function type_Ex(type:String) {
 	                        "w":130,
 	                        "h":40,
 	                        "depth":50,
-	                        "x":-200,
-	                        "y":20,
+	                        "x":-65,
+	                        "y":200,
 	                        "isRigid":1,
-	                        "baseHeight":0
+	                        "baseHeight":0,
+	                        "code":type
 	                        };
 	   break;
 	   
@@ -374,10 +389,11 @@ static function type_Ex(type:String) {
 	                        "w":160,
 	                        "h":40,
 	                        "depth":50,
-	                        "x":-200,
-	                        "y":20,
+	                        "x":-80,
+	                        "y":200,
 	                        "isRigid":1,
-	                        "baseHeight":0
+	                        "baseHeight":0,
+	                        "code":type
 	                        };
 	   break;
 	   
@@ -399,10 +415,11 @@ static function type_Ex(type:String) {
 	                        "w":65,
 	                        "h":40,
 	                        "depth":50,
-	                        "x":-200,
-	                        "y":20,
+	                        "x":-32,
+	                        "y":200,
 	                        "isRigid":1,
-	                        "baseHeight":0
+	                        "baseHeight":0,
+	                        "code":type
 	                        };
 	   break;
 	   
@@ -422,10 +439,11 @@ static function type_Ex(type:String) {
 	                        "w":65,
 	                        "h":40,
 	                        "depth":50,
-	                        "x":-200,
-	                        "y":20,
+	                        "x":-32,
+	                        "y":200,
 	                        "isRigid":1,
-	                        "baseHeight":0
+	                        "baseHeight":0,
+	                        "code":type
 	                        };
 	   break;
 	   
@@ -445,10 +463,11 @@ static function type_Ex(type:String) {
 	                        "w":65,
 	                        "h":40,
 	                        "depth":50,
-	                        "x":-200,
-	                        "y":20,
+	                        "x":-32,
+	                        "y":200,
 	                        "isRigid":1,
-	                        "baseHeight":0
+	                        "baseHeight":0,
+	                        "code":type
 	                        };
 	   break;
 	   
@@ -468,17 +487,18 @@ static function type_Ex(type:String) {
 	                        "w":65,
 	                        "h":40,
 	                        "depth":50,
-	                        "x":-200,
-	                        "y":20,
+	                        "x":-32,
+	                        "y":200,
 	                        "isRigid":1,
-	                        "baseHeight":0
+	                        "baseHeight":0,
+	                        "code":type
 	                        };
 	   break;
 	   
 	   case "ex20-t":
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
-							"Front":"textures/H3375_ST22",
+							"Front":"textures/speakertexture",
 	                        "FrontUp":"textures/200s",
 	                        "FrontDown":"textures/200s",
 	                        "Back":"textures/H3375_ST22",
@@ -491,10 +511,11 @@ static function type_Ex(type:String) {
 	                        "w":65,
 	                        "h":40,
 	                        "depth":50,
-	                        "x":-200,
-	                        "y":20,
+	                        "x":-32,
+	                        "y":200,
 	                        "isRigid":1,
-	                        "baseHeight":0
+	                        "baseHeight":0,
+	                        "code":type
 	                        };
 	   break;
 	   
@@ -516,10 +537,11 @@ static function type_Ex(type:String) {
 	                        "w":65,
 	                        "h":40,
 	                        "depth":36,
-	                        "x":-200,
-	                        "y":20,
+	                        "x":-32,
+	                        "y":200,
 	                        "isRigid":1,
-	                        "baseHeight":0
+	                        "baseHeight":0,
+	                        "code":type
 	                        };
 	   break;
 	   
@@ -539,10 +561,11 @@ static function type_Ex(type:String) {
 	                        "w":65,
 	                        "h":40,
 	                        "depth":36,
-	                        "x":-200,
-	                        "y":20,
+	                        "x":-32,
+	                        "y":200,
 	                        "isRigid":1,
-	                        "baseHeight":0
+	                        "baseHeight":0,
+	                        "code":type
 	                        };
 	   break;
 	   
@@ -563,10 +586,11 @@ static function type_Ex(type:String) {
 	                        "w":120,
 	                        "h":30,
 	                        "depth":40,
-	                        "x":-200,
-	                        "y":20,
+	                        "x":-60,
+	                        "y":200,
 	                        "isRigid":1,
-	                        "baseHeight":0
+	                        "baseHeight":0,
+	                        "code":type
 	                        };
 	   break;
 	   

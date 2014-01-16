@@ -55,8 +55,16 @@ static function tex_load()
 static function tex_save()
 {
 	var tex:Texture2D = Resources.Load("GUISkin/gui_btn_save", Texture2D);
- 
+
 	return GUIContent(tex,"Save Combination");
+}
+
+static function tex_speaker(){
+
+	var tex:Texture2D = Resources.Load("textures/speakertexture", Texture2D);
+ 
+	return tex;
+
 }
 
 /*

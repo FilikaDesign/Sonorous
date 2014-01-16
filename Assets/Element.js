@@ -4,6 +4,7 @@
 // 24.12.2013
 
 var elementID		: int;
+var elementType		: String;
 var elementContainer: GameObject;
 var cubeFront 		: GameObject;
 var cubeFrontUp		: GameObject;
@@ -44,6 +45,8 @@ function Start (){
 			var x:float = params["x"];
 			var y:float = params["y"];
 			
+			elementType = params["elementType"];
+			
 			this.gameObject.transform.localPosition.y = h*0.5;
 			baseHeight = params["baseHeight"];
 			
@@ -82,6 +85,9 @@ function Start (){
 			var hole:int = params["Hole"];
 			var isRigid:int =  params["isRigid"];
 			
+			
+			
+	
 			if(isRigid == 1) {
 				this.gameObject.AddComponent(Rigidbody);
 				this.gameObject.rigidbody.isKinematic = true;
@@ -276,6 +282,8 @@ function OnTriggerExit (other : Collider) {
 
 function createBase(size : int){
 	if(params["baseHeight"] == 0){
+	
+	print(elementID);
 		//Debug.Log("Baza yarat");
 		params["baseHeight"] = size;
 		var baseElement: GameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);

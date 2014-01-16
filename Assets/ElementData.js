@@ -24,6 +24,7 @@
 	public var y 			: int;	
 	public var isRigid 		: String;	
 	public var baseHeight 	: int;
+	public var code 		: String;
 		
  	
  	
