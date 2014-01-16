@@ -112,8 +112,8 @@ function Start (){
 			//FrontUp
 		    cubeFrontUp  = GameObject.CreatePrimitive(PrimitiveType.Cube);
 		    cubeFrontUp.name = "cubeFrontUp";
-		    cubeFrontUp.transform.localScale = Vector3(w-2*woodThickness,(h-woodThickness)*0.5,woodThickness);
-			cubeFrontUp.transform.localPosition = Vector3(w*0.5,(h - woodThickness)*0.75, -1 * depth + woodThickness*0.5);
+		    cubeFrontUp.transform.localScale = Vector3(w-2*woodThickness,(h-woodThickness)*0.5-0.2,woodThickness);
+			cubeFrontUp.transform.localPosition = Vector3(w*0.5,(h - woodThickness)*0.75+0.1, -1 * depth + woodThickness*0.5);
 			cubeFrontUp.renderer.material.mainTexture = Resources.Load(FrontUp, Texture2D);
 			cubeFrontUp.transform.parent = elementContainer.transform;
 			var cubeFrontUpBoxCollider : BoxCollider = cubeFrontUp.GetComponent("BoxCollider");
@@ -122,8 +122,8 @@ function Start (){
 			//FrontDown
 			cubeFrontDown  = GameObject.CreatePrimitive(PrimitiveType.Cube);
 			cubeFrontDown.name = "cubeFrontDown";
-		    cubeFrontDown.transform.localScale = Vector3(w-2*woodThickness,(h-woodThickness)*0.5,woodThickness);
-			cubeFrontDown.transform.localPosition = Vector3(w*0.5,(h - woodThickness)*0.25, -1 * depth + woodThickness*0.5);
+		    cubeFrontDown.transform.localScale = Vector3(w-2*woodThickness,(h-woodThickness)*0.5-0.2,woodThickness);
+			cubeFrontDown.transform.localPosition = Vector3(w*0.5,(h - woodThickness)*0.25-0.1, -1 * depth + woodThickness*0.5);
 			cubeFrontDown.renderer.material.mainTexture = Resources.Load(FrontDown, Texture2D);
 			cubeFrontDown.transform.parent = elementContainer.transform;
 			var cubeFrontDownBoxCollider : BoxCollider = cubeFrontDown.GetComponent("BoxCollider");

@@ -112,8 +112,9 @@ private var MPosY:float;
 function Start () {
 	
 	//camera positioning
-	this.transform.position = Vector3(90,150,-300);
-	this.transform.Rotate(15,-5,0);
+	resetCameraPos();
+	//Camera.main.fieldOfView -=8;
+	//Camera.main.depth = 3;
 	
 	// Make a game object
 	
@@ -125,30 +126,30 @@ function Start () {
 	// Set color and position
 	lightGameObject.light.color = Color.white;
 	lightGameObject.light.type = LightType.Directional;
-	lightGameObject.light.intensity = 0.4;
+	lightGameObject.light.intensity = 0.5;
 	
 	// Set the position (or any transform property) after
 	// adding the light component.
 	lightGameObject.transform.position = Vector3(0, 500, 0);
 	lightGameObject.transform.Rotate(40, 5, 200);
 	
+	/*
 	//point light
-	var pointLightGameObject : GameObject = new GameObject("The Point One");
+	var cameraLightGameObject : GameObject = new GameObject("Camera Light");
 	
 	// Add the light component
-	pointLightGameObject.AddComponent(Light);
+	cameraLightGameObject.AddComponent(Light);
 	// Set color and position
-	pointLightGameObject.light.color = Color.white;
-	pointLightGameObject.light.type = LightType.Point;
-	pointLightGameObject.light.intensity = 1;
-	pointLightGameObject.light.range = 130;
+	cameraLightGameObject.light.color = Color.white;
+	cameraLightGameObject.light.type = LightType.Point;
+	cameraLightGameObject.light.intensity = 0.1;
+	cameraLightGameObject.light.range = 130;
 	
 	// Set the position (or any transform property) after
 	// adding the light component.
-	pointLightGameObject.transform.position = Vector3(60, 140, -31);
-	pointLightGameObject.transform.Rotate(40, 5, 200);
+	cameraLightGameObject.transform.parent = this.transform;
 	
-	
+	*/
 	//create Background Wall and Floor
 	ww = float.Parse(textWidth);
 	hh = float.Parse(textHeight);
@@ -160,7 +161,7 @@ function Start () {
 	wall.transform.position = Vector3(0,hh*0.5,10);
 	wall.transform.localScale = Vector3(ww,2,hh);
 	wall.transform.Rotate(90,0,0);
-	wall.renderer.material.mainTexture = Resources.Load("textures/wall", Texture2D);
+	wall.renderer.material.mainTexture = Resources.Load("textures/floortexture", Texture2D);
 	wall.renderer.material.mainTextureScale = Vector2 (11,11);
 	//floor
 	floor = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -170,7 +171,7 @@ function Start () {
 	floor.transform.position = Vector3(0,-1,-hh*0.5+10);
 	floor.transform.localScale = Vector3(ww,2,hh);
 	floor.transform.Rotate(0,0,0);
-	floor.renderer.material.mainTexture = Resources.Load("textures/wooden-floor-texture", Texture2D);
+	floor.renderer.material.mainTexture = Resources.Load("textures/floortexture", Texture2D);
 	floor.renderer.material.mainTextureScale = Vector2 (11,11);	
 	
 	
@@ -730,6 +731,8 @@ function clearAllHighlightedModuls() {
 function initSetRoomSize() {
 
 	if(!setRoomSize) {
+	
+		
 		clearAllHighlightedModuls();
 		GUI.color.a = 0.9;
 		
@@ -746,7 +749,8 @@ function initSetRoomSize() {
 			wall.transform.position = Vector3(0,parseInt(textHeight)*0.5,10);
 			floor.transform.localScale = Vector3(parseInt(textWidth),2,parseInt(textHeight));
 			floor.transform.position = Vector3(0,-1,-parseInt(textHeight)*0.5+10);
-			setRoomSize = true;			
+			setRoomSize = true;	
+					
 		}
 		
 		GUI.EndGroup();
@@ -990,16 +994,15 @@ function BillofMaterials(){
 	+ "&hash=" + hash;
 	
 	/*UPLOAD SCREENSHOT*/
-	this.transform.position.z = -400;//better placement is required
-	// We should only read the screen after all rendering is complete 
+	resetCameraPos();	// We should only read the screen after all rendering is complete 
 	yield WaitForEndOfFrame();
 
     // Create a texture the size of the screen, RGB24 format
     var width = Screen.width;
     var height = Screen.height;
-    var tex = new Texture2D( width, height, TextureFormat.RGB24, false );
+    var tex = new Texture2D( width, height-100, TextureFormat.RGB24, false );
     // Read screen contents into the texture
-    tex.ReadPixels( Rect(0, 0, width, height), 0, 0 );
+    tex.ReadPixels( Rect(0, 0, width, height-100), 0, 0 );
     tex.Apply();
  
     // Encode texture into PNG
@@ -1326,6 +1329,12 @@ function LoadState(){
   
   
  
+
+}
+
+function resetCameraPos(){
+
+	this.transform.position = Vector3(0 ,100,-300);
 
 }
 

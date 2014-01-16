@@ -1,0 +1,21 @@
+1) Bütün yüzeylerin texture'larý ayný olarak deðiþtirilecek. Ancak eðer kutu tipi T uzantýlý ise kapak siyah kalacak, TF ise flap etmeyen kapak siyah kalacak, hoperlor kumaþýný temsil ediyor.
+
+2) 2lik ve 8lik baza yanyana gelemez kuralýný ekleyeceðiz
+
+3) Kamera perspektifi düzeltilecek
+
+4) pdfte listede ayný typelar alt alta sýralanacak
+
+5) Pdf tablosunda ürün adý ve ürün kodu yazacak
+
+6) Kombinasyonun birimlerine dair ölçüler katalogdaki gibi kurgulanacak
+
+7) ilk seçilen baza diðer baza gerektiren durumlar için standart olacak, bir baza deðiþirse hepsi deðiþecek
+
+8) Hangi kutu hangi hata veriyor düzenlenecek
+
+9) Reset kamera tuþu olacak (fonksiyon hazýr : resetCameraPos();)
+
+10) Texture Inspector^a baza yuksekliði gelecek
+
+11) Kutularla duvar arasý boþluk alýnacak
