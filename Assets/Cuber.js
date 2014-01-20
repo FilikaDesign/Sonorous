@@ -108,6 +108,12 @@ private var MPosX:float;
 
 private var preMPosY:float;
 private var MPosY:float;
+private var alphaDelay:float = 0.5f;
+private var alphaRoomSize:float = 0.85f;
+
+//grid
+private var showGrid : boolean = false;
+static var lineMaterial : Material;
 
 function Start () {
 	
@@ -159,7 +165,7 @@ function Start () {
 	wall.name = "Wall";
 	var wallBoxCollider : BoxCollider = wall.GetComponent("BoxCollider");
 	wallBoxCollider.enabled = false;
-	wall.transform.position = Vector3(0,hh*0.5,10);
+	wall.transform.position = Vector3(0,hh*0.5,0);
 	wall.transform.localScale = Vector3(ww,2,hh);
 	wall.transform.Rotate(90,0,0);
 	wall.renderer.material.mainTexture = Resources.Load("textures/floortexture", Texture2D);
@@ -169,7 +175,7 @@ function Start () {
 	floor.name = "Floor";
 	var floorBoxCollider : BoxCollider = floor.GetComponent("BoxCollider");
 	floorBoxCollider.enabled = false;
-	floor.transform.position = Vector3(0,-1,-hh*0.5+10);
+	floor.transform.position = Vector3(0,-1,-hh*0.5);
 	floor.transform.localScale = Vector3(ww,2,hh);
 	floor.transform.Rotate(0,0,0);
 	floor.renderer.material.mainTexture = Resources.Load("textures/floortexture", Texture2D);
@@ -189,6 +195,7 @@ function Start () {
 	}
 	
 	textures = ["textures/200s", "textures/black", "textures/capucino", "textures/graphit", "textures/H3375_ST22", "textures/regblack"];
+	welcomeRect.alpha = 0;
 }
 
 /* ADD MODUL METHOD */
@@ -445,7 +452,10 @@ function OnGUI() {
 	
 	// Set Room Size
 	else if(GUI.Button(Rect((btnW+1)*7,0,btnW,btnW),GUITextures.tex_room_size())){
+		clearAllHighlightedModuls();
 		setRoomSize = false;
+		alphaDelay = 0f;
+		alphaRoomSize = 0.85f;
 	}
 	
 	if(isGUIClosed) {
@@ -470,13 +480,18 @@ function OnGUI() {
 	}
 	
 	
+	// Reset camera position
+	if(GUI.Button(Rect((btnW+1)*9,0,btnW,btnW),GUITextures.tex_reset())){
+		resetCameraPos();
+	}
+	
 
 		
 	
 	
 	
 	// Tooltip
-	GUI.Label (Rect ((btnW+2)*9,3,200,40), GUI.tooltip);
+	GUI.Label (Rect ((btnW+2)*10,3,200,40), GUI.tooltip);
 	
 	/* GUI State */
 	var customButton : GUIStyle;
@@ -696,7 +711,7 @@ function openInspector() {
 		guiPosX = guiPosX+w;
 		resetGUIParams();
 	}
-	LeanTween.move( guiRect, Vector2(guiPosX, 0), 0.25 );
+	LeanTween.move( guiRect, Vector2(guiPosX, 0), 0.5 ).setEase(LeanTweenType.easeOutExpo);
 	//d.setOnComplete( tweenFinished );
 	
 	isGUIClosed =  !isGUIClosed;
@@ -705,14 +720,14 @@ function openInspector() {
 function showInspector() {
 	guiPosX = guiPosX-w;
 	
-	LeanTween.move( guiRect, Vector2(guiPosX, 0), 0.25 );/*.setOnComplete( tweenFinished );*/
+	LeanTween.move( guiRect, Vector2(guiPosX, 0), 0.5 ).setEase(LeanTweenType.easeOutExpo);/*.setOnComplete( tweenFinished );*/
 	
 }
 
 function tweenFinished() {
 	isGUIClosed =  !isGUIClosed;
 	guiPosX = Screen.width-w;
-	LeanTween.move( guiRect, Vector2(guiPosX, 0), 0.25 );
+	LeanTween.move( guiRect, Vector2(guiPosX, 0), 0.5 ).setEase(LeanTweenType.easeOutExpo);
 }
 
 
@@ -752,31 +767,38 @@ function clearAllHighlightedModuls() {
 */
 function initSetRoomSize() {
 
-	if(!setRoomSize) {
+	//if(!setRoomSize) {
 	
 		
-		clearAllHighlightedModuls();
-		GUI.color.a = 0.9;
-		
-		GUI.BeginGroup(welcomeRect.rect);
-		GUI.Box(Rect(0,0,Screen.width,Screen.height),"");
-		GUI.skin.box.normal.background = null;
-		GUI.Box(Rect((Screen.width-GUITextures.tex_logo().width)*0.5,50,GUITextures.tex_logo().width,GUITextures.tex_logo().height),GUITextures.tex_logo());
-		textWidth = GUI.TextField(Rect(Screen.width*0.5-35,150,70,20),textWidth);
-		textHeight = GUI.TextField(Rect(Screen.width*0.5-35,174,70,20),textHeight);
-		GUI.skin.box.normal.background = GUITextures.tex_box_bg();
-		
-		if(GUI.Button(Rect(Screen.width*0.5-50,210,100,30),"OK")) {
-			wall.transform.localScale = Vector3(parseInt(textWidth),2,parseInt(textHeight));
-			wall.transform.position = Vector3(0,parseInt(textHeight)*0.5,10);
-			floor.transform.localScale = Vector3(parseInt(textWidth),2,parseInt(textHeight));
-			floor.transform.position = Vector3(0,-1,-parseInt(textHeight)*0.5+10);
-			setRoomSize = true;	
-					
-		}
-		
-		GUI.EndGroup();
+	
+	//GUI.color.a = 0.9;
+	
+	GUI.BeginGroup(welcomeRect.rect);
+	GUI.Box(Rect(0,0,Screen.width,Screen.height),"");
+	GUI.skin.box.normal.background = null;
+	GUI.Box(Rect((Screen.width-GUITextures.tex_logo().width)*0.5,50,GUITextures.tex_logo().width,GUITextures.tex_logo().height),GUITextures.tex_logo());
+	textWidth = GUI.TextField(Rect(Screen.width*0.5-35,150,70,20),textWidth);
+	textHeight = GUI.TextField(Rect(Screen.width*0.5-35,174,70,20),textHeight);
+	GUI.skin.box.normal.background = GUITextures.tex_box_bg();
+	
+	if(GUI.Button(Rect(Screen.width*0.5-50,210,100,30),"OK")) {
+		alphaRoomSize = 0;
+		alphaDelay = 0;
+		wall.transform.localScale = Vector3(parseInt(textWidth),2,parseInt(textHeight));
+		wall.transform.position = Vector3(0,parseInt(textHeight)*0.5,0);
+		floor.transform.localScale = Vector3(parseInt(textWidth),2,parseInt(textHeight));
+		floor.transform.position = Vector3(0,-1,-parseInt(textHeight)*0.5);
+
 	}
+	
+	GUI.EndGroup();
+	
+	if(!LeanTween.isTweening(welcomeRect))
+		LeanTween.alpha(welcomeRect,alphaRoomSize , 0.6f).setDelay(alphaDelay).setEase(LeanTweenType.easeOutExpo).setOnComplete(setBolFalse);
+}
+
+function setBolFalse() {
+	setRoomSize = true;	
 }
 
 function setCameraPosition(direction : String) {
@@ -813,6 +835,7 @@ function setCameraPosition(direction : String) {
 function setMouseZoom() {
 	if(iSwitch) {
 		this.gameObject.transform.position.z = this.gameObject.transform.position.z + Input.GetAxis("Mouse ScrollWheel")*(cameraShift+40);
+			
 		if(Input.GetKey(KeyCode.LeftApple) && Input.GetMouseButton) {
 			
 			//this.gameObject.transform.position = this.gameObject.transform.position + Input.mousePosition;
@@ -850,10 +873,10 @@ function initKeyboardInteraction() {
 		
 			setCameraPosition("down");
 		
-		}/*else if(Event.current.Equals (Event.KeyboardEvent ("s")) || Event.current.Equals (Event.KeyboardEvent ("S"))) {
-			SaveState();
+		}else if(Event.current.Equals (Event.KeyboardEvent ("g")) || Event.current.Equals (Event.KeyboardEvent ("G"))) {
+			showGrid = !showGrid;
 	
-		}else if(Event.current.Equals (Event.KeyboardEvent ("l")) || Event.current.Equals (Event.KeyboardEvent ("L"))) {
+		}/*else if(Event.current.Equals (Event.KeyboardEvent ("l")) || Event.current.Equals (Event.KeyboardEvent ("L"))) {
 			LoadState();
 		}*/
 	}else{
@@ -1324,10 +1347,69 @@ function LoadState(){
 }
 
 function resetCameraPos(){
-
-	this.transform.position = Vector3(0 ,160,-400);
+	
+	//this.transform.position = Vector3(0 ,160,-400);
+	
+	LeanTween.move(camera.main.gameObject,new Vector3(0 ,160,-400),1f).setEase(LeanTweenType.easeOutExpo);
 
 }
+
+
+//show grid
+
+static function CreateLineMaterial() {
+
+	if( !lineMaterial ) {
+	lineMaterial = new Material( "Shader \"Lines/Colored Blended\" {" +
+	"SubShader { Pass { " +
+	"    Blend SrcAlpha OneMinusSrcAlpha " +
+	"    ZWrite Off Cull Off Fog { Mode Off } " +
+	"    BindChannels {" +
+	"      Bind \"vertex\", vertex Bind \"color\", color }" +
+	"} } }" );
+
+	lineMaterial.hideFlags = HideFlags.HideAndDontSave;
+	lineMaterial.shader.hideFlags = HideFlags.HideAndDontSave;
+	}
+
+}
+
+
+
+function OnPostRender() {
+
+	if(showGrid){
+	
+		GL.PushMatrix();
+		CreateLineMaterial();
+		// set the current material
+		lineMaterial.SetPass( 0 );
+		GL.Begin( GL.LINES );
+		GL.Color( Color(224/255,224/255,221/255,0.3) );
+		var gridSpaceV : int = 5;
+		var gridSpaceH :int = 5;
+		//print(parseInt(hh / gridSpaceV));
+
+		for(var i:int = 0; i < parseInt(hh / gridSpaceV); i++) {
+			
+			GL.Vertex3( -1 * ww * 0.5, i * gridSpaceV, -2 );
+			GL.Vertex3(  1 * ww * 0.5, i * gridSpaceV, -2 );
+		}
+		
+		for(var j:int = 0; j < parseInt(ww / gridSpaceH); j++) {
+
+			GL.Vertex3( -1 * ww * 0.5 + j * gridSpaceH, -1 * hh, -2 );
+			GL.Vertex3( -1 * ww * 0.5 + j * gridSpaceH,  1 * hh, -2 );
+		
+		}
+
+		GL.End();
+		GL.PopMatrix();
+	
+	}
+
+}
+
 
 function RulesEngine(){
 

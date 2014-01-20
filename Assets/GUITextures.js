@@ -7,6 +7,12 @@ static function tex_inspector()
 	return GUIContent(tex,"Open / Close the inspector panel");
 }
 
+static function tex_reset()
+{
+	var tex:Texture2D = Resources.Load("GUISkin/gui_btn_refresh", Texture2D);
+ 
+	return GUIContent(tex,"Reset camera position / zoom");
+}
 
 static function tex_export()
 {
