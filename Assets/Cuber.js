@@ -784,6 +784,8 @@ function initSetRoomSize() {
 	if(GUI.Button(Rect(Screen.width*0.5-50,210,100,30),"OK")) {
 		alphaRoomSize = 0;
 		alphaDelay = 0;
+		ww = parseInt(textWidth);
+		hh = parseInt(textHeight);
 		wall.transform.localScale = Vector3(parseInt(textWidth),2,parseInt(textHeight));
 		wall.transform.position = Vector3(0,parseInt(textHeight)*0.5,0);
 		floor.transform.localScale = Vector3(parseInt(textWidth),2,parseInt(textHeight));
