@@ -18,7 +18,7 @@
       <h>40</h>
       <depth>50</depth>
       <x>-245</x>
-      <y>20</y>
+      <y>28</y>
       <isRigid>True</isRigid>
       <baseHeight>8</baseHeight>
       <code>ex10--AMZ</code>
@@ -40,7 +40,7 @@
       <h>40</h>
       <depth>50</depth>
       <x>-115</x>
-      <y>20</y>
+      <y>28</y>
       <isRigid>True</isRigid>
       <baseHeight>8</baseHeight>
       <code>ex11--WHT</code>

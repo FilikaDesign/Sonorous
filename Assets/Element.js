@@ -54,7 +54,7 @@ function Start (){
 			
 
 			//collider
-			//Debug.Log(this.gameObject);
+			
 			
 			var sc : BoxCollider;
 			sc = this.gameObject.AddComponent ("BoxCollider");
@@ -205,19 +205,16 @@ function Start (){
 			}
 			
 			if(baseHeight > 0){
-			var baseElement: GameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
-			baseElement.name = "Base";
-			baseElement.transform.localScale = Vector3(this.w,baseHeight,this.depth-2);
-		
-			
-	
-			baseElement.transform.position.x = w * 0.5;
-			baseElement.transform.position.y = - baseHeight * 0.5;
-			baseElement.transform.position.z = elementContainer.transform.position.z - this.depth * 0.5 + 1;
-		
-			baseElement.renderer.material.color = Color.gray;
-			baseElement.transform.parent = elementContainer.transform;
-			
+				
+				baseElement = GameObject.CreatePrimitive(PrimitiveType.Cube);
+				baseElement.name = "Base";
+				baseElement.transform.localScale = Vector3(this.w,baseHeight,this.depth-2);
+				baseElement.transform.position.x = elementContainer.transform.position.x + this.w * 0.5;
+				baseElement.transform.position.y = this.transform.localPosition.y - h*0.5 - baseHeight * 0.5;
+				baseElement.transform.position.z = elementContainer.transform.position.z - this.depth * 0.5 + 1;
+				baseElement.renderer.material.color = Color.gray;
+				baseElement.transform.parent = elementContainer.transform;
+					
 			}
 			
 			Place(x,y);
@@ -284,7 +281,7 @@ function OnTriggerExit (other : Collider) {
 function createBase(size : int){
 
 	var temp_baseHeight : int = params["baseHeight"];
-
+	
 	if(temp_baseHeight == 0){
 	
 		print(elementID);
@@ -295,7 +292,7 @@ function createBase(size : int){
 		baseElement.name = "Base";
 		baseElement.transform.localScale = Vector3(this.w,size,this.depth-2);
 		baseElement.transform.position.x = elementContainer.transform.position.x + this.w * 0.5;
-		baseElement.transform.position.y = - size * 0.5;
+		baseElement.transform.position.y = this.transform.localPosition.y - h*0.5 - size * 0.5;
 		baseElement.transform.position.z = elementContainer.transform.position.z - this.depth * 0.5 + 1;
 		baseElement.renderer.material.color = Color.gray;
 		baseElement.transform.parent = elementContainer.transform;
@@ -303,7 +300,6 @@ function createBase(size : int){
 }
 
 function changeBase(size : int){
-
 
 		Destroy(baseElement);
 		params["baseHeight"] = size;
@@ -313,7 +309,7 @@ function changeBase(size : int){
 		baseElement.transform.localScale = Vector3(this.w,size,this.depth-2);
 		baseElement.transform.position.x = elementContainer.transform.position.x + this.w * 0.5;
 		
-		baseElement.transform.position.y = - size * 0.5;
+		baseElement.transform.position.y = this.transform.localPosition.y - h*0.5 - size * 0.5;
 		baseElement.transform.position.z = elementContainer.transform.position.z - this.depth * 0.5 + 1;
 		baseElement.renderer.material.color = Color.gray;
 		baseElement.transform.parent = elementContainer.transform;

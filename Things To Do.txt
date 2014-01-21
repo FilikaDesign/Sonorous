@@ -1,20 +1,25 @@
 
-2) 2lik ve 8lik baza yanyana gelemez kuralýný ekleyeceðiz
 
-3) Kamera perspektifi düzeltilecek ?
 
-4) pdfte listede ayný typelar alt alta sýralanacak
 
-5) Pdf tablosunda ürün adý ve ürün kodu yazacak
+1) pdfte listede ayný typelar alt alta sýralanacak
 
-6) Kombinasyonun birimlerine dair ölçüler katalogdaki gibi kurgulanacak
+2) Pdf tablosunda ürün adý ve ürün kodu yazacak
 
-7) ilk seçilen baza diðer baza gerektiren durumlar için standart olacak, bir baza deðiþirse hepsi deðiþecek
+3) Kombinasyonun birimlerine dair ölçüler katalogdaki gibi kurgulanacak
 
-8) Hangi kutu hangi hata veriyor düzenlenecek
+4) Hangi kutu hangi hata veriyor düzenlenecek
 
-9) Reset kamera tuþu olacak (fonksiyon hazýr : resetCameraPos();)
+5) Index numaralarý ve ölçeklendirme
 
-11) Kutularla duvar arasý boþluk alýnacak
+6) Kurallarý gözden geçirmek
 
-12) Index numaralarý ve ölçeklendirme
+7) A,B,C ayrýmý
+
+8) U-F tipi
+
+9) TV askýsý
+
+10) sað klik mouse remove
+
+11) debugging

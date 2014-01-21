@@ -7,7 +7,7 @@ import System.IO;
 
 private var secretKey="x91{7&85,[cN5.S";//server side
 private var billofmaterialsUrl="http://www.filikatasarim.com/clients/sonorous/writeElement.php?"; //be sure to add a ? to your url
-private var baseNoti:String;
+private var baseNoti:String = "Yerdeki tüm ürünler (EX) bir baza seçeneğine sahip olmak zorunda. Lütfen baza yüksekliği seçin.";
 
 private var wall 		: GameObject;
 private var floor 		: GameObject;
@@ -90,6 +90,7 @@ private var elementBO:String = "none";
 private var elementT:String = "none";
 
 //
+private var baseAllH:int = 0;
 
 var setRoomSize : boolean = false;
 private var textWidth:String = "800";
@@ -233,7 +234,7 @@ function changeBaseAll(baseH : int){
 		if(tip == "EX") {
 			
 			// duvarları toparla
-			if(variableScript.baseHeight == 2){
+			/*if(baseAllH == 8){
 		
 				
 				wall.transform.position.y = -8 + hh*0.5;
@@ -246,7 +247,10 @@ function changeBaseAll(baseH : int){
 				floor.transform.position.y = -2 -1 ;
 				
 		
-			}
+			}*/
+			print(baseAllH);
+			wall.transform.position.y = -baseAllH + hh*0.5;
+			floor.transform.position.y = -baseAllH -1 ;
 		
 			var mG : GameObject = moduls[i];			
             GameObject.Find(mG.name).SendMessage("changeBase",baseH);
@@ -388,20 +392,7 @@ function Update () {
 			}
 		}
 		
-		if (Input.GetMouseButtonDown (1)){
-			MPosX = Input.mousePosition.x;
-			MPosY = Input.mousePosition.y;
-			preMPosX = MPosX;
-			preMPosY = MPosY;
-		}
 		
-		if (Input.GetMouseButton (1)){
-			MPosX = Input.mousePosition.x;
-			MPosY = Input.mousePosition.y;
-			this.transform.Rotate(Mathf.Floor(MPosY - preMPosY),Mathf.Floor(MPosX - preMPosX),0);
-			preMPosX = MPosX;
-			preMPosY = MPosY;
-		}
 		
 	} // Set room size condition
 	
@@ -429,9 +420,13 @@ function OnGUI() {
 		GUI.skin.button.normal.background = Resources.Load("GUISkin/sonorous_gui_button_hover", Texture2D);
 	}
 	
-		if(GUI.Button(Rect(0,0,btnW,btnW),GUITextures.tex_inspector())) {
+	if(GUI.Button(Rect(0,0,btnW,btnW),GUITextures.tex_inspector())) {
+		if(guiState != "modul_edit")
 			openInspector();
-		}
+			
+		guiState = "default";
+	}
+	
 	GUI.skin.button.normal.background  = Resources.Load("GUISkin/sonorous_gui_button", Texture2D);
 
 	// Load
@@ -464,6 +459,8 @@ function OnGUI() {
 	// Change Material
 	else if(GUI.Button(Rect((btnW+1)*6,0,btnW,btnW),GUITextures.tex_material())) {
 		guiState = "modul_edit";
+		inch2 = false;
+		inch8 = false;
 		if(isGUIClosed)
 			openInspector();
 	}
@@ -530,10 +527,10 @@ function OnGUI() {
 		GUI.Label(Rect(ml+startx,ml,w,20),": "+ elementType);
 		GUI.Label(Rect(ml+startx,ml+tfH,w,20),": "+ elementSize);
 		
-		GUI.Label(Rect(ml,ml+tfH*10+mt,w-ml*2,20),"Add Element");
+		//GUI.Label(Rect(ml,ml+tfH*10+mt,w-ml*2,20),"Add Element");
 		
 		// Select Modul to Add Screen
-		scrollPosition = GUI.BeginScrollView (Rect (ml,ml+tfH*11+5+mt,w-12,Screen.height - 20*12-ml),
+		scrollPosition = GUI.BeginScrollView (Rect (ml,ml+tfH*2+5+mt,w-12,Screen.height - 20*2-ml),
 		scrollPosition, Rect (0, 0, 0, (64+ml)*(thumbs.Count-1)));	
 		
 		/*if(GUI.Button(Rect( 0,0,128,64 ),m1)) {addM1Box();draggingObject = moduls[moduls.Count-1];}*/
@@ -558,6 +555,7 @@ function OnGUI() {
 	
 	// Change Material GUI
 	else if(guiState == "modul_edit" && draggingElementId > -1 && moduls.Count > 0) {
+		//resetGUIParams();
 		
 		var tex:String = "wall";
 		
@@ -601,41 +599,46 @@ function OnGUI() {
 			GUI.Label(Rect(ml,lastY + (tFloor)*(2+120)+tfH,w,77),baseNoti);
 			
 			if(GUI.Toggle(Rect(ml,lastY + (tFloor)*(2+120)+tfH*4+ml,100,30),inch2," 2 cm")) {
-				inch2 = true;
-				inch8 = false;
+				
 				
 				variableScript = preDraggingObj.GetComponent("Element");
 				
-				
+				baseAllH = 2;
 				
 				if(variableScript.baseHeight == 0){
-					GameObject.Find(preDraggingObj.name).SendMessage("createBase",2);
-					wall.transform.position.y = -2 + hh*0.5;
-					floor.transform.position.y = -2 -1 ;	
+					GameObject.Find(preDraggingObj.name).SendMessage("createBase",baseAllH);
+					wall.transform.position.y = -baseAllH + hh*0.5;
+					floor.transform.position.y = -baseAllH -1 ;	
 				    //parameters[draggingElementId]["y"] = 2 + preDraggingObj.transform.localScale.y*0.5;
 				}else{
-					//changeBaseAll(2);
+					if(!inch2)
+						changeBaseAll(baseAllH);
 				}
+				inch2 = true;
+				inch8 = false;
 				
 				
 			}
 			
 			if(GUI.Toggle(Rect(ml+100,lastY + (tFloor)*(2+120)+tfH*4+ml,200,30),inch8," 8 cm")) {
-				inch2 = false;
-				inch8 = true;
+				
 				
 				variableScript = preDraggingObj.GetComponent("Element");
 				
-			
+				baseAllH = 8;
 				
 				if(variableScript.baseHeight == 0){
-					GameObject.Find(preDraggingObj.name).SendMessage("createBase",8);
-					wall.transform.position.y = -8 + hh*0.5;
-					floor.transform.position.y = -8 - 1;	
+					GameObject.Find(preDraggingObj.name).SendMessage("createBase",baseAllH);
+					wall.transform.position.y = -baseAllH + hh*0.5;
+					floor.transform.position.y = -baseAllH - 1;	
 					//parameters[draggingElementId]["y"] = 8 + preDraggingObj.transform.localScale.y*0.5;
 				}else{
-					//changeBaseAll(8);
+					if(!inch8)
+						changeBaseAll(baseAllH);
 				}
+				
+				inch2 = false;
+				inch8 = true;
 				
 				
 			}
@@ -836,7 +839,7 @@ function initSetRoomSize() {
 	GUI.EndGroup();
 	
 	if(!LeanTween.isTweening(welcomeRect))
-		LeanTween.alpha(welcomeRect,alphaRoomSize , 0.6f).setDelay(alphaDelay).setEase(LeanTweenType.easeOutExpo).setOnComplete(setBolFalse);
+		LeanTween.alpha(welcomeRect,alphaRoomSize , 0.5f).setEase(LeanTweenType.easeOutExpo).setOnComplete(setBolFalse);
 }
 
 function setBolFalse() {
@@ -1388,6 +1391,8 @@ function LoadState(){
 	         addModul(myStuffTex,index);               
   }
   
+  baseAllH = baseHeight;
+  
    
   
   
@@ -1730,7 +1735,6 @@ function RulesEngine(){
 				//EX YERDE DEMEK
 				Notification.notiBool[4] = "0";
 				if(baseHeight <= 0){
-					baseNoti="Yerdeki tüm ürünler (EX) bir baza seçeneğine sahip olmak zorunda. Lütfen baza yüksekliği seçin.";
 					guiState = "modul_edit";
 					
 					if(isGUIClosed) {
