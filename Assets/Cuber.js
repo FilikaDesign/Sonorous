@@ -38,7 +38,7 @@ private var draggingElementId : int = -1;
 
 
 private var snapFactorX	: float = 5;
-private var snapFactorY	: float = 2;
+private var snapFactorY	: float = 5;
 private var cameraShift : float = 5;
 private var snapEnable 	: boolean = true;
 
@@ -114,6 +114,7 @@ private var alphaRoomSize:float = 0.85f;
 //grid
 private var showGrid : boolean = false;
 static var lineMaterial : Material;
+
 
 function Start () {
 	
@@ -218,7 +219,7 @@ function addModul(modulParams:Hashtable, id:String) {
 
 }
 
-function changeBaseAll(){
+function changeBaseAll(baseH : int){
 
 	for(var i:int = 0; i < moduls.Count; i++) {
 			
@@ -227,11 +228,28 @@ function changeBaseAll(){
 		var tip:String = variableScript.elementType;
 		
 		
+		
 	
 		if(tip == "EX") {
-			//burasu olacak
-			var mG : GameObject = moduls[i];
-			GameObject.Find(mG.name).SendMessage("createBase",8);
+			
+			// duvarları toparla
+			if(variableScript.baseHeight == 2){
+		
+				
+				wall.transform.position.y = -8 + hh*0.5;
+				floor.transform.position.y = -8 -1 ;
+				
+			}else{
+				
+				
+				wall.transform.position.y = -2 + hh*0.5;
+				floor.transform.position.y = -2 -1 ;
+				
+		
+			}
+		
+			var mG : GameObject = moduls[i];			
+            GameObject.Find(mG.name).SendMessage("changeBase",baseH);
 		}
 			
 	}
@@ -585,19 +603,41 @@ function OnGUI() {
 			if(GUI.Toggle(Rect(ml,lastY + (tFloor)*(2+120)+tfH*4+ml,100,30),inch2," 2 cm")) {
 				inch2 = true;
 				inch8 = false;
-				GameObject.Find(preDraggingObj.name).SendMessage("createBase",2);
-				preDraggingObj.transform.position.y = 2 + preDraggingObj.transform.localScale.y*0.5;	
-				parameters[draggingElementId]["y"] = 2 + preDraggingObj.transform.localScale.y*0.5;
-				changeBaseAll();
+				
+				variableScript = preDraggingObj.GetComponent("Element");
+				
+				
+				
+				if(variableScript.baseHeight == 0){
+					GameObject.Find(preDraggingObj.name).SendMessage("createBase",2);
+					wall.transform.position.y = -2 + hh*0.5;
+					floor.transform.position.y = -2 -1 ;	
+				    //parameters[draggingElementId]["y"] = 2 + preDraggingObj.transform.localScale.y*0.5;
+				}else{
+					//changeBaseAll(2);
+				}
+				
+				
 			}
 			
 			if(GUI.Toggle(Rect(ml+100,lastY + (tFloor)*(2+120)+tfH*4+ml,200,30),inch8," 8 cm")) {
 				inch2 = false;
 				inch8 = true;
-				GameObject.Find(preDraggingObj.name).SendMessage("createBase",8);
-				preDraggingObj.transform.position.y = 8 + preDraggingObj.transform.localScale.y*0.5;	
-				parameters[draggingElementId]["y"] = 8 + preDraggingObj.transform.localScale.y*0.5;
-				changeBaseAll();
+				
+				variableScript = preDraggingObj.GetComponent("Element");
+				
+			
+				
+				if(variableScript.baseHeight == 0){
+					GameObject.Find(preDraggingObj.name).SendMessage("createBase",8);
+					wall.transform.position.y = -8 + hh*0.5;
+					floor.transform.position.y = -8 - 1;	
+					//parameters[draggingElementId]["y"] = 8 + preDraggingObj.transform.localScale.y*0.5;
+				}else{
+					//changeBaseAll(8);
+				}
+				
+				
 			}
 			
 			
@@ -878,9 +918,16 @@ function initKeyboardInteraction() {
 		}else if(Event.current.Equals (Event.KeyboardEvent ("g")) || Event.current.Equals (Event.KeyboardEvent ("G"))) {
 			showGrid = !showGrid;
 	
-		}/*else if(Event.current.Equals (Event.KeyboardEvent ("l")) || Event.current.Equals (Event.KeyboardEvent ("L"))) {
-			LoadState();
-		}*/
+		}else if(Event.current.Equals (Event.KeyboardEvent ("b")) || Event.current.Equals (Event.KeyboardEvent ("B"))) {
+			changeBaseAll(2);
+	
+		}else if(Event.current.Equals (Event.KeyboardEvent ("n")) || Event.current.Equals (Event.KeyboardEvent ("N"))) {
+			changeBaseAll(8);
+	
+		}
+		
+		
+		
 	}else{
 		if(Event.current.Equals (Event.KeyboardEvent ("return"))) {
 		
@@ -1390,7 +1437,7 @@ function OnPostRender() {
 		GL.Color( Color(224/255,224/255,221/255,0.3) );
 		var gridSpaceV : int = 5;
 		var gridSpaceH :int = 5;
-		//print(parseInt(hh / gridSpaceV));
+		
 
 		for(var i:int = 0; i < parseInt(hh / gridSpaceV); i++) {
 			

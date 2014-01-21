@@ -27,6 +27,7 @@ var params:Hashtable = {};
 var isColliding			: int = 0;
 var highlighted:boolean = false;
 var baseHeight			: int = 0;
+var baseElement: GameObject;
 
 function Start (){
     	
@@ -281,12 +282,16 @@ function OnTriggerExit (other : Collider) {
 }
 
 function createBase(size : int){
-	if(params["baseHeight"] == 0){
+
+	var temp_baseHeight : int = params["baseHeight"];
+
+	if(temp_baseHeight == 0){
 	
-	print(elementID);
+		print(elementID);
 		//Debug.Log("Baza yarat");
 		params["baseHeight"] = size;
-		var baseElement: GameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+		baseHeight = size;
+		baseElement = GameObject.CreatePrimitive(PrimitiveType.Cube);
 		baseElement.name = "Base";
 		baseElement.transform.localScale = Vector3(this.w,size,this.depth-2);
 		baseElement.transform.position.x = elementContainer.transform.position.x + this.w * 0.5;
@@ -297,6 +302,23 @@ function createBase(size : int){
 	}
 }
 
+function changeBase(size : int){
+
+
+		Destroy(baseElement);
+		params["baseHeight"] = size;
+		baseHeight = size;
+		baseElement = GameObject.CreatePrimitive(PrimitiveType.Cube);
+		baseElement.name = "Base";
+		baseElement.transform.localScale = Vector3(this.w,size,this.depth-2);
+		baseElement.transform.position.x = elementContainer.transform.position.x + this.w * 0.5;
+		
+		baseElement.transform.position.y = - size * 0.5;
+		baseElement.transform.position.z = elementContainer.transform.position.z - this.depth * 0.5 + 1;
+		baseElement.renderer.material.color = Color.gray;
+		baseElement.transform.parent = elementContainer.transform;
+	
+}
 
 
 
