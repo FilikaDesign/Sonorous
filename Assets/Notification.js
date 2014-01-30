@@ -39,40 +39,18 @@ static function checkNotiCount() {
 }
 
 static function showNotificationList() {
-for(var i:int = 0; i < notiBool.Count; i++) {
+	for(var i:int = 0; i < notiBool.Count; i++) {
 		if(notiBool[i] == "1") {
 			var str:String = notiArr[i];
-			GUI.Label(Rect(5,5+(notCount*textH),w-10,textH),str);
+			if(GUI.Button(Rect(5,5+(notCount*textH),w-10,textH),str)) {
+				GameObject.Find(Camera.main.name).SendMessage("HighlightErrorsEngine",i);
+			}
 			notCount++;
 		}
 	}
 	
 	notCount = 0;
-	/*
-	if(notiBool[0] == "1") {
-		GUI.Label(Rect(5,5+(0*textH),w-10,textH),notiArr[0]);
-	}
-	
-	if(notiBool[1] == "1") {
-		GUI.Label(Rect(5,5+(1*textH),w-10,textH),notiArr[1]);
-	}
-	
-	if(notiBool[2] == "1") {
-		GUI.Label(Rect(5,5+(2*textH),w-10,textH),notiArr[2]);
-	}
-	
-	if(notiBool[3] == "1") {
-		GUI.Label(Rect(5,5+(3*textH),w-10,textH),notiArr[3]);
-	}
-	
-	if(notiBool[4] == "1") {
-		GUI.Label(Rect(5,5+(4*textH),w-10,textH),notiArr[4]);
-	}
-	
-	if(notiBool[5] == "1") {
-		GUI.Label(Rect(5,5+(5*textH),w-10,textH),notiArr[5]);
-	}
-	*/
+
 }
 
 static function message(str:String) {

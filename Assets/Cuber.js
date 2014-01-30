@@ -385,7 +385,8 @@ function Update () {
 				parameters[draggingElementId]["x"] = draggingObject.transform.position.x;
 				parameters[draggingElementId]["y"] = draggingObject.transform.position.y;
 				
-				RulesEngine();
+				//RulesEngine();
+				DebugEngine();
 				
 				preDraggingObj = moduls[draggingElementId];
 				draggingObject = null;
@@ -484,6 +485,8 @@ function OnGUI() {
 	if(Notification.checkForWarning()) {
 		if(GUI.Button(Rect((btnW+1)*8,0,btnW,btnW),GUITextures.tex_warning_on())) {
 			guiState = "modul_warning";
+			
+			DebugEngine();
 			
 			if(isGUIClosed)
 				openInspector();
@@ -944,7 +947,7 @@ function initKeyboardInteraction() {
 
 function ToggleLight(){
 
-	print(draggingElementId);
+	//print(draggingElementId);
 	//highlight
 	var allChildren = moduls[draggingElementId].GetComponentsInChildren(Transform);
  	
@@ -955,7 +958,7 @@ function ToggleLight(){
     // do whatever with child transform here
 	    if(child.renderer != null){
 	    
-		    child.renderer.material.color = Color.red;
+		    child.renderer.material.color = Color.green;
 		    variableScript.highlighted = true;
 		   
 	    }
@@ -992,7 +995,7 @@ function ToggleLight(){
     		// do whatever with child transform here
 		   		if(child.renderer != null){
 		    
-			    child.renderer.material.color = Color.red;
+			    child.renderer.material.color = Color.green;
 			    variableScript.highlighted = true;
 			   
 		    	}
@@ -1464,6 +1467,340 @@ function OnPostRender() {
 
 }
 
+function DebugEngine(){
+
+	Notification.notiBool[0] = "0";
+	Notification.notiBool[1] = "0";
+	
+	
+	var myX	: int;
+	var myY : int;
+	var myH : int;
+	var myW : int;
+	
+	var otherX	: int;
+	var otherY : int;
+	var otherH : int;
+	var otherW : int;
+	
+	var deltaW : int;
+		
+	// Rule 1 : EX ÜST ÜSTE OLMAZ
+	for(var i : int = 0; i < parameters.Count; i++){
+
+
+		if(parameters[i]["elementType"] == "EX"){
+		
+			for(var j : int = 0; j < parameters.Count; j++){
+			
+				if(parameters[j]["elementType"] == "EX" && i!=j){
+				
+				
+					//başka EX kutusu
+					
+					myX = parameters[i]["x"];
+					myY = parameters[i]["y"];
+					myH = parameters[i]["h"];
+					myW = parameters[i]["w"];
+					
+					otherX = parameters[j]["x"];
+					otherY = parameters[j]["y"];
+					otherH = parameters[j]["h"];
+					otherW = parameters[j]["w"];
+					
+					if(Mathf.Min(myX,otherX) == myX){
+						
+							//ben soldayım
+							deltaW = myW;
+						
+					}else{
+							//others solda
+							deltaW = otherW;
+						
+					}
+					
+					if(//conditions
+					
+					(Mathf.Abs(otherY - myY) == myH) //yukarda aşağıda
+					
+					&&
+					
+					(Mathf.Abs(otherX - myX) < deltaW) // arasında
+					
+					
+					){
+						print("üstüsteyiz");
+						Notification.notiBool[0] = "1";
+						break;
+					}else{
+						print("sorun yok abi");
+						
+					}
+					
+					
+			
+				
+				}
+			
+				
+			
+			
+			}
+		
+		
+		
+		}
+	
+		if(Notification.notiBool[0] == "0"){
+		
+		
+		var allChildren = moduls[i].GetComponentsInChildren(Transform);
+									
+			for (var child : Transform in allChildren) {
+			// do whatever with child transform here
+				if(child.renderer != null){
+										
+					child.renderer.material.color = Color.white;
+									   
+				}
+			}
+		}
+
+	}
+	
+	//// Rule 1 ends here
+	
+	
+	// Rule 2 : ED ÜST ÜSTE OLMAZ
+		
+	//Debug.Log("2 : ED rule");
+	for(var m : int = 0; m < parameters.Count; m++){
+
+
+		if(parameters[m]["elementType"] == "ED"){
+		
+			for(var n : int = 0; n < parameters.Count; n++){
+			
+				if(parameters[n]["elementType"] == "ED" && m!=n){
+				
+				
+					//başka ED kutusu
+					
+					myX = parameters[m]["x"];
+					myY = parameters[m]["y"];
+					myH = parameters[m]["h"];
+					myW = parameters[m]["w"];
+					
+					otherX = parameters[n]["x"];
+					otherY = parameters[n]["y"];
+					otherH = parameters[n]["h"];
+					otherW = parameters[n]["w"];
+					
+					if(Mathf.Min(myX,otherX) == myX){
+						
+							//ben soldayım
+							deltaW = myW;
+						
+					}else{
+							//others solda
+							deltaW = otherW;
+						
+					}
+		
+					if(//conditions
+					
+					(Mathf.Abs(otherY - myY) == myH) //yukarda aşağıda
+					
+					&&
+					
+					(Mathf.Abs(otherX - myX) < deltaW) // arasında
+					
+					
+					){
+						//Debug.Log("2 : ED ust uste olmaaaaz");
+						Notification.notiBool[1] = "1";
+						break;
+					}else{
+						print("sorun yok abi");
+						
+					}
+				
+				}
+				
+			}
+		}
+	}
+
+
+}
+
+function HighlightErrorsEngine(errorCode : int){
+
+			var myX	: int;
+			var myY : int;
+			var myH : int;
+			var myW : int;
+			
+			var otherX	: int;
+			var otherY : int;
+			var otherH : int;
+			var otherW : int;
+			
+			var deltaW : int;
+	switch(errorCode){
+	
+	case 0:
+			
+				
+			// Rule 1 : EX ÜST ÜSTE OLMAZ
+			for(var i : int = 0; i < parameters.Count; i++){
+
+
+				if(parameters[i]["elementType"] == "EX"){
+				
+					for(var j : int = 0; j < parameters.Count; j++){
+					
+						if(parameters[j]["elementType"] == "EX" && i!=j){
+						
+						
+							//başka EX kutusu
+							
+							myX = parameters[i]["x"];
+							myY = parameters[i]["y"];
+							myH = parameters[i]["h"];
+							myW = parameters[i]["w"];
+							
+							otherX = parameters[j]["x"];
+							otherY = parameters[j]["y"];
+							otherH = parameters[j]["h"];
+							otherW = parameters[j]["w"];
+							
+							if(Mathf.Min(myX,otherX) == myX){
+								
+									//ben soldayım
+									deltaW = myW;
+								
+							}else{
+									//others solda
+									deltaW = otherW;
+								
+							}
+							
+							if(//conditions
+							
+							(Mathf.Abs(otherY - myY) == myH) //yukarda aşağıda
+							
+							&&
+							
+							(Mathf.Abs(otherX - myX) < deltaW) // arasında
+							
+							
+							){
+								print("üstüsteyiz highlighted");
+								
+								var allChildren = moduls[i].GetComponentsInChildren(Transform);
+								
+								for (var child : Transform in allChildren) {
+									// do whatever with child transform here
+									if(child.renderer != null){
+									
+										child.renderer.material.color = Color.red;
+								   
+									}
+								}
+		
+								
+								break;
+							}else{
+								print("sorun yok abi");
+								
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+	break;
+	
+	case 1:
+			
+				
+		// Rule 2 : ED ÜST ÜSTE OLMAZ
+		
+		//Debug.Log("2 : ED rule");
+		for(var m : int = 0; m < parameters.Count; m++){
+
+
+			if(parameters[m]["elementType"] == "ED"){
+			
+				for(var n : int = 0; n < parameters.Count; n++){
+				
+					if(parameters[n]["elementType"] == "ED" && m!=n){
+					
+					
+						//başka ED kutusu
+						
+						myX = parameters[m]["x"];
+						myY = parameters[m]["y"];
+						myH = parameters[m]["h"];
+						myW = parameters[m]["w"];
+						
+						otherX = parameters[n]["x"];
+						otherY = parameters[n]["y"];
+						otherH = parameters[n]["h"];
+						otherW = parameters[n]["w"];
+						
+						if(Mathf.Min(myX,otherX) == myX){
+							
+								//ben soldayım
+								deltaW = myW;
+							
+						}else{
+								//others solda
+								deltaW = otherW;
+							
+						}
+			
+						if(//conditions
+						
+						(Mathf.Abs(otherY - myY) == myH) //yukarda aşağıda
+						
+						&&
+						
+						(Mathf.Abs(otherX - myX) < deltaW) // arasında
+						
+						
+						){
+							//Debug.Log("2 : ED ust uste olmaaaaz");
+							var allChildren2 = moduls[m].GetComponentsInChildren(Transform);
+									
+									for (var child : Transform in allChildren2) {
+										// do whatever with child transform here
+										if(child.renderer != null){
+										
+											child.renderer.material.color = Color.red;
+									   
+										}
+									}
+							break;
+						}else{
+							print("sorun yok abi");
+							
+						}
+					
+					}
+					
+				}
+			}
+		}
+	break;
+	
+	}
+
+}
 
 function RulesEngine(){
 
@@ -1488,7 +1825,7 @@ function RulesEngine(){
 		
 		if(parameters[draggingElementId]["elementType"] == "EX"){
 			
-			//Debug.Log("1 : EX rule");
+			
 			for(var i : int = 0; i < parameters.Count; i++){
 			
 				if(i != draggingElementId && parameters[i]["elementType"] == "EX"){
@@ -1521,10 +1858,10 @@ function RulesEngine(){
 					
 					){
 						
-						//Debug.Log("1 : EX ust uste olmaaaaz");
+						Debug.Log("EX Type Moduls cannot be superposed");
 						
-						guiNotification = "1 : EX Type Moduls cannot be superposed";
-						Notification.showNotification();
+						guiNotification = "EX Type Moduls cannot be superposed";
+						//Notification.showNotification();
 						Notification.notiBool[0] = "1";
 						break;
 					}else{
@@ -1536,7 +1873,7 @@ function RulesEngine(){
 			}
 		
 		}
-		
+		/*
 		// Rule 2 : ED ÜST ÜSTE OLMAZ
 		
 		if(parameters[draggingElementId]["elementType"] == "ED"){
@@ -1576,7 +1913,7 @@ function RulesEngine(){
 						
 						//Debug.Log("2 : ED ust uste olmaaaaz");
 						guiNotification = "2 : ED Type Moduls cannot be superposed";
-						Notification.showNotification();
+						//Notification.showNotification();
 						Notification.notiBool[1] = "1";
 						break;
 					}else{
@@ -1754,4 +2091,5 @@ function RulesEngine(){
 			}
 		
 		}
+		*/
 }

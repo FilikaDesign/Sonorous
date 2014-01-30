@@ -1,25 +1,20 @@
 
-
-
-
 1) pdfte listede ayný typelar alt alta sýralanacak
 
 2) Pdf tablosunda ürün adý ve ürün kodu yazacak
 
-3) Kombinasyonun birimlerine dair ölçüler katalogdaki gibi kurgulanacak
+3) Pdf yaratma alternatifi
 
-4) Hangi kutu hangi hata veriyor düzenlenecek
+4) Hangi kutu hangi hata veriyor düzenlenecek (s & alp)
 
-5) Index numaralarý ve ölçeklendirme
+5) Kombinasyonun birimlerine dair ölçüler katalogdaki gibi kurgulanacak, Index numaralarý ve ölçeklendirme (alp)
 
-6) Kurallarý gözden geçirmek
+6) Kurallarý gözden geçirmek (s)
 
-7) A,B,C ayrýmý
+7) A,B,C ayrýmý (s)
 
-8) U-F tipi
+8) U-F tipi(s)
 
-9) TV askýsý
+9) TV askýsý (s)
 
-10) sað klik mouse remove
-
-11) debugging
+10) debugging
