@@ -387,6 +387,7 @@ function Update () {
 				
 				//RulesEngine();
 				DebugEngine();
+				returnStructure();
 				
 				preDraggingObj = moduls[draggingElementId];
 				draggingObject = null;
@@ -444,7 +445,9 @@ function OnGUI() {
 	// Screen Shot Button
 	else if(GUI.Button(Rect((btnW+1)*3,0,btnW,btnW),GUITextures.tex_export())) {
 		//Application.CaptureScreenshot("Screenshot.png",1);
+		guiState = "ids";
 		BillofMaterials();
+		
 	}
 	
 	// Delete Button
@@ -656,6 +659,23 @@ function OnGUI() {
 	
 	GUI.EndGroup ();
 	
+	if(guiState == "ids") {
+		GUI.skin.label.normal.textColor = Color.gray;
+		GUI.skin.label.fontSize = 32;
+		
+		for(var g:int = 0; g < moduls.Count; g++) {
+			var screenPos : Vector3 = camera.WorldToScreenPoint (moduls[g].transform.position);
+			GUI.Label(Rect(screenPos.x,Screen.height-screenPos.y,30,30),(g+1).ToString());
+		}
+		
+		
+		
+		
+	}
+	
+	GUI.skin.label.normal.textColor = Color.white;
+		GUI.skin.label.fontSize = 12;
+		
 	Notification.message(guiNotification);
 	// Welcome Screen
 	initSetRoomSize();
@@ -1471,7 +1491,9 @@ function DebugEngine(){
 
 	Notification.notiBool[0] = "0";
 	Notification.notiBool[1] = "0";
-	
+	Notification.notiBool[2] = "0";
+	Notification.notiBool[3] = "0";
+	Notification.notiBool[4] = "0";
 	
 	var myX	: int;
 	var myY : int;
@@ -1630,8 +1652,141 @@ function DebugEngine(){
 			}
 		}
 	}
+	
+	// Rule 2 : ENDS HERE
+	
+	// Rule 3 : ED EX’in ÜSTÜNE GELEBİLİR. TAM TERSİ OLAMAZ. = EX ED'in üstüne gelemez
+	
+	for(var p : int = 0; p < parameters.Count; p++){
 
 
+		if(parameters[p]["elementType"] == "ED"){
+		
+			for(var r : int = 0; r < parameters.Count; r++){
+			
+				if(parameters[r]["elementType"] == "EX"){
+			
+					//ED kutusu
+						
+					myX = parameters[p]["x"];
+					myY = parameters[p]["y"];
+					myH = parameters[p]["h"];
+					myW = parameters[p]["w"];
+					
+					//Başka EX kutusu
+						
+					otherX = parameters[r]["x"];
+					otherY = parameters[r]["y"];
+					otherH = parameters[r]["h"];
+					otherW = parameters[r]["w"];
+					
+					if(Mathf.Min(otherX,myX) == otherX){
+							//EX ED kutusunun solunda
+							deltaW = otherW;
+						
+					}else{
+							//EX ED kutusunun sağında
+							deltaW = myW;
+					}
+					
+					if(//conditions
+					
+						(otherY - myY == myH) //EX kutusu yukarıda 
+						
+						&&
+						
+						(Mathf.Abs(otherX - myX) < deltaW) // arasında
+						
+						
+						){
+							
+							Debug.Log("3 : EX ED'in üstüne gelemez");
+							Notification.notiBool[2] = "1";
+							break;
+						}else{
+							print("sorun yok abi");
+						}
+			
+				}
+			}
+		}	
+	}
+
+	// Rule 3 : ENDS HERE
+	
+	// Rule 4 : ED YERDE OLAMAZ.
+	for(var k : int = 0; k < parameters.Count; k++){
+
+
+		if(parameters[k]["elementType"] == "ED"){
+		
+			myX = parameters[k]["x"];
+			myY = parameters[k]["y"];
+			myH = parameters[k]["h"];
+			myW = parameters[k]["w"];
+					
+			
+			if(myY - myH * 0.5 == 0){
+				Debug.Log("4 : ED YERDE OLAMAZ");
+				Notification.notiBool[3] = "1";
+			
+			}else{
+				
+			}
+		}
+	}
+	// Rule 4 : ENDS HERE.
+	
+	// Rule 5 : EX DUVARDA OLAMAZ (ASILAMAZ). HER ZAMAN YERDE OLMALI
+	// Rule 6 : Yerdeki tüm ürünler (EX) bir baza seçeneğine sahip olmak zorunda.
+	
+	for(var v : int = 0; v < parameters.Count; v++){
+
+
+		if(parameters[v]["elementType"] == "EX"){
+		
+			myX = parameters[v]["x"];
+			myY = parameters[v]["y"];
+			myH = parameters[v]["h"];
+			myW = parameters[v]["w"];
+			
+			var baseHeight : int = parameters[v]["baseHeight"];
+			
+			if(myY - myH * 0.5 - baseHeight> 0){
+				//Debug.Log("5 : EX DUVARDA OLAMAZ (ASILAMAZ). HER ZAMAN YERDE OLMALI");
+				Notification.notiBool[4] = "1";
+			
+			}else{
+			/*
+				//EX YERDE DEMEK
+				Notification.notiBool[4] = "0";
+				if(baseHeight <= 0){
+					guiState = "modul_edit";
+					
+					if(isGUIClosed) {
+						showInspector();
+						isGUIClosed = false;
+					}
+					
+					Debug.Log("6 : Yerdeki tüm ürünler (EX) bir baza seçeneğine sahip olmak zorunda.");
+					Notification.closeNotification();
+					Notification.notiBool[5] = "1";
+					
+					
+				}else{
+					Notification.notiBool[5] = "0";
+				}
+				
+				*/
+			}
+			
+			
+		}
+			
+	}
+		
+	// Rule 5 : ENDS HERE.
+		
 }
 
 function HighlightErrorsEngine(errorCode : int){
@@ -1647,6 +1802,26 @@ function HighlightErrorsEngine(errorCode : int){
 			var otherW : int;
 			
 			var deltaW : int;
+			var allChildren;
+			
+			for(var c : int = 0; c < parameters.Count; c++){
+			
+				allChildren = moduls[c].GetComponentsInChildren(Transform);
+								
+				for (var child : Transform in allChildren) {
+					// do whatever with child transform here
+					if(child.renderer != null){
+									
+						child.renderer.material.color = Color.white;
+								   
+					}
+				}
+			
+			
+			}
+			
+			
+			
 	switch(errorCode){
 	
 	case 0:
@@ -1698,7 +1873,7 @@ function HighlightErrorsEngine(errorCode : int){
 							){
 								print("üstüsteyiz highlighted");
 								
-								var allChildren = moduls[i].GetComponentsInChildren(Transform);
+								allChildren = moduls[i].GetComponentsInChildren(Transform);
 								
 								for (var child : Transform in allChildren) {
 									// do whatever with child transform here
@@ -1775,9 +1950,9 @@ function HighlightErrorsEngine(errorCode : int){
 						
 						){
 							//Debug.Log("2 : ED ust uste olmaaaaz");
-							var allChildren2 = moduls[m].GetComponentsInChildren(Transform);
+							allChildren = moduls[m].GetComponentsInChildren(Transform);
 									
-									for (var child : Transform in allChildren2) {
+									for (var child : Transform in allChildren) {
 										// do whatever with child transform here
 										if(child.renderer != null){
 										
@@ -1798,11 +1973,264 @@ function HighlightErrorsEngine(errorCode : int){
 		}
 	break;
 	
+	case 2:
+	
+		// Rule 3 : ED EX’in ÜSTÜNE GELEBİLİR. TAM TERSİ OLAMAZ. = EX ED'in üstüne gelemez
+		
+		for(var p : int = 0; p < parameters.Count; p++){
+
+
+			if(parameters[p]["elementType"] == "ED"){
+			
+				for(var r : int = 0; r < parameters.Count; r++){
+				
+					if(parameters[r]["elementType"] == "EX"){
+				
+						//ED kutusu
+							
+						myX = parameters[p]["x"];
+						myY = parameters[p]["y"];
+						myH = parameters[p]["h"];
+						myW = parameters[p]["w"];
+						
+						//Başka EX kutusu
+							
+						otherX = parameters[r]["x"];
+						otherY = parameters[r]["y"];
+						otherH = parameters[r]["h"];
+						otherW = parameters[r]["w"];
+						
+						if(Mathf.Min(otherX,myX) == otherX){
+								//EX ED kutusunun solunda
+								deltaW = otherW;
+							
+						}else{
+								//EX ED kutusunun sağında
+								deltaW = myW;
+						}
+						
+						if(//conditions
+						
+							(otherY - myY == myH) //EX kutusu yukarıda 
+							
+							&&
+							
+							(Mathf.Abs(otherX - myX) < deltaW) // arasında
+							
+							
+							){
+								
+								//Debug.Log("2 : ED ust uste olmaaaaz");
+								
+								
+								allChildren = moduls[p].GetComponentsInChildren(Transform);
+									
+								for (var child : Transform in allChildren) {
+										// do whatever with child transform here
+										if(child.renderer != null){
+										
+											child.renderer.material.color = Color.red;
+									   
+										}
+								}
+								
+								allChildren = moduls[r].GetComponentsInChildren(Transform);
+									
+								for (var child : Transform in allChildren) {
+										// do whatever with child transform here
+										if(child.renderer != null){
+										
+											child.renderer.material.color = Color.red;
+									   
+										}
+								}
+								break;
+							}else{
+								print("sorun yok abi");
+							}
+				
+					}
+				}
+			}	
+		}
+
+		// Rule 3 : ENDS HERE
+	break;
+	
+	case 3:
+		// Rule 4 : ED YERDE OLAMAZ.
+		
+		for(var k : int = 0; k < parameters.Count; k++){
+
+
+			if(parameters[k]["elementType"] == "ED"){
+			
+				myX = parameters[k]["x"];
+				myY = parameters[k]["y"];
+				myH = parameters[k]["h"];
+				myW = parameters[k]["w"];
+						
+				
+				if(myY - myH * 0.5 == 0){
+				
+					allChildren = moduls[k].GetComponentsInChildren(Transform);
+									
+					for (var child : Transform in allChildren) {
+							// do whatever with child transform here
+							if(child.renderer != null){
+							
+								child.renderer.material.color = Color.red;
+						   
+							}
+					}
+				
+				}else{
+					
+				}
+			}
+		}
+		// Rule 4 : ENDS HERE.
+	break;
+	
+	case 4:
+		// Rule 5 : EX DUVARDA OLAMAZ (ASILAMAZ). HER ZAMAN YERDE OLMALI
+		// Rule 6 : Yerdeki tüm ürünler (EX) bir baza seçeneğine sahip olmak zorunda.
+		
+		for(var v : int = 0; v < parameters.Count; v++){
+
+
+			if(parameters[v]["elementType"] == "EX"){
+			
+				myX = parameters[v]["x"];
+				myY = parameters[v]["y"];
+				myH = parameters[v]["h"];
+				myW = parameters[v]["w"];
+				
+				var baseHeight : int = parameters[v]["baseHeight"];
+				
+				if(myY - myH * 0.5 - baseHeight> 0){
+					//Debug.Log("5 : EX DUVARDA OLAMAZ (ASILAMAZ). HER ZAMAN YERDE OLMALI");
+					allChildren = moduls[v].GetComponentsInChildren(Transform);
+									
+					for (var child : Transform in allChildren) {
+							// do whatever with child transform here
+							if(child.renderer != null){
+							
+								child.renderer.material.color = Color.red;
+						   
+							}
+					}
+				
+				}else{
+				/*
+					//EX YERDE DEMEK
+					Notification.notiBool[4] = "0";
+					if(baseHeight <= 0){
+						guiState = "modul_edit";
+						
+						if(isGUIClosed) {
+							showInspector();
+							isGUIClosed = false;
+						}
+						
+						Debug.Log("6 : Yerdeki tüm ürünler (EX) bir baza seçeneğine sahip olmak zorunda.");
+						Notification.closeNotification();
+						Notification.notiBool[5] = "1";
+						
+						
+					}else{
+						Notification.notiBool[5] = "0";
+					}
+					
+					*/
+				}
+				
+				
+			}
+				
+		}
+			
+		// Rule 5 : ENDS HERE.
+	break;
 	}
 
 }
 
-function RulesEngine(){
+function returnStructure(){
+
+			var myX	: int;
+			var myY : int;
+			var myH : int;
+			var myW : int;
+			
+			var otherX	: int;
+			var otherY : int;
+			var otherH : int;
+			var otherW : int;
+			
+			
+			
+			for(var i : int = 0; i < parameters.Count; i++){
+			
+				var boxRight = false;
+				var boxLeft = false;
+				var boxStructure : String = "";
+			
+				for(var j : int = 0; j < parameters.Count; j++){
+				
+					if(i !=j){
+				
+						//KUTU
+							
+						myX = parameters[i]["x"];
+						myY = parameters[i]["y"];
+						myH = parameters[i]["h"];
+						myW = parameters[i]["w"];
+						
+						//Başka KUTU
+							
+						otherX = parameters[j]["x"];
+						otherY = parameters[j]["y"];
+						otherH = parameters[j]["h"];
+						otherW = parameters[j]["w"];
+						
+						
+						
+						if(myX < otherX && otherX - myX == myW && myY == otherY){
+							print("benim sağımda kutu var");
+							boxRight = true;
+
+						}
+						
+						if(myX > otherX && myX - otherX == otherW && myY == otherY){
+					        print("benim solumda kutu var");
+							boxLeft = true;
+						}
+						
+					}
+				}
+				
+				if(boxRight){
+					boxStructure = "B";
+				}
+				if(boxLeft){
+					boxStructure = "C";
+				}
+				if(boxRight && boxLeft){
+					boxStructure = "D";
+				}
+				if(!boxRight && !boxLeft){
+					boxStructure = "A";
+				}
+				
+				print(boxStructure);
+			}
+			
+			
+
+}
+
+/* function RulesEngine(){
 
 		var othersX	: int;
 		var othersY : int;
@@ -1873,7 +2301,7 @@ function RulesEngine(){
 			}
 		
 		}
-		/*
+		
 		// Rule 2 : ED ÜST ÜSTE OLMAZ
 		
 		if(parameters[draggingElementId]["elementType"] == "ED"){
@@ -2091,5 +2519,5 @@ function RulesEngine(){
 			}
 		
 		}
-		*/
-}
+		
+} */

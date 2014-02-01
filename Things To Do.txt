@@ -5,11 +5,9 @@
 
 3) Pdf yaratma alternatifi
 
-4) Hangi kutu hangi hata veriyor düzenlenecek (s & alp)
-
 5) Kombinasyonun birimlerine dair ölçüler katalogdaki gibi kurgulanacak, Index numaralarý ve ölçeklendirme (alp)
 
-6) Kurallarý gözden geçirmek (s)
+6) Yere yerleþene baza seçeneði
 
 7) A,B,C ayrýmý (s)
 
@@ -18,3 +16,5 @@
 9) TV askýsý (s)
 
 10) debugging
+
+11) EditorUtility.SaveFilePanel iptalleri
