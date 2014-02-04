@@ -39,6 +39,7 @@ static function checkNotiCount() {
 }
 
 static function showNotificationList() {
+	GUI.skin.button.fontSize = 10;
 	for(var i:int = 0; i < notiBool.Count; i++) {
 		if(notiBool[i] == "1") {
 			var str:String = notiArr[i];
@@ -48,7 +49,7 @@ static function showNotificationList() {
 			notCount++;
 		}
 	}
-	
+	GUI.skin.button.fontSize = 12;
 	notCount = 0;
 
 }

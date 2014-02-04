@@ -3,30 +3,7 @@
     <Element>
       <elementId>0</elementId>
       <elementType>EX</elementType>
-      <Front>
-      </Front>
-      <FrontUp>textures/black</FrontUp>
-      <FrontDown>textures/black</FrontDown>
-      <Back>textures/black</Back>
-      <Left>textures/black</Left>
-      <Right>textures/black</Right>
-      <Bottom>textures/black</Bottom>
-      <Top>textures/black</Top>
-      <Hole>0</Hole>
-      <nFrontFace>2</nFrontFace>
-      <w>130</w>
-      <h>40</h>
-      <depth>50</depth>
-      <x>-245</x>
-      <y>28</y>
-      <isRigid>True</isRigid>
-      <baseHeight>8</baseHeight>
-      <code>ex10--AMZ</code>
-    </Element>
-    <Element>
-      <elementId>1</elementId>
-      <elementType>EX</elementType>
-      <Front>textures/200s</Front>
+      <Front>textures/H3375_ST22</Front>
       <FrontUp>textures/200s</FrontUp>
       <FrontDown>textures/200s</FrontDown>
       <Back>textures/200s</Back>
@@ -35,15 +12,59 @@
       <Bottom>textures/200s</Bottom>
       <Top>textures/200s</Top>
       <Hole>1</Hole>
-      <nFrontFace>1</nFrontFace>
+      <nFrontFace>2</nFrontFace>
       <w>130</w>
       <h>40</h>
       <depth>50</depth>
-      <x>-115</x>
-      <y>28</y>
+      <x>-80</x>
+      <y>20</y>
       <isRigid>True</isRigid>
-      <baseHeight>8</baseHeight>
-      <code>ex11--WHT</code>
+      <baseHeight>2</baseHeight>
+      <code>ex11- WHT - B</code>
+    </Element>
+    <Element>
+      <elementId>1</elementId>
+      <elementType>ED</elementType>
+      <Front>textures/black</Front>
+      <FrontUp>textures/200s</FrontUp>
+      <FrontDown>textures/200s</FrontDown>
+      <Back>textures/black</Back>
+      <Left>textures/black</Left>
+      <Right>textures/black</Right>
+      <Bottom>textures/black</Bottom>
+      <Top>textures/black</Top>
+      <Hole>0</Hole>
+      <nFrontFace>1</nFrontFace>
+      <w>65</w>
+      <h>40</h>
+      <depth>36</depth>
+      <x>50</x>
+      <y>60</y>
+      <isRigid>True</isRigid>
+      <baseHeight>0</baseHeight>
+      <code>ed50- AMZ - B</code>
+    </Element>
+    <Element>
+      <elementId>2</elementId>
+      <elementType>EX</elementType>
+      <Front>textures/black</Front>
+      <FrontUp>textures/200s</FrontUp>
+      <FrontDown>textures/200s</FrontDown>
+      <Back>textures/black</Back>
+      <Left>textures/black</Left>
+      <Right>textures/black</Right>
+      <Bottom>textures/black</Bottom>
+      <Top>textures/black</Top>
+      <Hole>0</Hole>
+      <nFrontFace>1</nFrontFace>
+      <w>65</w>
+      <h>40</h>
+      <depth>50</depth>
+      <x>-145</x>
+      <y>20</y>
+      <isRigid>True</isRigid>
+      <baseHeight>0</baseHeight>
+      <code>ex20- AMZ - B</code>
     </Element>
   </Elements>
 </Combination>

@@ -116,6 +116,7 @@ private var alphaRoomSize:float = 0.85f;
 private var showGrid : boolean = false;
 static var lineMaterial : Material;
 
+private var globalBoxStructure:String;
 
 function Start () {
 	
@@ -469,6 +470,11 @@ function OnGUI() {
 			openInspector();
 	}
 	
+	// Reset camera position
+	else if(GUI.Button(Rect((btnW+1)*9,0,btnW,btnW),GUITextures.tex_reset())){
+		resetCameraPos();
+	}
+	
 	// Set Room Size
 	else if(GUI.Button(Rect((btnW+1)*7,0,btnW,btnW),GUITextures.tex_room_size())){
 		clearAllHighlightedModuls();
@@ -501,10 +507,7 @@ function OnGUI() {
 	}
 	
 	
-	// Reset camera position
-	if(GUI.Button(Rect((btnW+1)*9,0,btnW,btnW),GUITextures.tex_reset())){
-		resetCameraPos();
-	}
+	
 	
 
 		
@@ -523,23 +526,14 @@ function OnGUI() {
 	
 	
 	if(guiState == "default") {
-		// Modul Info
-		GUI.Label(Rect(ml,ml,w,20),"Element Type");
-		GUI.Label(Rect(ml,ml+tfH,w,20),"Element Size");
 		
 		
 		var startx:int = 122;
-					
-		GUI.Label(Rect(ml+startx,ml,w,20),": "+ elementType);
-		GUI.Label(Rect(ml+startx,ml+tfH,w,20),": "+ elementSize);
-		
-		//GUI.Label(Rect(ml,ml+tfH*10+mt,w-ml*2,20),"Add Element");
-		
+	
 		// Select Modul to Add Screen
-		scrollPosition = GUI.BeginScrollView (Rect (ml,ml+tfH*2+5+mt,w-12,Screen.height - 20*2-ml),
+		scrollPosition = GUI.BeginScrollView (Rect (ml,ml,w-12,Screen.height - ml - 5),
 		scrollPosition, Rect (0, 0, 0, (64+ml)*(thumbs.Count-1)));	
 		
-		/*if(GUI.Button(Rect( 0,0,128,64 ),m1)) {addM1Box();draggingObject = moduls[moduls.Count-1];}*/
 		
 		GUI.skin.button.normal.background  = GUITextures.load_thumb_bg(); 
 		for(var t:int=0; t < thumbs.Count; t++) {
@@ -560,7 +554,7 @@ function OnGUI() {
 	*/
 	
 	// Change Material GUI
-	else if(guiState == "modul_edit" && draggingElementId > -1 && moduls.Count > 0) {
+	if(guiState == "modul_edit" && draggingElementId > -1 && moduls.Count > 0) {
 		//resetGUIParams();
 		
 		var tex:String = "wall";
@@ -571,7 +565,7 @@ function OnGUI() {
 		GUI.Label(Rect(ml,ml,w,20),"Element Type");
 		GUI.Label(Rect(ml,ml+tfH,w,20),"Element Size");
 					
-		GUI.Label(Rect(ml+122,ml,w,20),": "+ elementType);
+		GUI.Label(Rect(ml+122,ml,w,20),": "+ elementType  + " - " + globalBoxStructure);
 		GUI.Label(Rect(ml+122,ml+tfH,w,20),": "+ elementSize);
 		
 		GUI.Label(Rect(ml,ml+tfH*2,w,tfH),"Click on Cabinet and select a texture");
@@ -724,32 +718,32 @@ function setTextures(tex:String,coverCount:int,cType:String) {
 	cType = cType.Substring(0,5);
 	switch(decor) {
 		case "textures/black":
-		parameters[draggingElementId]["code"] = cType + "-AMZ" ;
+		parameters[draggingElementId]["code"] = cType + " AMZ"  + " - " + globalBoxStructure;
 		break;
 		
 		case "textures/regblack":
-		parameters[draggingElementId]["code"] = cType + "-BLK" ;
+		parameters[draggingElementId]["code"] = cType + " BLK"  + " - " + globalBoxStructure;
 		break;
 		
 		case "textures/capucino":
-		parameters[draggingElementId]["code"] = cType + "-CPN" ;
+		parameters[draggingElementId]["code"] = cType + " CPN"  + " - " + globalBoxStructure;
 		break;
 		
 		case "textures/H3375_ST22":
-		parameters[draggingElementId]["code"] = cType + "-OAK" ;
+		parameters[draggingElementId]["code"] = cType + " OAK"  + " - " + globalBoxStructure;
 		break;
 		
 		case "textures/200s":
-		parameters[draggingElementId]["code"] = cType + "-WHT" ;
+		parameters[draggingElementId]["code"] = cType + " WHT"  + " - " + globalBoxStructure;
 		break;
 		
 		case "textures/graphit":
-		parameters[draggingElementId]["code"] = cType + "-GRP" ;
+		parameters[draggingElementId]["code"] = cType + " GRP"  + " - " + globalBoxStructure;
 		break;
 		
 	}
 	
-elementType = parameters[draggingElementId]["code"];
+	elementType = parameters[draggingElementId]["code"];
 	
 	
 	setFrontUp = setFrontDown = setLeft = setRight = setBottom = setTop = setBack = setFront = false;
@@ -2197,13 +2191,13 @@ function returnStructure(){
 						
 						
 						if(myX < otherX && otherX - myX == myW && myY == otherY){
-							print("benim sağımda kutu var");
+							//print("benim sağımda kutu var");
 							boxRight = true;
 
 						}
 						
 						if(myX > otherX && myX - otherX == otherW && myY == otherY){
-					        print("benim solumda kutu var");
+					        //print("benim solumda kutu var");
 							boxLeft = true;
 						}
 						
@@ -2224,6 +2218,8 @@ function returnStructure(){
 				}
 				
 				print(boxStructure);
+				
+				globalBoxStructure = boxStructure;
 			}
 			
 			
