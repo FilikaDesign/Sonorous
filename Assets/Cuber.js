@@ -199,6 +199,8 @@ function Start () {
 	
 	textures = ["textures/200s", "textures/black", "textures/capucino", "textures/graphit", "textures/H3375_ST22", "textures/regblack"];
 	welcomeRect.alpha = 0;
+	
+	
 }
 
 /* ADD MODUL METHOD */
@@ -255,9 +257,12 @@ function changeBaseAll(baseH : int){
 		
 			var mG : GameObject = moduls[i];			
             GameObject.Find(mG.name).SendMessage("changeBase",baseH);
+			
 		}
 			
 	}
+	
+	DebugEngine();
 
 
 }
@@ -607,6 +612,7 @@ function OnGUI() {
 				
 				if(variableScript.baseHeight == 0){
 					GameObject.Find(preDraggingObj.name).SendMessage("createBase",baseAllH);
+					DebugEngine();
 					wall.transform.position.y = -baseAllH + hh*0.5;
 					floor.transform.position.y = -baseAllH -1 ;	
 				    //parameters[draggingElementId]["y"] = 2 + preDraggingObj.transform.localScale.y*0.5;
@@ -629,6 +635,7 @@ function OnGUI() {
 				
 				if(variableScript.baseHeight == 0){
 					GameObject.Find(preDraggingObj.name).SendMessage("createBase",baseAllH);
+					DebugEngine();
 					wall.transform.position.y = -baseAllH + hh*0.5;
 					floor.transform.position.y = -baseAllH - 1;	
 					//parameters[draggingElementId]["y"] = 8 + preDraggingObj.transform.localScale.y*0.5;
@@ -653,6 +660,15 @@ function OnGUI() {
 	
 	GUI.EndGroup ();
 	
+	
+	GUI.skin.label.normal.textColor = Color.gray;
+		GUI.skin.label.fontSize = 32;
+		
+		for(var g:int = 0; g < moduls.Count; g++) {
+			var screenPos : Vector3 = camera.WorldToScreenPoint (moduls[g].transform.position);
+			GUI.Label(Rect(screenPos.x,Screen.height-screenPos.y,30,30),(g+1).ToString());
+		}
+	/*
 	if(guiState == "ids") {
 		GUI.skin.label.normal.textColor = Color.gray;
 		GUI.skin.label.fontSize = 32;
@@ -666,7 +682,7 @@ function OnGUI() {
 		
 		
 	}
-	
+	*/
 	GUI.skin.label.normal.textColor = Color.white;
 		GUI.skin.label.fontSize = 12;
 		
@@ -1751,7 +1767,7 @@ function DebugEngine(){
 				Notification.notiBool[4] = "1";
 			
 			}else{
-			/*
+			
 				//EX YERDE DEMEK
 				Notification.notiBool[4] = "0";
 				if(baseHeight <= 0){
@@ -1762,7 +1778,7 @@ function DebugEngine(){
 						isGUIClosed = false;
 					}
 					
-					Debug.Log("6 : Yerdeki tüm ürünler (EX) bir baza seçeneğine sahip olmak zorunda.");
+					//Debug.Log("6 : Yerdeki tüm ürünler (EX) bir baza seçeneğine sahip olmak zorunda.");
 					Notification.closeNotification();
 					Notification.notiBool[5] = "1";
 					
@@ -1771,7 +1787,7 @@ function DebugEngine(){
 					Notification.notiBool[5] = "0";
 				}
 				
-				*/
+				
 			}
 			
 			
