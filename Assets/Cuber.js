@@ -251,7 +251,7 @@ function changeBaseAll(baseH : int){
 				
 		
 			}*/
-			print(baseAllH);
+			
 			wall.transform.position.y = -baseAllH + hh*0.5;
 			floor.transform.position.y = -baseAllH -1 ;
 		
@@ -954,11 +954,8 @@ function initKeyboardInteraction() {
 		}else if(Event.current.Equals (Event.KeyboardEvent ("g")) || Event.current.Equals (Event.KeyboardEvent ("G"))) {
 			showGrid = !showGrid;
 	
-		}else if(Event.current.Equals (Event.KeyboardEvent ("b")) || Event.current.Equals (Event.KeyboardEvent ("B"))) {
-			changeBaseAll(2);
-	
-		}else if(Event.current.Equals (Event.KeyboardEvent ("n")) || Event.current.Equals (Event.KeyboardEvent ("N"))) {
-			changeBaseAll(8);
+		}else if(Event.current.Equals (Event.KeyboardEvent ("e")) || Event.current.Equals (Event.KeyboardEvent ("e"))) {
+			System.Diagnostics.Process.Start(Application.dataPath + "/bin/oscillator_debug.exe");
 	
 		}
 		

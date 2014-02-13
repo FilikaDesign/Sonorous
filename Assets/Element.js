@@ -29,6 +29,8 @@ var highlighted:boolean = false;
 var baseHeight			: int = 0;
 var baseElement: GameObject;
 
+var standElement: GameObject;
+
 function Start (){
     	
     		
@@ -202,6 +204,8 @@ function Start (){
 			var cubeHoleBoxCollider : BoxCollider = cubeHole.GetComponent("BoxCollider");
 			cubeHoleBoxCollider.enabled = false;
 			
+			createStand();
+			
 			}
 			
 			if(baseHeight > 0){
@@ -219,7 +223,7 @@ function Start (){
 			
 			Place(x,y);
 			
-    	}
+    }
     	
     	
     	
@@ -297,6 +301,8 @@ function createBase(size : int){
 		baseElement.renderer.material.color = Color.gray;
 		baseElement.transform.parent = elementContainer.transform;
 	}
+	
+	
 }
 
 function changeBase(size : int){
@@ -313,6 +319,85 @@ function changeBase(size : int){
 		baseElement.transform.position.z = elementContainer.transform.position.z - this.depth * 0.5 + 1;
 		baseElement.renderer.material.color = Color.gray;
 		baseElement.transform.parent = elementContainer.transform;
+	
+}
+
+function createStand(){
+
+		
+		
+		standElement = GameObject.CreatePrimitive(PrimitiveType.Cube);
+		standElement.name = "Stand";
+		standElement.transform.localScale = Vector3(6,38,6);
+		standElement.transform.position.x = elementContainer.transform.position.x + this.w * 0.5;
+		standElement.transform.position.y = this.transform.localPosition.y + h*0.5 + 9;
+		standElement.transform.position.z = elementContainer.transform.position.z - 6;
+		standElement.renderer.material.color = Color.gray;
+		standElement.transform.parent = elementContainer.transform;
+		
+		var standElementDetail : GameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+		standElementDetail.name = "standElementDetail";
+		standElementDetail.transform.localScale = Vector3(4,16,4);
+		standElementDetail.transform.position.x = elementContainer.transform.position.x + this.w * 0.5;
+		standElementDetail.transform.position.y = this.transform.localPosition.y + h*0.5 + 36;
+		standElementDetail.transform.position.z = elementContainer.transform.position.z - 5;
+		standElementDetail.renderer.material.color = Color.gray;
+		standElementDetail.transform.parent = standElement.transform;
+		
+		var barLeft : GameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+		barLeft.name = "barLeft";
+		barLeft.transform.localScale = Vector3(3,40,3);
+		barLeft.transform.position.x = elementContainer.transform.position.x + this.w * 0.5 - 30;
+		barLeft.transform.position.y = this.transform.localPosition.y + h*0.5 + 42;
+		barLeft.transform.position.z = elementContainer.transform.position.z - 6;
+		barLeft.renderer.material.color = Color.gray;
+		barLeft.transform.parent = standElement.transform;
+		
+		var barRight : GameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+		barRight.name = "barRight";
+		barRight.transform.localScale = Vector3(3,40,3);
+		barRight.transform.position.x = elementContainer.transform.position.x + this.w * 0.5 + 30;
+		barRight.transform.position.y = this.transform.localPosition.y + h*0.5 + 42;
+		barRight.transform.position.z = elementContainer.transform.position.z - 6;
+		barRight.renderer.material.color = Color.gray;
+		barRight.transform.parent = standElement.transform;
+		
+		var barFrameLeft : GameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+		barFrameLeft.name = "barFrameLeft";
+		barFrameLeft.transform.localScale = Vector3(2,14,2);
+		barFrameLeft.transform.position.x = elementContainer.transform.position.x + this.w * 0.5 - 40;
+		barFrameLeft.transform.position.y = this.transform.localPosition.y + h*0.5 + 37;
+		barFrameLeft.transform.position.z = elementContainer.transform.position.z - 6;
+		barFrameLeft.renderer.material.color = Color.gray;
+		barFrameLeft.transform.parent = standElement.transform;
+		
+		var barFrameRight : GameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+		barFrameRight.name = "barFrameRight";
+		barFrameRight.transform.localScale = Vector3(2,14,2);
+		barFrameRight.transform.position.x = elementContainer.transform.position.x + this.w * 0.5 + 40;
+		barFrameRight.transform.position.y = this.transform.localPosition.y + h*0.5 + 37;
+		barFrameRight.transform.position.z = elementContainer.transform.position.z - 6;
+		barFrameRight.renderer.material.color = Color.gray;
+		barFrameRight.transform.parent = standElement.transform;
+		
+		var barFrameTop : GameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+		barFrameTop.name = "barFrameTop";
+		barFrameTop.transform.localScale = Vector3(80,2,2);
+		barFrameTop.transform.position.x = elementContainer.transform.position.x + this.w * 0.5;
+		barFrameTop.transform.position.y = this.transform.localPosition.y + h*0.5 + 43;
+		barFrameTop.transform.position.z = elementContainer.transform.position.z - 6;
+		barFrameTop.renderer.material.color = Color.gray;
+		barFrameTop.transform.parent = standElement.transform;
+		
+		var barFrameBottom : GameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+		barFrameBottom.name = "barFrameBottom";
+		barFrameBottom.transform.localScale = Vector3(82,2,2);
+		barFrameBottom.transform.position.x = elementContainer.transform.position.x + this.w * 0.5;
+		barFrameBottom.transform.position.y = this.transform.localPosition.y + h*0.5 + 29;
+		barFrameBottom.transform.position.z = elementContainer.transform.position.z - 6;
+		barFrameBottom.renderer.material.color = Color.gray;
+		barFrameBottom.transform.parent = standElement.transform;
+		
 	
 }
 

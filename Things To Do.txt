@@ -5,14 +5,12 @@
 
 3) Pdf yaratma alternatifi
 
-5) Kombinasyonun birimlerine dair ölçüler katalogdaki gibi kurgulanacak, Index numaralarý ve ölçeklendirme (alp)
+4) Kombinasyonun birimlerine dair ölçüler katalogdaki gibi kurgulanacak, Index numaralarý ve ölçeklendirme (alp)
 
-6) Baza beyaz kalýyor
+5) Baza beyaz kalýyor
 
-7) ED ÜRÜNLERÝ OMUZ HÝZASI VE ÜZERÝNDE “U”, ALTINDA ÝSE “F” KAPAK SEÇENEÐÝNE SAHÝP OLMALI.
+6) ED ÜRÜNLERÝ OMUZ HÝZASI VE ÜZERÝNDE “U”, ALTINDA ÝSE “F” KAPAK SEÇENEÐÝNE SAHÝP OLMALI.
 
-9) TV askýsý (s)
+7) debugging
 
-10) debugging
-
-11) EditorUtility.SaveFilePanel iptalleri
+8) EditorUtility.SaveFilePanel iptalleri
