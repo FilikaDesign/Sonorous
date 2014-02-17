@@ -39,24 +39,24 @@ public class pdfMaker : MonoBehaviour {
 		
        
 		Document doc = new Document();
-		//try
+		try
 
-        //{
+        {
 
             PdfWriter.GetInstance(doc, new FileStream(Application.dataPath + "/" + pdfName + ".pdf", FileMode.Create ));
 			
-        //}
+        }
 
-        //catch(System.Exception e)
+        catch(System.Exception e)
 
-        //{
+        {
 
-          // print(e.ToString());
+          print(e.ToString());
 
-        //}  
+        }  
 		
 		
-		//string my = Application.dataPath + "/" + pdfName + ".png";
+		print(Application.dataPath);
 		
 		
 		doc.Open();
@@ -66,8 +66,9 @@ public class pdfMaker : MonoBehaviour {
 		
 		
 		//doc.Add(gif);
-		//Image mark;// = Image.GetInstance(Application.dataPath + "/Test.png");
-		
+		Image mark = Image.GetInstance(Application.dataPath + "/Test.png");
+		//Image ImageOne = new Bitmap(Application.dataPath + "/" + pdfName + ".png");
+		doc.Add(mark);
 		
 		
   
