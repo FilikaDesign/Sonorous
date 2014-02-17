@@ -54,8 +54,12 @@
      <Compile Include="Assets\md5functions.js" />
      <Compile Include="Assets\snippets.js" />
      <None Include="Assets\XmlDocs\Save.xml" />
+     <None Include="Assets\plugins\iTextSharp.xml" />
      <None Include="Assets\XmlDocs\Save copy.xml" />
      <None Include="Assets\plugins\iTween\ReadMe!\ReadMe!.txt" />
+ <Reference Include="itextsharp">
+ <HintPath>Assets\plugins\itextsharp.dll</HintPath>
+ </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp-firstpass-vs.csproj">

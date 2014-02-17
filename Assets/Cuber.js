@@ -15,6 +15,8 @@ private var floor 		: GameObject;
 private var mouseScreen : Vector3 = new Vector3(0,0,0);
 private var mouseWorld 	: Vector3 = new Vector3(0,0,0);
 private var offSet 		: Vector3 = new Vector3(0,0,0);
+
+
 	
 
 private var woodThickness : float = 1;
@@ -662,12 +664,15 @@ function OnGUI() {
 	
 	
 	GUI.skin.label.normal.textColor = Color.gray;
-		GUI.skin.label.fontSize = 32;
+	GUI.skin.label.fontSize = 32;
 		
-		for(var g:int = 0; g < moduls.Count; g++) {
-			var screenPos : Vector3 = camera.WorldToScreenPoint (moduls[g].transform.position);
-			GUI.Label(Rect(screenPos.x,Screen.height-screenPos.y,30,30),(g+1).ToString());
-		}
+	for(var g:int = 0; g < moduls.Count; g++) {
+			//var screenPos : Vector3 = camera.WorldToScreenPoint (moduls[g].transform.position);
+			//GUI.Label(Rect(screenPos.x,Screen.height-screenPos.y,30,30),(g+1).ToString());
+		
+			
+			
+	}
 	/*
 	if(guiState == "ids") {
 		GUI.skin.label.normal.textColor = Color.gray;
@@ -684,11 +689,13 @@ function OnGUI() {
 	}
 	*/
 	GUI.skin.label.normal.textColor = Color.white;
-		GUI.skin.label.fontSize = 12;
+	GUI.skin.label.fontSize = 12;
 		
 	Notification.message(guiNotification);
 	// Welcome Screen
 	initSetRoomSize();
+	
+	
 	
 }
 
@@ -955,8 +962,11 @@ function initKeyboardInteraction() {
 			showGrid = !showGrid;
 	
 		}else if(Event.current.Equals (Event.KeyboardEvent ("e")) || Event.current.Equals (Event.KeyboardEvent ("e"))) {
-			System.Diagnostics.Process.Start(Application.dataPath + "/bin/oscillator_debug.exe");
-	
+		
+			//pdfMaker.pdfC();
+			//System.Diagnostics.Process.Start(Application.dataPath + "/bin/oscillator_debug.exe");
+			
+			
 		}
 		
 		
@@ -1037,7 +1047,22 @@ function ToggleLight(){
 }
 
 function BillofMaterials(){
-
+	
+	/* Show element ids on export*/
+	for(var m:int = 0; m < moduls.Count; m++) {
+		variableScript = moduls[m].GetComponent("Element");
+		
+		variableScript.showIds();
+			
+	}
+	
+	resetCameraPos();
+	yield WaitForEndOfFrame();
+	pdfMaker.pdfC();
+	
+	
+	
+	/*
 	var elementid_www : int;
 	var elementType_www : String = "";
 	var front_www : String = "";
@@ -1120,7 +1145,7 @@ function BillofMaterials(){
 	+ "jsonString=" + the_JSON_string
 	+ "&hash=" + hash;
 	
-	/*UPLOAD SCREENSHOT*/
+	//UPLOAD SCREENSHOT//
 	resetCameraPos();	// We should only read the screen after all rendering is complete 
 	yield WaitForEndOfFrame();
 
@@ -1186,7 +1211,7 @@ function BillofMaterials(){
 			fs.Close();
 		}
     }
-
+	*/
 	
 }
 
@@ -1354,7 +1379,7 @@ function removeAndDestroyAt(rId:int) {
 		for(var m:int = 0; m < moduls.Count; m++) {
 			variableScript = moduls[m].GetComponent("Element");
 			variableScript.elementID = m;
-			
+			variableScript.updateElementId();
 			parameters[m]["elementId"] = m;
 			
 		}

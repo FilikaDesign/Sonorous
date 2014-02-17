@@ -5,7 +5,7 @@
 
 3) Pdf yaratma alternatifi
 
-4) Kombinasyonun birimlerine dair ölçüler katalogdaki gibi kurgulanacak, Index numaralarý ve ölçeklendirme (alp)
+4) Kombinasyonun birimlerine dair ölçüler katalogdaki gibi kurgulanacak
 
 5) Baza beyaz kalýyor
 

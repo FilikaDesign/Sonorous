@@ -44,18 +44,10 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\DitheringShaders\Scripts\CreatePalette.cs" />
-     <None Include="Assets\DitheringShaders\Shaders\Normal-Unlit.shader" />
-     <None Include="Assets\DitheringShaders\Shaders\Normal-DiffuseSimple.shader" />
-     <None Include="Assets\DitheringShaders\Shaders\Cutout-UnlitSimple.shader" />
-     <None Include="Assets\DitheringShaders\Shaders\CGIncludes\Dithering.cginc" />
-     <None Include="Assets\resources\Shaders\Highlight.shader" />
-     <None Include="Assets\DitheringShaders\Shaders\Cutout-DiffuseSimple.shader" />
-     <None Include="Assets\DitheringShaders\Shaders\Normal-Diffuse.shader" />
+     <Compile Include="Assets\pdfMaker.cs" />
+     <None Include="Assets\XmlDocs\Save.xml" />
+     <None Include="Assets\XmlDocs\Save copy.xml" />
      <None Include="Assets\plugins\iTween\ReadMe!\ReadMe!.txt" />
-     <None Include="Assets\DitheringShaders\Shaders\Cutout-Diffuse.shader" />
-     <None Include="Assets\DitheringShaders\Shaders\Cutout-Unlit.shader" />
-     <None Include="Assets\DitheringShaders\Shaders\Normal-UnlitSimple.shader" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp-firstpass.csproj">

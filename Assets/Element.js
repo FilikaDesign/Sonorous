@@ -26,11 +26,13 @@ var params:Hashtable = {};
 
 var isColliding			: int = 0;
 var highlighted:boolean = false;
+var showId:boolean = false;
 var baseHeight			: int = 0;
 var baseElement: GameObject;
 
 var standElement: GameObject;
-
+var theText: GameObject;
+var textMesh:TextMesh;
 function Start (){
     	
     		
@@ -221,10 +223,41 @@ function Start (){
 					
 			}
 			
+			
+			if(!showId) {
+				theText = new GameObject();
+ 
+				textMesh = theText.AddComponent("TextMesh");
+				var meshRenderer = theText.AddComponent("MeshRenderer");
+			
+				//textMesh.GetComponent(TextMesh).text = (elementID + 1).ToString();
+				textMesh.GetComponent(TextMesh).fontSize = 90;
+				var newFont : Font = Resources.Load("Arial", typeof(Font)) as Font;
+			
+				textMesh.GetComponent(TextMesh).font = newFont;
+			
+				meshRenderer.GetComponent(MeshRenderer).renderer.material = newFont.material; 
+				
+			}
 			Place(x,y);
 			
-    }
-    	
+}
+
+function updateElementId() {
+	textMesh.GetComponent(TextMesh).text = (elementID + 1).ToString();
+}
+
+function showIds() {
+ 
+			
+	textMesh.GetComponent(TextMesh).text = (elementID + 1).ToString();
+						
+	theText.transform.position.x = elementContainer.transform.position.x + 5;
+	theText.transform.position.y = elementContainer.transform.position.y + h * 0.5 - 5;
+	theText.transform.position.z = -1 * depth + woodThickness*0.5;
+				
+	theText.transform.parent = elementContainer.transform;
+}
     	
     	
 function Place (_xPos : int, _yPos : int)
