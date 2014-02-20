@@ -19,9 +19,9 @@ private var offSet 		: Vector3 = new Vector3(0,0,0);
 
 	
 
-private var woodThickness : float = 1;
+public var woodThickness : float = 1;
 
-private var parameters : List.<Hashtable> = new List.<Hashtable>();
+public var parameters : List.<Hashtable> = new List.<Hashtable>();
 private var moduls : List.<GameObject> = new List.<GameObject>();
 private var thumbs : List.<Hashtable> = new List.<Hashtable>();
 private var thumbTypes : Array = new Array();
@@ -1053,11 +1053,16 @@ function BillofMaterials(){
 		variableScript = moduls[m].GetComponent("Element");
 		
 		variableScript.showIds();
-			
+		
+		// modul info to pdf maker
+		pdfMaker.setRows(parameters[m]);
 	}
 	
 	resetCameraPos();
 	yield WaitForEndOfFrame();
+	
+ 
+	
 	pdfMaker.pdfC();
 	
 	
