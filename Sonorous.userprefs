@@ -2,8 +2,13 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\plugins\pdfMaker.cs">
     <Files>
-      <File FileName="Assets\plugins\pdfMaker.cs" Line="245" Column="6" />
-      <File FileName="Assets\Cuber.js" Line="1" Column="1" />
+      <File FileName="Assets\plugins\pdfMaker.cs" Line="1" Column="19" />
+      <File FileName="Assets\Cuber.js" Line="1130" Column="23" />
+      <File FileName="Assets\Element.js" Line="253" Column="17" />
+      <File FileName="Assets\ModulsParams.js" Line="1" Column="1" />
+      <File FileName="Assets\ElementData.js" Line="1" Column="1" />
+      <File FileName="Assets\XmlDocs\Save.xml" Line="1" Column="1" />
+      <File FileName="Assets\snippets.js" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

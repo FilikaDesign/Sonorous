@@ -20,6 +20,9 @@ var w				: float;
 var h				: float;
 var depth			: float;
 
+var screenId		: int;
+
+
 var xPos				: int = 0;
 var yPos				: int = 0;
 var params:Hashtable = {};
@@ -244,13 +247,13 @@ function Start (){
 }
 
 function updateElementId() {
-	textMesh.GetComponent(TextMesh).text = (elementID + 1).ToString();
+	textMesh.GetComponent(TextMesh).text = (screenId + 1).ToString();
 }
 
 function showIds() {
  
 			
-	textMesh.GetComponent(TextMesh).text = (elementID + 1).ToString();
+	textMesh.GetComponent(TextMesh).text = (screenId + 1).ToString();
 						
 	theText.transform.position.x = elementContainer.transform.position.x + 5;
 	theText.transform.position.y = elementContainer.transform.position.y + h * 0.5 - 5;
@@ -258,6 +261,14 @@ function showIds() {
 				
 	theText.transform.parent = elementContainer.transform;
 }
+
+function hideIds() {
+ 
+			
+	textMesh.GetComponent(TextMesh).text = "";
+	
+}
+
     	
     	
 function Place (_xPos : int, _yPos : int)

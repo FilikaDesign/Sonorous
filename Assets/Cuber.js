@@ -118,8 +118,7 @@ private var alphaRoomSize:float = 0.85f;
 private var showGrid : boolean = false;
 static var lineMaterial : Material;
 
-private var globalBoxStructure:String;
-
+private var pdfGenerated:boolean = false;
 function Start () {
 	
 	//camera positioning
@@ -221,6 +220,7 @@ function addModul(modulParams:Hashtable, id:String) {
 
 	moduls.Add(eleman);
 	
+	  
 	
 
 }
@@ -399,6 +399,12 @@ function Update () {
 				
 				preDraggingObj = moduls[draggingElementId];
 				draggingObject = null;
+				
+				var textureF:String = parameters[draggingElementId]["Top"].ToString();
+				var fNum:int = parameters[draggingElementId]["nFrontFace"];
+				var codum:String = parameters[draggingElementId]["code"];
+	
+				setTextures(textureF,fNum ,codum,draggingElementId); 
 			}
 		}
 		
@@ -453,9 +459,11 @@ function OnGUI() {
 	// Screen Shot Button
 	else if(GUI.Button(Rect((btnW+1)*3,0,btnW,btnW),GUITextures.tex_export())) {
 		//Application.CaptureScreenshot("Screenshot.png",1);
-		guiState = "ids";
-		BillofMaterials();
-		
+		if(!pdfGenerated) {
+			pdfGenerated = true;
+			guiState = "ids";
+			BillofMaterials();
+		}
 	}
 	
 	// Delete Button
@@ -465,6 +473,7 @@ function OnGUI() {
 	
 	// Delete All Button
 	else if(GUI.Button(Rect((btnW+1)*5,0,btnW,btnW),GUITextures.tex_new_scene())) {
+		guiState = "default";
 		removeAndDestroy();
 	}
 	
@@ -569,10 +578,9 @@ function OnGUI() {
 		var num:int = parameters[draggingElementId]["nFrontFace"];
 		var minusFac:int = 0;
 		
-		GUI.Label(Rect(ml,ml,w,20),"Element Type");
+		GUI.Label(Rect(ml,ml,w,20),"Element Code");
 		GUI.Label(Rect(ml,ml+tfH,w,20),"Element Size");
-					
-		GUI.Label(Rect(ml+122,ml,w,20),": "+ elementType  + " - " + globalBoxStructure);
+		GUI.Label(Rect(ml+122,ml,w,20),": "+ elementType.ToUpper());
 		GUI.Label(Rect(ml+122,ml+tfH,w,20),": "+ elementSize);
 		
 		GUI.Label(Rect(ml,ml+tfH*2,w,tfH),"Click on Cabinet and select a texture");
@@ -585,13 +593,13 @@ function OnGUI() {
 			if(te % 2 == 0) {
 				if(GUI.Button(Rect( ml,lastY + tFloor*(2+120),(w-ml*2)*0.5,120 ),GUITextures.load_tex(textures[te]))) 
 				{	
-					setTextures(textures[te],num,cType);
+					setTextures(textures[te],num,cType,draggingElementId);
 				}
 				tFloor++;
 			}else {
 				if(GUI.Button(Rect( ml*2+((w-ml*2)*0.5), lastY + (tFloor-1)*(2+120),(w-ml*2)*0.5,120 ),GUITextures.load_tex(textures[te]))) 
 				{	
-					setTextures(textures[te],num,cType);
+					setTextures(textures[te],num,cType,draggingElementId);
 				}
 			}
 		}
@@ -702,71 +710,80 @@ function OnGUI() {
 /*
 * SET EDIT TEXTURES OF SELECTED MODUL
 */
-function setTextures(tex:String,coverCount:int,cType:String) {
-	variableScript = moduls[draggingElementId].GetComponent("Element");
+function setTextures(tex:String,coverCount:int,cType:String,_id:int) {
+	
+	
+	
+	
+	
+	variableScript = moduls[_id].GetComponent("Element");
 	
 	var tip:String = (cType.Substring(5,cType.Length-5));
 	
-	if(coverCount>1) {
+	
+	
+	if(coverCount==2) {
 		if(tip != "tf") {
 			variableScript.cubeFrontUp.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
-			parameters[draggingElementId]["FrontUp"] = tex;
+			parameters[_id]["FrontUp"] = tex;
 		}
 		
 		variableScript.cubeFrontDown.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
-		parameters[draggingElementId]["FrontDown"] = tex;
-	}else{
+		parameters[_id]["FrontDown"] = tex;
+	}
+	if(coverCount==1){
 		if(tip != "t") {
+			print("tex : "+tex);
 			variableScript.cubeFront.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
-			parameters[draggingElementId]["Front"] = tex;
+			parameters[_id]["Front"] = tex;
 		}
 	}
 	
 	variableScript.cubeLeft.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
-	parameters[draggingElementId]["Left"] = tex;
+	parameters[_id]["Left"] = tex;
 	
 	variableScript.cubeRight.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
-	parameters[draggingElementId]["Right"] = tex;
+	parameters[_id]["Right"] = tex;
 
 	variableScript.cubeBack.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
-	parameters[draggingElementId]["Back"] = tex;
+	parameters[_id]["Back"] = tex;
 
 	variableScript.cubeBottom.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
-	parameters[draggingElementId]["Bottom"] = tex;
+	parameters[_id]["Bottom"] = tex;
 
 	variableScript.cubeTop.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
-	parameters[draggingElementId]["Top"] = tex;
+	parameters[_id]["Top"] = tex;
 	
-	var decor:String = parameters[draggingElementId]["Top"];
+	var decor:String = parameters[_id]["Top"];
 	cType = cType.Substring(0,5);
 	switch(decor) {
 		case "textures/black":
-		parameters[draggingElementId]["code"] = cType + " AMZ"  + " - " + globalBoxStructure;
+		parameters[_id]["code"] = cType + " AMZ"  + " - " + parameters[_id]["structure"];
 		break;
 		
 		case "textures/regblack":
-		parameters[draggingElementId]["code"] = cType + " BLK"  + " - " + globalBoxStructure;
+		parameters[_id]["code"] = cType + " BLK"  + " - " + parameters[_id]["structure"];
 		break;
 		
 		case "textures/capucino":
-		parameters[draggingElementId]["code"] = cType + " CPN"  + " - " + globalBoxStructure;
+		parameters[_id]["code"] = cType + " CPN"  + " - " + parameters[_id]["structure"];
 		break;
 		
 		case "textures/H3375_ST22":
-		parameters[draggingElementId]["code"] = cType + " OAK"  + " - " + globalBoxStructure;
+		parameters[_id]["code"] = cType + " OAK"  + " - " + parameters[_id]["structure"];
 		break;
 		
 		case "textures/200s":
-		parameters[draggingElementId]["code"] = cType + " WHT"  + " - " + globalBoxStructure;
+		parameters[_id]["code"] = cType + " WHT"  + " - " + parameters[_id]["structure"];
 		break;
 		
 		case "textures/graphit":
-		parameters[draggingElementId]["code"] = cType + " GRP"  + " - " + globalBoxStructure;
+		parameters[_id]["code"] = cType + " GRP"  + " - " + parameters[_id]["structure"];
 		break;
 		
 	}
 	
-	elementType = parameters[draggingElementId]["code"];
+	elementType = parameters[_id]["code"];
 	
 	
 	setFrontUp = setFrontDown = setLeft = setRight = setBottom = setTop = setBack = setFront = false;
@@ -1046,9 +1063,54 @@ function ToggleLight(){
 	
 }
 
+function screenIDSorter(){
+		
+	var screenIDs : List.<int> = new List.<int>();	
+	
+	var walk = 0;
+		
+	for(var i:int = 0; i < parameters.Count; i++) {
+	
+		variableScript = moduls[i].GetComponent("Element");
+		
+		var hu:String = parameters[i]["elementType"];
+		if(parameters[i]["elementType"] == "EX"){
+		
+			//screenIDs.Add(i);
+			parameters[i]["screenId"] = walk;
+			variableScript.screenId = walk;
+			walk ++;
+		}
+		
+	}
+	
+	for(var ii:int = 0; ii < parameters.Count; ii++) {
+	
+		variableScript = moduls[ii].GetComponent("Element");
+		
+		if(parameters[ii]["elementType"] == "ED"){
+		
+			parameters[ii]["screenId"] = walk;
+			variableScript.screenId = walk;
+			walk ++;
+		}
+		
+	}
+	/*
+	for(var p:int = 0; p < screenIDs.Count; p++) {
+	print(screenIDs[p]);
+	}
+*/
+		
+}
+
 function BillofMaterials(){
 	
-	/* Show element ids on export*/
+	
+	screenIDSorter();
+	pdfMaker.resetRows();
+	
+	// Show element ids on export //
 	for(var m:int = 0; m < moduls.Count; m++) {
 		variableScript = moduls[m].GetComponent("Element");
 		
@@ -1065,159 +1127,13 @@ function BillofMaterials(){
 	
 	pdfMaker.pdfC();
 	
+	pdfGenerated = false;
 	
-	
-	/*
-	var elementid_www : int;
-	var elementType_www : String = "";
-	var front_www : String = "";
-	var frontUp_www : String = "";
-	var frontDown_www : String = "";
-	var back_www : String = "";
-	var left_www : String = "";
-	var right_www : String = "";
-	var bottom_www : String = "";
-	var top_www : String = "";
-	var hole_www : int;
-	var nFrontFace_www : int;
-	var w_www : int;
-	var h_www : int;
-	var depth_www : int;
-	var x_www : int;
-	var y_www : int;
-	var isRigid_www : int;
-	var baseHeight_www : int;
-	
-	
-	var the_JSON_string:String = "{\"elementArray\":[";
-
-	
-	for(var i : int = 0; i < parameters.Count; i++){
-			
-		elementid_www = parameters[i]["elementId"];
-		elementType_www = parameters[i]["elementType"];	
-		front_www = parameters[i]["Front"];
-		frontUp_www = parameters[i]["FrontUp"];
-		frontDown_www = parameters[i]["FrontDown"];
-		back_www = parameters[i]["Back"];
-		left_www = parameters[i]["Left"];
-		right_www = parameters[i]["Right"];
-		bottom_www = parameters[i]["Bottom"];
-		top_www = parameters[i]["Top"];
-		hole_www = parameters[i]["Hole"];
-		nFrontFace_www = parameters[i]["nFrontFace"];
-		w_www = parameters[i]["w"];
-		h_www = parameters[i]["h"];
-		depth_www = parameters[i]["depth"];
-		x_www = parameters[i]["x"];
-		y_www = parameters[i]["y"];
-		isRigid_www = parameters[i]["isRigid"];
-		baseHeight_www = parameters[i]["baseHeight"];
+	for(var p:int = 0; p < moduls.Count; p++) {
+		variableScript = moduls[p].GetComponent("Element");
 		
-		the_JSON_string += "{\"elementid\":"+elementid_www
-		+",\"elementType\":\""+elementType_www+"\""
-		+",\"front\":\""+front_www+"\""
-		+",\"frontUp\":\""+frontUp_www+"\""
-		+",\"frontDown\":\""+frontDown_www+"\""
-		+",\"back\":\""+back_www+"\""
-		+",\"left\":\""+left_www+"\""
-		+",\"right\":\""+right_www+"\""
-		+",\"bottom\":\""+bottom_www+"\""
-		+",\"top\":\""+top_www+"\""
-		+",\"hole\":\""+hole_www+"\""
-		+",\"nFrontFace\":\""+nFrontFace_www+"\""
-		+",\"w\":\""+w_www+"\""
-		+",\"h\":\""+h_www+"\""
-		+",\"depth\":\""+depth_www+"\""
-		+",\"x\":\""+x_www+"\""
-		+",\"y\":\""+y_www+"\""
-		+",\"isRigid\":\""+isRigid_www+"\""
-		+",\"baseHeight\":\""+baseHeight_www+"\"}";
-		
-		if(i!=parameters.Count-1){
-			the_JSON_string += ",";
-		}		
+		variableScript.hideIds();
 	}
-
-	the_JSON_string += "]}";
-	
-	
-	
-	var hash=md5functions.Md5Sum(secretKey);
-	
-	 
-	var post_url = billofmaterialsUrl 
-	+ "jsonString=" + the_JSON_string
-	+ "&hash=" + hash;
-	
-	//UPLOAD SCREENSHOT//
-	resetCameraPos();	// We should only read the screen after all rendering is complete 
-	yield WaitForEndOfFrame();
-
-    // Create a texture the size of the screen, RGB24 format
-    var width = Screen.width;
-    var height = Screen.height;
-    var tex = new Texture2D( width, height-100, TextureFormat.RGB24, false );
-    // Read screen contents into the texture
-    tex.ReadPixels( Rect(0, 0, width, height-100), 0, 0 );
-    tex.Apply();
- 
-    // Encode texture into PNG
-    var bytes = tex.EncodeToPNG();
-    Destroy( tex );
- 
- 	
-    // Create a Web Form
-    var form = new WWWForm();
-    form.AddField ("action","Upload Image");
-    form.AddBinaryData("fileUpload", bytes, "screenShot.png", "image/png");
-    
-    var hs_post = WWW(post_url, form);
-    
-    while(hs_post.isDone != true){
-    //print(hs_post.uploadProgress);
-    EditorUtility.DisplayProgressBar(
-					"Combination Upload",
-					"Uploading ... Please wait!",
-					hs_post.uploadProgress);
-	}
-	EditorUtility.ClearProgressBar();
-	
-	yield hs_post; // Wait until the download is done
-
-	
-    if (hs_post.error != null){
-       Application.ExternalCall( "debug", hs_post.error);
-    }else
-    {
-        Application.ExternalCall( "debug", "Finished Uploading Screenshot");
-        
-        var combinationID = hs_post.text;
-        var pdf_url = "http://filikatasarim.com/clients/sonorous/pdfci.php?combinationID="+combinationID;
-        var pdf_post = WWW(pdf_url);
-        //print(pdf_url);
-        
-        yield pdf_post;
-		
-		if(pdf_post.isDone) {
-		
-			var path = EditorUtility.SaveFilePanel(
-					"Save as PDF",
-					"",
-					"",
-					"pdf");
-					
-			var pdf_bytes = pdf_post.bytes;
-			
-			var fs : FileStream = FileStream(path, FileMode.CreateNew);
-			var bw : BinaryWriter = BinaryWriter(fs);
-			bw.Write(pdf_bytes);
-			bw.Close();
-			fs.Close();
-		}
-    }
-	*/
-	
 }
 
 function SaveState(){
@@ -1333,6 +1249,16 @@ function SaveState(){
 		ElementXML.AppendChild(codeXML);
 		var code : String = parameters[i]["code"];
 		codeXML.InnerText = code.ToString();
+		
+		var screenIDXML : XmlElement = xmlDoc.CreateElement("screenid");
+		ElementXML.AppendChild(screenIDXML);
+		var screenId : int = parameters[i]["screenId"];
+		screenIDXML.InnerText = screenId.ToString();
+		
+		var structureXML : XmlElement = xmlDoc.CreateElement("structure");
+		ElementXML.AppendChild(structureXML);
+		var structure : String = parameters[i]["structure"];
+		structureXML.InnerText = structure.ToString();
 
 	}
 	
@@ -1425,6 +1351,8 @@ function LoadState(){
   			var isRigid : String = myLoad.Elements[j].isRigid;//problem
   			var baseHeight : int = myLoad.Elements[j].baseHeight;
   			var code : String = myLoad.Elements[j].code;
+  			var screenId : int = myLoad.Elements[j].screenId;
+  			var structure : String = myLoad.Elements[j].structure;
   			
 			var myStuffTex:Hashtable = {"elementId":elementId,
 							"elementType":elementType,
@@ -1445,10 +1373,15 @@ function LoadState(){
 	                        "y":y,
 	                        "isRigid":true,
 	                        "baseHeight":baseHeight,
-	                        "code":code
+	                        "code":code,
+	                        "screenId":screenId,
+	                        "structure":structure
 	                        };
 	         var index = j.ToString();               
-	         addModul(myStuffTex,index);               
+	         addModul(myStuffTex,index);
+	         
+	         /**/   
+	               
   }
   
   baseAllH = baseHeight;
@@ -1588,11 +1521,11 @@ function DebugEngine(){
 					
 					
 					){
-						print("üstüsteyiz");
+						//print("üstüsteyiz");
 						Notification.notiBool[0] = "1";
 						break;
 					}else{
-						print("sorun yok abi");
+						//print("sorun yok abi");
 						
 					}
 					
@@ -1680,7 +1613,7 @@ function DebugEngine(){
 						Notification.notiBool[1] = "1";
 						break;
 					}else{
-						print("sorun yok abi");
+						//print("sorun yok abi");
 						
 					}
 				
@@ -1741,7 +1674,7 @@ function DebugEngine(){
 							Notification.notiBool[2] = "1";
 							break;
 						}else{
-							print("sorun yok abi");
+							//print("sorun yok abi");
 						}
 			
 				}
@@ -1924,7 +1857,7 @@ function HighlightErrorsEngine(errorCode : int){
 								
 								break;
 							}else{
-								print("sorun yok abi");
+								//print("sorun yok abi");
 								
 							}
 
@@ -1999,7 +1932,7 @@ function HighlightErrorsEngine(errorCode : int){
 									}
 							break;
 						}else{
-							print("sorun yok abi");
+							//print("sorun yok abi");
 							
 						}
 					
@@ -2083,7 +2016,7 @@ function HighlightErrorsEngine(errorCode : int){
 								}
 								break;
 							}else{
-								print("sorun yok abi");
+								//print("sorun yok abi");
 							}
 				
 					}
@@ -2260,9 +2193,14 @@ function returnStructure(){
 					boxStructure = "A";
 				}
 				
-				print(boxStructure);
 				
-				globalBoxStructure = boxStructure;
+				//print("box structure : "+boxStructure );
+				parameters[i]["structure"] = boxStructure;
+				
+				var tip:String = parameters[i]["code"].ToString().Substring(0,parameters[i]["code"].ToString().Length-1);
+				
+				//print(tip);
+				//parameters[i]["code"] = tip + " " + parameters[i]["structure"];
 			}
 			
 			

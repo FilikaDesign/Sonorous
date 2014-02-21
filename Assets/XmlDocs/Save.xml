@@ -2,28 +2,6 @@
   <Elements>
     <Element>
       <elementId>0</elementId>
-      <elementType>EX</elementType>
-      <Front>textures/H3375_ST22</Front>
-      <FrontUp>textures/200s</FrontUp>
-      <FrontDown>textures/200s</FrontDown>
-      <Back>textures/200s</Back>
-      <Left>textures/200s</Left>
-      <Right>textures/200s</Right>
-      <Bottom>textures/200s</Bottom>
-      <Top>textures/200s</Top>
-      <Hole>1</Hole>
-      <nFrontFace>2</nFrontFace>
-      <w>130</w>
-      <h>40</h>
-      <depth>50</depth>
-      <x>-80</x>
-      <y>20</y>
-      <isRigid>True</isRigid>
-      <baseHeight>2</baseHeight>
-      <code>ex11- WHT - B</code>
-    </Element>
-    <Element>
-      <elementId>1</elementId>
       <elementType>ED</elementType>
       <Front>textures/black</Front>
       <FrontUp>textures/200s</FrontUp>
@@ -38,33 +16,85 @@
       <w>65</w>
       <h>40</h>
       <depth>36</depth>
-      <x>50</x>
-      <y>60</y>
+      <x>-95</x>
+      <y>70</y>
       <isRigid>True</isRigid>
       <baseHeight>0</baseHeight>
-      <code>ed50- AMZ - B</code>
+      <code>ed50- AMZ - A</code>
+      <screenid>0</screenid>
+      <structure>A</structure>
+    </Element>
+    <Element>
+      <elementId>1</elementId>
+      <elementType>EX</elementType>
+      <Front>textures/200s</Front>
+      <FrontUp>textures/H3375_ST22</FrontUp>
+      <FrontDown>textures/H3375_ST22</FrontDown>
+      <Back>textures/H3375_ST22</Back>
+      <Left>textures/H3375_ST22</Left>
+      <Right>textures/H3375_ST22</Right>
+      <Bottom>textures/H3375_ST22</Bottom>
+      <Top>textures/H3375_ST22</Top>
+      <Hole>0</Hole>
+      <nFrontFace>2</nFrontFace>
+      <w>130</w>
+      <h>40</h>
+      <depth>50</depth>
+      <x>-100</x>
+      <y>20</y>
+      <isRigid>True</isRigid>
+      <baseHeight>8</baseHeight>
+      <code>ex10- OAK - A</code>
+      <screenid>0</screenid>
+      <structure>D</structure>
     </Element>
     <Element>
       <elementId>2</elementId>
       <elementType>EX</elementType>
-      <Front>textures/black</Front>
-      <FrontUp>textures/200s</FrontUp>
-      <FrontDown>textures/200s</FrontDown>
+      <Front>textures/200s</Front>
+      <FrontUp>textures/black</FrontUp>
+      <FrontDown>textures/black</FrontDown>
       <Back>textures/black</Back>
       <Left>textures/black</Left>
       <Right>textures/black</Right>
       <Bottom>textures/black</Bottom>
       <Top>textures/black</Top>
-      <Hole>0</Hole>
-      <nFrontFace>1</nFrontFace>
-      <w>65</w>
+      <Hole>1</Hole>
+      <nFrontFace>2</nFrontFace>
+      <w>130</w>
       <h>40</h>
       <depth>50</depth>
-      <x>-145</x>
+      <x>30</x>
       <y>20</y>
       <isRigid>True</isRigid>
-      <baseHeight>0</baseHeight>
-      <code>ex20- AMZ - B</code>
+      <baseHeight>8</baseHeight>
+      <code>ex11- AMZ - C</code>
+      <screenid>0</screenid>
+      <structure>C</structure>
+    </Element>
+    <Element>
+      <elementId>3</elementId>
+      <elementType>EX</elementType>
+      <Front>textures/200s</Front>
+      <FrontUp>textures/200s</FrontUp>
+      <FrontDown>textures/200s</FrontDown>
+      <Back>textures/200s</Back>
+      <Left>textures/200s</Left>
+      <Right>textures/200s</Right>
+      <Bottom>textures/200s</Bottom>
+      <Top>textures/200s</Top>
+      <Hole>0</Hole>
+      <nFrontFace>2</nFrontFace>
+      <w>130</w>
+      <h>40</h>
+      <depth>50</depth>
+      <x>-230</x>
+      <y>20</y>
+      <isRigid>True</isRigid>
+      <baseHeight>8</baseHeight>
+      <code>ex10- WHT - B</code>
+      <screenid>0</screenid>
+      <structure>B</structure>
     </Element>
   </Elements>
 </Combination>

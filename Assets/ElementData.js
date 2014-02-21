@@ -25,7 +25,8 @@
 	public var isRigid 		: String;	
 	public var baseHeight 	: int;
 	public var code 		: String;
-		
+	public var screenId 	: int;
+	public var structure 	: String;	
  	
  	
  }

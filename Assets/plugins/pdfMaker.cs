@@ -12,10 +12,12 @@ public class pdfMaker : MonoBehaviour {
 	private static string pdfName;
 	private static PdfPCell cellLight;
 	private static PdfPCell cellTitle;
-	private static ArrayList parms = new ArrayList();       
+	private static ArrayList parms;      
   	private static iTextSharp.text.Font regular = FontFactory.GetFont("Arial", 7, iTextSharp.text.Font.NORMAL, BaseColor.DARK_GRAY);
 	private static iTextSharp.text.Font title = FontFactory.GetFont("Arial", 8, iTextSharp.text.Font.BOLD, BaseColor.DARK_GRAY);
 	private static iTextSharp.text.Font maintitle = FontFactory.GetFont("Arial", 10, iTextSharp.text.Font.BOLDITALIC, BaseColor.DARK_GRAY);
+	
+	private static ArrayList sortedTable;    
 	
 	// Use this for initialization
 	void Start () {
@@ -36,7 +38,7 @@ public class pdfMaker : MonoBehaviour {
 	
 		
 		
-		//print ("cuber.woodThickness : "+par["elementId"]);
+		 
 		pdfName = "Test";
 		// create a texture to pass to encoding
         Texture2D texture = new Texture2D(Screen.width, Screen.height-100, TextureFormat.RGB24, false);
@@ -138,9 +140,9 @@ public class pdfMaker : MonoBehaviour {
 		doc.Add(new Phrase("\n"));
 		
 		
-  		PdfPTable table = new PdfPTable(9);
+  		PdfPTable table = new PdfPTable(2);
 		PdfPCell cell = new PdfPCell(new Phrase("Bill of Moduls",maintitle));
-		cell.Colspan = 9;
+		cell.Colspan = 2;
 		cell.PaddingTop = 5;
 		cell.PaddingBottom = 8;
 		
@@ -150,7 +152,7 @@ public class pdfMaker : MonoBehaviour {
 		table.AddCell(cell);
 		
 		table.WidthPercentage = 100;
-        float[] widths = new float[] { 1.2f, 2f, 1.2f, 2f, 2f, 2f, 1.2f, 2f, 2f};
+        float[] widths = new float[] { 1.2f, 2f};
         table.SetWidths(widths);
 		
 		table.HorizontalAlignment = 1;
@@ -159,14 +161,14 @@ public class pdfMaker : MonoBehaviour {
 		setTitleStyleCell();
 		table.AddCell(cellTitle);
 		
-		cellTitle = new PdfPCell(new Phrase("Type",title));
+		cellTitle = new PdfPCell(new Phrase("Code",title));
 		setTitleStyleCell();
 		table.AddCell(cellTitle);
 		
 		//cellTitle = new PdfPCell(new Phrase("Cover Num.",title));
 		//setTitleStyleCell();
 		//table.AddCell(cellTitle);
-		
+		/*
 		cellTitle = new PdfPCell(new Phrase("Material",title));
 		setTitleStyleCell();
 		table.AddCell(cellTitle);
@@ -177,12 +179,12 @@ public class pdfMaker : MonoBehaviour {
 		
 		cellTitle = new PdfPCell(new Phrase("Mat. Front Down",title));
 		setTitleStyleCell();
-		table.AddCell(cellTitle);
+		table.AddCell(cellTitle);*/
 		
 		//cellTitle = new PdfPCell(new Phrase("Hole",title));
 		//setTitleStyleCell();
 		//table.AddCell(cellTitle);
-		
+		/*
 		cellTitle = new PdfPCell(new Phrase("Width",title));
 		setTitleStyleCell();
 		table.AddCell(cellTitle);
@@ -198,15 +200,18 @@ public class pdfMaker : MonoBehaviour {
 		cellTitle = new PdfPCell(new Phrase("Base Height",title));
 		setTitleStyleCell();
 		table.AddCell(cellTitle);
+		*/
 		
-		for(int i = 0; i<parms.Count; i++) {
+		tableSorter(parms);
+			
+		for(int i = 0; i<sortedTable.Count; i++) {
 			
 			
-			Hashtable ht = parms[i] as Hashtable;
+			Hashtable ht = sortedTable[i] as Hashtable;
 			
 			// 1st column
-			int id = (int)ht["elementId"];
-			cellLight = new PdfPCell(new Phrase((id + 1).ToString(),regular));
+			int id = (int)ht["screenId"] + 1;
+			cellLight = new PdfPCell(new Phrase(id.ToString(),regular));
 			cellLight.PaddingTop = 5;
 			cellLight.PaddingBottom = 8;
 			if(i % 2 == 0)
@@ -219,7 +224,7 @@ public class pdfMaker : MonoBehaviour {
 			
 			// second column
 			//table.AddCell(new Paragraph(ht["elementType"] as string,regular));
-			cellLight = new PdfPCell(new Phrase(ht["elementType"].ToString(),regular));
+			cellLight = new PdfPCell(new Phrase(ht["code"].ToString().ToUpper(),regular));
 			cellLight.PaddingTop = 5;
 			cellLight.PaddingBottom = 8;
 			if(i % 2 == 0)
@@ -242,7 +247,7 @@ public class pdfMaker : MonoBehaviour {
 			cellLight.HorizontalAlignment = 1; //0=Left, 1=Centre, 2=Right
 			cellLight.BorderColor = BaseColor.LIGHT_GRAY;
 			table.AddCell(cellLight);
-			*/
+
 			
 			if(ht["nFrontFace"].ToString() != "2") {
 				// fourth column
@@ -323,7 +328,7 @@ public class pdfMaker : MonoBehaviour {
 				cellLight.BorderColor = BaseColor.LIGHT_GRAY;
 				table.AddCell(cellLight);	
 			}
-			
+			*/
 			// seventh column
 			//table.AddCell(new Paragraph(ht["Hole"].ToString(),regular));
 			/*cellLight = new PdfPCell(new Phrase(ht["Hole"].ToString(),regular));
@@ -339,7 +344,7 @@ public class pdfMaker : MonoBehaviour {
 			
 			// eigth column
 			//table.AddCell(new Paragraph(ht["w"].ToString(),regular));
-			cellLight = new PdfPCell(new Phrase(ht["w"].ToString()+" cm",regular));
+			/*cellLight = new PdfPCell(new Phrase(ht["w"].ToString()+" cm",regular));
 			cellLight.PaddingTop = 5;
 			cellLight.PaddingBottom = 8;
 			if(i % 2 == 0)
@@ -387,7 +392,7 @@ public class pdfMaker : MonoBehaviour {
 				cellLight.BackgroundColor = new BaseColor(System.Drawing.ColorTranslator.FromHtml("#FFFFFF"));
 			cellLight.HorizontalAlignment = 1; //0=Left, 1=Centre, 2=Right
 			cellLight.BorderColor = BaseColor.LIGHT_GRAY;
-			table.AddCell(cellLight);
+			table.AddCell(cellLight);*/
 		}
 		
 		
@@ -405,6 +410,11 @@ public class pdfMaker : MonoBehaviour {
 		
 		// Added by Karl. - Tell unity to delete the texture, by default it seems to keep hold of it and memory crashes will occur after too many screenshots.
         DestroyObject( texture );
+		
+		//EditorUtility.DisplayDialog("Place Selection On Surface?","hhu","helal","yuk");
+			
+			
+			
 	}
 	
 	public static PdfPCell cell(string txt) {
@@ -428,6 +438,56 @@ public class pdfMaker : MonoBehaviour {
 	public static void setRows(Hashtable par) {
 		
 		parms.Add(par);
+	}
+	
+	public static void resetRows() {
+		
+		
+		//parms.Clear();
+		parms = new ArrayList();
+	}
+	
+	public static void tableSorter(ArrayList _parms){
+		
+		sortedTable = new ArrayList();
+		
+		for(int i = 0; i<_parms.Count; i++) {
+			
+			Hashtable ht = parms[i] as Hashtable;
+			
+		
+			int id = (int)ht["elementId"];
+			string typo = ht["elementType"].ToString();
+			
+			
+			if(typo == "EX"){
+				sortedTable.Add(ht);
+			}
+			
+		}
+		
+		for(int ii = 0; ii<_parms.Count; ii++) {
+			
+			Hashtable ht = parms[ii] as Hashtable;
+			
+		
+			int id = (int)ht["elementId"];
+			string typo = ht["elementType"].ToString();
+			
+			
+			if(typo == "ED"){
+				sortedTable.Add(ht);
+			}
+			
+		}
+		
+		for(int j = 0; j< sortedTable.Count; j++) {
+			
+			Hashtable htNew = sortedTable[j] as Hashtable;
+			//print (htNew["elementId"].ToString());
+			//print (htNew["elementType"].ToString());
+		}
+		
 	}
 
 }

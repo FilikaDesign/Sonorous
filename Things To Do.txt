@@ -1,16 +1,10 @@
 
-1) pdfte listede ayný typelar alt alta sýralanacak
+1) Kombinasyonun birimlerine dair ölçüler katalogdaki gibi kurgulanacak
 
-2) Pdf tablosunda ürün adý ve ürün kodu yazacak
+2) Baza beyaz kalýyor
 
-3) Pdf yaratma alternatifi
+3) ED ÜRÜNLERÝ OMUZ HÝZASI VE ÜZERÝNDE “U”, ALTINDA ÝSE “F” KAPAK SEÇENEÐÝNE SAHÝP OLMALI.
 
-4) Kombinasyonun birimlerine dair ölçüler katalogdaki gibi kurgulanacak
+4) debugging
 
-5) Baza beyaz kalýyor
-
-6) ED ÜRÜNLERÝ OMUZ HÝZASI VE ÜZERÝNDE “U”, ALTINDA ÝSE “F” KAPAK SEÇENEÐÝNE SAHÝP OLMALI.
-
-7) debugging
-
-8) EditorUtility.SaveFilePanel iptalleri
+5) Baza toplu secim
