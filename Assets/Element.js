@@ -9,13 +9,18 @@ var elementContainer: GameObject;
 var cubeFront 		: GameObject;
 var cubeFrontUp		: GameObject;
 var cubeFrontDown	: GameObject;
+var cubeFrontMid	: GameObject;
 var cubeBack 		: GameObject;
 var cubeLeft 		: GameObject;
+var cubeLeftSkin 	: GameObject;
 var cubeRight 		: GameObject;
+var cubeRightSkin 	: GameObject;
 var cubeBottom 		: GameObject;
+var cubeBottomSkin 	: GameObject;
 var cubeTop 		: GameObject;
+var cubeTopSkin		: GameObject;
 var cubeHole 		: GameObject;
-var woodThickness 	: float = 1;
+var woodThickness 	: float = 0.4;
 var w				: float;
 var h				: float;
 var depth			: float;
@@ -36,6 +41,8 @@ var baseElement: GameObject;
 var standElement: GameObject;
 var theText: GameObject;
 var textMesh:TextMesh;
+var newFont : Font;
+
 function Start (){
     	
     		
@@ -133,6 +140,9 @@ function Start (){
 			var cubeFrontUpBoxCollider : BoxCollider = cubeFrontUp.GetComponent("BoxCollider");
 			cubeFrontUpBoxCollider.enabled = false;
 			
+			
+			
+			
 			//FrontDown
 			cubeFrontDown  = GameObject.CreatePrimitive(PrimitiveType.Cube);
 			cubeFrontDown.name = "cubeFrontDown";
@@ -142,6 +152,16 @@ function Start (){
 			cubeFrontDown.transform.parent = elementContainer.transform;
 			var cubeFrontDownBoxCollider : BoxCollider = cubeFrontDown.GetComponent("BoxCollider");
 			cubeFrontDownBoxCollider.enabled = false;
+			
+			cubeFrontMid = GameObject.CreatePrimitive(PrimitiveType.Cube);
+			cubeFrontMid.name = "skin";
+		    cubeFrontMid.transform.localScale = Vector3(w-2*woodThickness,0.6,woodThickness*0.5);
+			cubeFrontMid.transform.localPosition = Vector3(w*0.5,(h - woodThickness)*0.5 - 0.1, -1 * depth + 0.2);
+			cubeFrontMid.renderer.material.color = Color.black;
+			cubeFrontMid.transform.parent = elementContainer.transform;
+			var cubeFrontMidCollider : BoxCollider = cubeFrontMid.GetComponent("BoxCollider");
+			cubeFrontMidCollider.enabled = false;
+			
 			
 			}
 			
@@ -165,6 +185,16 @@ function Start (){
 			var cubeLeftBoxCollider : BoxCollider = cubeLeft.GetComponent("BoxCollider");
 			cubeLeftBoxCollider.enabled = false;
 			
+			//Left Skin
+		    cubeLeftSkin  = GameObject.CreatePrimitive(PrimitiveType.Cube);
+		    cubeLeftSkin.name = "skin";
+		    cubeLeftSkin.transform.localScale = Vector3(woodThickness,h,0.1);
+			cubeLeftSkin.transform.localPosition = Vector3(0.5 * woodThickness, h * 0.5, -1 * depth - 0.1);
+			cubeLeftSkin.renderer.material.color = Color.black;
+			cubeLeftSkin.transform.parent = elementContainer.transform;
+			var cubeLeftSkinBoxCollider : BoxCollider = cubeLeftSkin.GetComponent("BoxCollider");
+			cubeLeftSkinBoxCollider.enabled = false;
+			
 			//Right
 		    cubeRight  = GameObject.CreatePrimitive(PrimitiveType.Cube);
 		    cubeRight.name = "cubeRight";
@@ -174,6 +204,16 @@ function Start (){
 			cubeRight.transform.parent = elementContainer.transform;
 			var cubeRightBoxCollider : BoxCollider = cubeRight.GetComponent("BoxCollider");
 			cubeRightBoxCollider.enabled = false;
+			
+			//Right Skin
+		    cubeRightSkin  = GameObject.CreatePrimitive(PrimitiveType.Cube);
+		    cubeRightSkin.name = "skin";
+		    cubeRightSkin.transform.localScale = Vector3(woodThickness,h,0.1);
+			cubeRightSkin.transform.localPosition = Vector3(w - woodThickness*0.5, h * 0.5, -1 * depth - 0.1);
+			cubeRightSkin.renderer.material.color = Color.black;
+			cubeRightSkin.transform.parent = elementContainer.transform;
+			var cubeRightSkinBoxCollider : BoxCollider = cubeRightSkin.GetComponent("BoxCollider");
+			cubeRightSkinBoxCollider.enabled = false;
 
 			
 			//Bottom
@@ -185,7 +225,18 @@ function Start (){
 			cubeBottom.transform.parent = elementContainer.transform;
 			var cubeBottomBoxCollider : BoxCollider = cubeBottom.GetComponent("BoxCollider");
 			cubeBottomBoxCollider.enabled = false;
-
+			
+			/*
+			//Bottom Skin
+		    cubeBottomSkin  = GameObject.CreatePrimitive(PrimitiveType.Cube);
+		    cubeBottomSkin.name = "skin";
+		    cubeBottomSkin.transform.localScale = Vector3(w-woodThickness * 2,woodThickness,0.1);
+			cubeBottomSkin.transform.localPosition = Vector3(w*0.5,woodThickness*0.5, -1 * depth - 0.1);
+			cubeBottomSkin.renderer.material.color = Color.black;
+			cubeBottomSkin.transform.parent = elementContainer.transform;
+			var cubeBottomSkinCollider : BoxCollider = cubeBottomSkin.GetComponent("BoxCollider");
+			cubeBottomSkinCollider.enabled = false;
+			*/
 			
 			//Top
 		    cubeTop  = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -196,6 +247,16 @@ function Start (){
 			cubeTop.transform.parent = elementContainer.transform;
 			var cubeTopBoxCollider : BoxCollider = cubeTop.GetComponent("BoxCollider");
 			cubeTopBoxCollider.enabled = false;
+			
+			//Top Skin
+		    cubeTopSkin  = GameObject.CreatePrimitive(PrimitiveType.Cube);
+		    cubeTopSkin.name = "skin";
+		    cubeTopSkin.transform.localScale = Vector3(w-woodThickness * 2,woodThickness,0.1);
+			cubeTopSkin.transform.localPosition = Vector3(w*0.5,h-woodThickness*0.5, -1 * depth - 0.1);
+			cubeTopSkin.renderer.material.color = Color.black;
+			cubeTopSkin.transform.parent = elementContainer.transform;
+			var cubeTopSkinCollider : BoxCollider = cubeTopSkin.GetComponent("BoxCollider");
+			cubeTopSkinCollider.enabled = false;
 			
 							
 			if(hole ==  1){
@@ -234,10 +295,24 @@ function Start (){
 				var meshRenderer = theText.AddComponent("MeshRenderer");
 			
 				//textMesh.GetComponent(TextMesh).text = (elementID + 1).ToString();
-				textMesh.GetComponent(TextMesh).fontSize = 90;
-				var newFont : Font = Resources.Load("Arial", typeof(Font)) as Font;
+				textMesh.GetComponent(TextMesh).fontSize = 70;
+				newFont = Resources.Load("Arial", typeof(Font)) as Font;
 			
 				textMesh.GetComponent(TextMesh).font = newFont;
+				
+				var Texttir:String = params["Front"]; 
+				var Texttir2:String = params["FrontUp"]; 
+				//newFont.material.color = Color.black;
+
+				if(Texttir == "textures/200s" || Texttir2 == "textures/200s"){
+					
+					newFont.material.color = Color.black;
+				}else{
+					
+					newFont.material.color = Color.white;
+				
+				}
+				
 			
 				meshRenderer.GetComponent(MeshRenderer).renderer.material = newFont.material; 
 				
@@ -254,12 +329,27 @@ function showIds() {
  
 			
 	textMesh.GetComponent(TextMesh).text = (screenId + 1).ToString();
+	
+	var Texttir:String = params["Front"]; 
+	var Texttir2:String = params["FrontUp"]; 
+
 						
 	theText.transform.position.x = elementContainer.transform.position.x + 5;
 	theText.transform.position.y = elementContainer.transform.position.y + h * 0.5 - 5;
 	theText.transform.position.z = -1 * depth + woodThickness*0.5;
 				
 	theText.transform.parent = elementContainer.transform;
+	
+	var meshRenderer = theText.GetComponent("MeshRenderer");
+	if(Texttir == "textures/200s" || Texttir2 == "textures/200s"){
+					
+		meshRenderer.GetComponent(MeshRenderer).renderer.material.color = Color.black;
+	}else{
+					
+		meshRenderer.GetComponent(MeshRenderer).renderer.material.color = Color.white;
+				
+	}
+	
 }
 
 function hideIds() {
@@ -342,7 +432,7 @@ function createBase(size : int){
 		baseElement.transform.position.x = elementContainer.transform.position.x + this.w * 0.5;
 		baseElement.transform.position.y = this.transform.localPosition.y - h*0.5 - size * 0.5;
 		baseElement.transform.position.z = elementContainer.transform.position.z - this.depth * 0.5 + 1;
-		baseElement.renderer.material.color = Color.gray;
+		baseElement.renderer.material.mainTexture = Resources.Load("textures/basetexture", Texture2D);
 		baseElement.transform.parent = elementContainer.transform;
 	}
 	
@@ -361,7 +451,7 @@ function changeBase(size : int){
 		
 		baseElement.transform.position.y = this.transform.localPosition.y - h*0.5 - size * 0.5;
 		baseElement.transform.position.z = elementContainer.transform.position.z - this.depth * 0.5 + 1;
-		baseElement.renderer.material.color = Color.gray;
+		baseElement.renderer.material.mainTexture = Resources.Load("textures/basetexture", Texture2D);
 		baseElement.transform.parent = elementContainer.transform;
 	
 }
@@ -376,16 +466,16 @@ function createStand(){
 		standElement.transform.position.x = elementContainer.transform.position.x + this.w * 0.5;
 		standElement.transform.position.y = this.transform.localPosition.y + h*0.5 + 9;
 		standElement.transform.position.z = elementContainer.transform.position.z - 6;
-		standElement.renderer.material.color = Color.gray;
+		standElement.renderer.material.mainTexture = Resources.Load("textures/basetexture", Texture2D);
 		standElement.transform.parent = elementContainer.transform;
 		
 		var standElementDetail : GameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
 		standElementDetail.name = "standElementDetail";
-		standElementDetail.transform.localScale = Vector3(4,16,4);
+		standElementDetail.transform.localScale = Vector3(4,12,4);
 		standElementDetail.transform.position.x = elementContainer.transform.position.x + this.w * 0.5;
 		standElementDetail.transform.position.y = this.transform.localPosition.y + h*0.5 + 36;
 		standElementDetail.transform.position.z = elementContainer.transform.position.z - 5;
-		standElementDetail.renderer.material.color = Color.gray;
+		standElementDetail.renderer.material.mainTexture = Resources.Load("textures/basetexture", Texture2D);
 		standElementDetail.transform.parent = standElement.transform;
 		
 		var barLeft : GameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -394,7 +484,7 @@ function createStand(){
 		barLeft.transform.position.x = elementContainer.transform.position.x + this.w * 0.5 - 30;
 		barLeft.transform.position.y = this.transform.localPosition.y + h*0.5 + 42;
 		barLeft.transform.position.z = elementContainer.transform.position.z - 6;
-		barLeft.renderer.material.color = Color.gray;
+		barLeft.renderer.material.mainTexture = Resources.Load("textures/basetexture", Texture2D);
 		barLeft.transform.parent = standElement.transform;
 		
 		var barRight : GameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -403,34 +493,34 @@ function createStand(){
 		barRight.transform.position.x = elementContainer.transform.position.x + this.w * 0.5 + 30;
 		barRight.transform.position.y = this.transform.localPosition.y + h*0.5 + 42;
 		barRight.transform.position.z = elementContainer.transform.position.z - 6;
-		barRight.renderer.material.color = Color.gray;
+		barRight.renderer.material.mainTexture = Resources.Load("textures/basetexture", Texture2D);
 		barRight.transform.parent = standElement.transform;
 		
 		var barFrameLeft : GameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
 		barFrameLeft.name = "barFrameLeft";
-		barFrameLeft.transform.localScale = Vector3(2,14,2);
+		barFrameLeft.transform.localScale = Vector3(2,12,2);
 		barFrameLeft.transform.position.x = elementContainer.transform.position.x + this.w * 0.5 - 40;
-		barFrameLeft.transform.position.y = this.transform.localPosition.y + h*0.5 + 37;
+		barFrameLeft.transform.position.y = this.transform.localPosition.y + h*0.5 + 36;
 		barFrameLeft.transform.position.z = elementContainer.transform.position.z - 6;
-		barFrameLeft.renderer.material.color = Color.gray;
+		barFrameLeft.renderer.material.mainTexture = Resources.Load("textures/basetexture", Texture2D);
 		barFrameLeft.transform.parent = standElement.transform;
 		
 		var barFrameRight : GameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
 		barFrameRight.name = "barFrameRight";
-		barFrameRight.transform.localScale = Vector3(2,14,2);
+		barFrameRight.transform.localScale = Vector3(2,12,2);
 		barFrameRight.transform.position.x = elementContainer.transform.position.x + this.w * 0.5 + 40;
-		barFrameRight.transform.position.y = this.transform.localPosition.y + h*0.5 + 37;
+		barFrameRight.transform.position.y = this.transform.localPosition.y + h*0.5 + 36;
 		barFrameRight.transform.position.z = elementContainer.transform.position.z - 6;
-		barFrameRight.renderer.material.color = Color.gray;
+		barFrameRight.renderer.material.mainTexture = Resources.Load("textures/basetexture", Texture2D);
 		barFrameRight.transform.parent = standElement.transform;
 		
 		var barFrameTop : GameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
 		barFrameTop.name = "barFrameTop";
-		barFrameTop.transform.localScale = Vector3(80,2,2);
+		barFrameTop.transform.localScale = Vector3(82,2,2);
 		barFrameTop.transform.position.x = elementContainer.transform.position.x + this.w * 0.5;
 		barFrameTop.transform.position.y = this.transform.localPosition.y + h*0.5 + 43;
 		barFrameTop.transform.position.z = elementContainer.transform.position.z - 6;
-		barFrameTop.renderer.material.color = Color.gray;
+		barFrameTop.renderer.material.mainTexture = Resources.Load("textures/basetexture", Texture2D);
 		barFrameTop.transform.parent = standElement.transform;
 		
 		var barFrameBottom : GameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -439,7 +529,7 @@ function createStand(){
 		barFrameBottom.transform.position.x = elementContainer.transform.position.x + this.w * 0.5;
 		barFrameBottom.transform.position.y = this.transform.localPosition.y + h*0.5 + 29;
 		barFrameBottom.transform.position.z = elementContainer.transform.position.z - 6;
-		barFrameBottom.renderer.material.color = Color.gray;
+		barFrameBottom.renderer.material.mainTexture = Resources.Load("textures/basetexture", Texture2D);
 		barFrameBottom.transform.parent = standElement.transform;
 		
 	

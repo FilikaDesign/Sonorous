@@ -4,6 +4,7 @@
 2) Baza beyaz kalýyor
 
 3) ED ÜRÜNLERÝ OMUZ HÝZASI VE ÜZERÝNDE “U”, ALTINDA ÝSE “F” KAPAK SEÇENEÐÝNE SAHÝP OLMALI.
+1.5 metre üstü ise U olmalý
 
 4) debugging
 

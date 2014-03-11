@@ -1,0 +1,11 @@
+C:\Users\Filika\Documents\GitHub\Sonorous\Temp\bin\Debug\Assembly-CSharp-firstpass.dll
+C:\Users\Filika\Documents\GitHub\Sonorous\Temp\bin\Debug\Assembly-CSharp-firstpass.pdb
+C:\Users\Filika\Documents\GitHub\Sonorous\Temp\bin\Debug\itextsharp.dll
+C:\Users\Filika\Documents\GitHub\Sonorous\Temp\bin\Debug\UnityEditor.dll
+C:\Users\Filika\Documents\GitHub\Sonorous\Temp\bin\Debug\UnityEngine.dll
+C:\Users\Filika\Documents\GitHub\Sonorous\Temp\bin\Debug\Mono.Cecil.dll
+C:\Users\Filika\Documents\GitHub\Sonorous\Temp\bin\Debug\nunit.framework.dll
+C:\Users\Filika\Documents\GitHub\Sonorous\Temp\bin\Debug\ICSharpCode.NRefactory.dll
+C:\Users\Filika\Documents\GitHub\Sonorous\Temp\bin\Debug\itextsharp.xml
+C:\Users\Filika\Documents\GitHub\Sonorous\obj\Debug\Assembly-CSharp-firstpass.dll
+C:\Users\Filika\Documents\GitHub\Sonorous\obj\Debug\Assembly-CSharp-firstpass.pdb

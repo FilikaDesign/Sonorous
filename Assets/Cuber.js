@@ -7,7 +7,7 @@ import System.IO;
 
 private var secretKey="x91{7&85,[cN5.S";//server side
 private var billofmaterialsUrl="http://www.filikatasarim.com/clients/sonorous/writeElement.php?"; //be sure to add a ? to your url
-private var baseNoti:String = "Yerdeki tüm ürünler (EX) bir baza seçeneğine sahip olmak zorunda. Lütfen baza yüksekliği seçin.";
+private var baseNoti:String = "All cabinets (EX type) should have a base underneath. Please, set the base height.";
 
 private var wall 		: GameObject;
 private var floor 		: GameObject;
@@ -41,7 +41,7 @@ private var draggingElementId : int = -1;
 
 private var snapFactorX	: float = 5;
 private var snapFactorY	: float = 5;
-private var cameraShift : float = 5;
+private var cameraShift : float = 150;
 private var snapEnable 	: boolean = true;
 
 private var bh:int;
@@ -128,26 +128,45 @@ function Start () {
 	Camera.main.backgroundColor = Color(0,0,0);
 	
 	// Make a game object
-	
+	//Point light
 	var lightGameObject : GameObject = new GameObject("The Light");
+	lightGameObject.gameObject.name = "Light One";
 	
 	// Add the light component
 	lightGameObject.AddComponent(Light);
 	
 	// Set color and position
 	lightGameObject.light.color = Color.white;
-	lightGameObject.light.type = LightType.Directional;
-	lightGameObject.light.intensity = 0.4;
+	lightGameObject.light.type = LightType.Point;
+	lightGameObject.light.intensity = 0.21;
 	
 	// Set the position (or any transform property) after
 	// adding the light component.
-	lightGameObject.transform.position = Vector3(0, 500, 0);
-	lightGameObject.transform.Rotate(40, 5, 200);
+	lightGameObject.transform.position = Vector3(-220, 100, -300);
+	lightGameObject.light.range = 120000;
+	//lightGameObject.transform.Rotate(40, 5, 200);
+	
+	var lightGameObjectTwo : GameObject = new GameObject("The Light");
+	lightGameObjectTwo.gameObject.name = "Light Two";
+	
+	// Add the light component
+	lightGameObjectTwo.AddComponent(Light);
+	
+	// Set color and position
+	lightGameObjectTwo.light.color = Color.white;
+	lightGameObjectTwo.light.type = LightType.Point;
+	lightGameObjectTwo.light.intensity = 0.21;
+	
+	// Set the position (or any transform property) after
+	// adding the light component.
+	lightGameObjectTwo.transform.position = Vector3(220, 100, -300);
+	lightGameObjectTwo.light.range = 120000;
+	//lightGameObject.transform.Rotate(40, 5, 200);
 	
 	
-	//point light
+	//Directional light
 	var cameraLightGameObject : GameObject = new GameObject("Camera Light");
-	
+	cameraLightGameObject.gameObject.name = "Light Three";
 	// Add the light component
 	cameraLightGameObject.AddComponent(Light);
 	// Set color and position
@@ -159,6 +178,21 @@ function Start () {
 	// Set the position (or any transform property) after
 	// adding the light component.
 	cameraLightGameObject.transform.parent = this.transform;
+	
+	//Directional light
+	var cameraLightGameObjectTwo : GameObject = new GameObject("Camera Light");
+	cameraLightGameObjectTwo.gameObject.name = "Light Three";
+	// Add the light component
+	cameraLightGameObjectTwo.AddComponent(Light);
+	// Set color and position
+	cameraLightGameObjectTwo.light.color = Color.white;
+	cameraLightGameObjectTwo.light.type = LightType.Directional;
+	cameraLightGameObjectTwo.light.intensity = 0.2;
+	cameraLightGameObjectTwo.transform.Rotate(65,0,0);
+	
+	// Set the position (or any transform property) after
+	// adding the light component.
+	cameraLightGameObjectTwo.transform.position = Vector3(220, 100, -300);
 	
 	
 	//create Background Wall and Floor
@@ -216,7 +250,6 @@ function addModul(modulParams:Hashtable, id:String) {
 	
 	var other : Element = eleman.GetComponent("Element");
 	other.params = parameters[parameters.Count-1];
-	
 
 	moduls.Add(eleman);
 	
@@ -270,6 +303,11 @@ function changeBaseAll(baseH : int){
 }
 
 function Update () {
+
+	if (Input.GetKeyDown(KeyCode.Escape)) {
+        Application.Quit();
+	}
+		
 	if(setRoomSize) {
 		 
 		if(!isGUIClosed) {
@@ -405,6 +443,7 @@ function Update () {
 				var codum:String = parameters[draggingElementId]["code"];
 	
 				setTextures(textureF,fNum ,codum,draggingElementId); 
+				
 			}
 		}
 		
@@ -457,7 +496,13 @@ function OnGUI() {
 	
 	
 	// Screen Shot Button
-	else if(GUI.Button(Rect((btnW+1)*3,0,btnW,btnW),GUITextures.tex_export())) {
+	if(Notification.checkForWarning()) {
+		GUI.color.a = 0.5;
+	}else{
+		GUI.color.a = 1.0;
+	}
+	//
+	if(GUI.Button(Rect((btnW+1)*3,0,btnW,btnW),GUITextures.tex_export())) {
 		//Application.CaptureScreenshot("Screenshot.png",1);
 		if(!pdfGenerated) {
 			pdfGenerated = true;
@@ -465,9 +510,10 @@ function OnGUI() {
 			BillofMaterials();
 		}
 	}
+	GUI.color.a = 1;
 	
 	// Delete Button
-	else if(GUI.Button(Rect((btnW+1)*4,0,btnW,btnW),GUITextures.tex_delete())) {
+	if(GUI.Button(Rect((btnW+1)*4,0,btnW,btnW),GUITextures.tex_delete())) {
 		removeAndDestroyAt(draggingElementId);
 	}
 	
@@ -633,6 +679,7 @@ function OnGUI() {
 				inch2 = true;
 				inch8 = false;
 				
+				clearAllHighlightedModuls();
 				
 			}
 			
@@ -657,7 +704,7 @@ function OnGUI() {
 				inch2 = false;
 				inch8 = true;
 				
-				
+				clearAllHighlightedModuls();
 			}
 			
 			
@@ -726,16 +773,19 @@ function setTextures(tex:String,coverCount:int,cType:String,_id:int) {
 		if(tip != "tf") {
 			variableScript.cubeFrontUp.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
 			parameters[_id]["FrontUp"] = tex;
+			variableScript.params = parameters[_id];
 		}
 		
 		variableScript.cubeFrontDown.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
 		parameters[_id]["FrontDown"] = tex;
+		variableScript.params = parameters[_id];
 	}
 	if(coverCount==1){
 		if(tip != "t") {
-			print("tex : "+tex);
+			//print("tex : "+tex);
 			variableScript.cubeFront.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
 			parameters[_id]["Front"] = tex;
+			variableScript.params = parameters[_id];
 		}
 	}
 	
@@ -753,6 +803,8 @@ function setTextures(tex:String,coverCount:int,cType:String,_id:int) {
 
 	variableScript.cubeTop.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
 	parameters[_id]["Top"] = tex;
+	
+	variableScript.params = parameters[_id];
 	
 	var decor:String = parameters[_id]["Top"];
 	cType = cType.Substring(0,5);
@@ -824,13 +876,20 @@ function showInspector() {
 	
 }
 
+function hideInspector() {
+	guiPosX = guiPosX+w;
+	
+	LeanTween.move( guiRect, Vector2(guiPosX, 0), 0.5 ).setEase(LeanTweenType.easeOutExpo);/*.setOnComplete( tweenFinished );*/
+	
+}
+/*
 function tweenFinished() {
 	isGUIClosed =  !isGUIClosed;
 	guiPosX = Screen.width-w;
 	LeanTween.move( guiRect, Vector2(guiPosX, 0), 0.5 ).setEase(LeanTweenType.easeOutExpo);
 }
 
-
+*/
 /*
 *** RESET GUI PAREMETERS
 */
@@ -845,19 +904,26 @@ function clearAllHighlightedModuls() {
 	//clear Highlighted Elements
 	if(draggingElementId != -1 && moduls.Count > 0){
 		
-			var allChildren = moduls[prevHighlightedId].GetComponentsInChildren(Transform);
+		var allChildren = moduls[prevHighlightedId].GetComponentsInChildren(Transform);
 
 		for (var child : Transform in allChildren) {
 		// do whatever with child transform here
 			if(child.renderer != null){
-    			if(child.renderer.gameObject.name !="Base"){
+    			if(child.renderer.gameObject.name =="Base"){
 	    			child.renderer.material.color = Color.white;
+	    			//child.renderer.material.mainTexture = Resources.Load("textures/basetexture", Texture2D);
 	   			 }
-	    		else{
-	   				 child.renderer.material.color = Color.gray;
+	   			 else if(child.renderer.gameObject.name =="skin"){
+	   			 	child.renderer.material.color = Color.black;
+	   			 }else{
+	   				 child.renderer.material.color = Color.white;
 	   			 }
     			variableScript.highlighted = false;
+    			
+    			//print(child.renderer.gameObject.name);
 			}
+			
+			
   		}
 	}
 }
@@ -1027,14 +1093,16 @@ function ToggleLight(){
 		for (var child : Transform in allChildren) {
 	    // do whatever with child transform here
 		    if(child.renderer != null){
-		    	if(child.renderer.gameObject.name !="Base"){
-			    child.renderer.material.color = Color.white;
-			    
-			    }
-			    else{
-			    child.renderer.material.color = Color.gray;
-			    
-			    }
+		    	if(child.renderer.gameObject.name =="Base"){
+	    			child.renderer.material.color = Color.white;
+	    			//child.renderer.material.mainTexture = Resources.Load("textures/basetexture", Texture2D);
+	   			 }
+	   			 else if(child.renderer.gameObject.name =="skin"){
+	   			 	child.renderer.material.color = Color.black;
+	   			 }
+	    		else{
+	   				 child.renderer.material.color = Color.white;
+	   			 }
 			    variableScript.highlighted = false;
 			   
 		    }
@@ -1120,7 +1188,20 @@ function BillofMaterials(){
 		pdfMaker.setRows(parameters[m]);
 	}
 	
+	// Reset Cam Pos
 	resetCameraPos();
+	
+	// Close GUI
+	if(!isGUIClosed) {
+		hideInspector();
+		
+		isGUIClosed = true;
+	}
+	
+	yield WaitForSeconds(1);
+	
+	// Hide Grid
+	showGrid = false;
 	yield WaitForEndOfFrame();
 	
  
@@ -1380,10 +1461,12 @@ function LoadState(){
 	         var index = j.ToString();               
 	         addModul(myStuffTex,index);
 	         
+	         
 	         /**/   
 	               
   }
   
+ 
   baseAllH = baseHeight;
   
    
@@ -1397,7 +1480,10 @@ function resetCameraPos(){
 	
 	//this.transform.position = Vector3(0 ,160,-400);
 	
-	LeanTween.move(camera.main.gameObject,new Vector3(0 ,160,-400),1f).setEase(LeanTweenType.easeOutExpo);
+    Camera.main.fieldOfView = 15;
+    Camera.main.farClipPlane = 4000;
+	
+	LeanTween.move(camera.main.gameObject,new Vector3(0 ,150,-1600),1f).setEase(LeanTweenType.easeOutExpo);
 
 }
 
@@ -1551,8 +1637,15 @@ function DebugEngine(){
 			for (var child : Transform in allChildren) {
 			// do whatever with child transform here
 				if(child.renderer != null){
-										
-					child.renderer.material.color = Color.white;
+					if(child.renderer.gameObject.name =="Base"){					
+						child.renderer.material.color = Color.white;
+						//child.renderer.material.mainTexture = Resources.Load("textures/basetexture", Texture2D);
+					}else if(child.renderer.gameObject.name =="skin"){
+	   			 		child.renderer.material.color = Color.black;
+	   			 	}
+					else{
+						child.renderer.material.color = Color.white;
+					}
 									   
 				}
 			}

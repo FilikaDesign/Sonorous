@@ -37,7 +37,6 @@ public class pdfMaker : MonoBehaviour {
 	public static void pdfC(){
 	
 		
-		
 		 
 		pdfName = "Test";
 		// create a texture to pass to encoding

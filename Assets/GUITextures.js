@@ -127,3 +127,4 @@ static function load_thumb_bg()
  
 	return tex;
 }
+
