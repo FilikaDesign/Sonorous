@@ -10,6 +10,7 @@ static function type_Ex(type:String) {
 		case "ex10-f":
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
+							"cabinetDoor":"F",
 							"Front":"textures/200s",
 	                        "FrontUp":"",
 	                        "FrontDown":"",
@@ -36,6 +37,7 @@ static function type_Ex(type:String) {
 	   case "ex10-fd":
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
+							"cabinetDoor":"FD",
 							"Front":"textures/200s",
 	                        "FrontUp":"textures/200s",
 	                        "FrontDown":"textures/200s",
@@ -62,6 +64,7 @@ static function type_Ex(type:String) {
 	    case "ex10-dd":
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
+							"cabinetDoor":"DD",
 							"Front":"textures/200s",
 	                        "FrontUp":"textures/200s",
 	                        "FrontDown":"textures/200s",
@@ -88,6 +91,7 @@ static function type_Ex(type:String) {
 	   case "ex10-t":
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
+							"cabinetDoor":"T",
 							"Front":"textures/200s",
 	                        "FrontUp":"",
 	                        "FrontDown":"",
@@ -114,6 +118,7 @@ static function type_Ex(type:String) {
 	    case "ex10-tf":
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
+							"cabinetDoor":"TF",
 							"Front":"",
 	                        "FrontUp":"textures/speakertexture",
 	                        "FrontDown":"textures/200s",
@@ -142,6 +147,7 @@ static function type_Ex(type:String) {
 		case "ex11-f":
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
+							"cabinetDoor":"F",
 							"Front":"textures/200s",
 	                        "FrontUp":"",
 	                        "FrontDown":"",
@@ -168,6 +174,7 @@ static function type_Ex(type:String) {
 	   case "ex11-fd":
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
+							"cabinetDoor":"FD",
 							"Front":"textures/200s",
 	                        "FrontUp":"textures/200s",
 	                        "FrontDown":"textures/200s",
@@ -194,6 +201,7 @@ static function type_Ex(type:String) {
 	   case "ex11-dd":
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
+							"cabinetDoor":"DD",
 							"Front":"textures/200s",
 	                        "FrontUp":"textures/200s",
 	                        "FrontDown":"textures/200s",
@@ -221,6 +229,7 @@ static function type_Ex(type:String) {
 	   case "ex11-t":
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
+							"cabinetDoor":"T",
 							"Front":"textures/speakertexture",
 	                        "FrontUp":"",
 	                        "FrontDown":"",
@@ -248,6 +257,7 @@ static function type_Ex(type:String) {
 	   case "ex11-tf":
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
+							"cabinetDoor":"TF",
 							"Front":"textures/200s",
 	                        "FrontUp":"textures/speakertexture",
 	                        "FrontDown":"textures/200s",
@@ -275,6 +285,7 @@ static function type_Ex(type:String) {
 	   case "ex12-f":
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
+							"cabinetDoor":"F",
 							"Front":"textures/200s",
 	                        "FrontUp":"",
 	                        "FrontDown":"",
@@ -301,6 +312,7 @@ static function type_Ex(type:String) {
 	   case "ex12-fd":
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
+							"cabinetDoor":"FD",
 							"Front":"textures/200s",
 	                        "FrontUp":"textures/200s",
 	                        "FrontDown":"textures/200s",
@@ -327,6 +339,7 @@ static function type_Ex(type:String) {
 	   case "ex12-dd":
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
+							"cabinetDoor":"DD",
 							"Front":"textures/200s",
 	                        "FrontUp":"textures/200s",
 	                        "FrontDown":"textures/200s",
@@ -353,6 +366,7 @@ static function type_Ex(type:String) {
 	   case "ex12-t":
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
+							"cabinetDoor":"T",
 							"Front":"textures/speakertexture",
 	                        "FrontUp":"",
 	                        "FrontDown":"",
@@ -379,6 +393,7 @@ static function type_Ex(type:String) {
 	   case "ex12-tf":
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
+							"cabinetDoor":"TF",
 							"Front":"textures/200s",
 	                        "FrontUp":"textures/speakertexture",
 	                        "FrontDown":"textures/200s",
@@ -406,6 +421,7 @@ static function type_Ex(type:String) {
 	   case "ex32-f":
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
+							"cabinetDoor":"F",
 							"Front":"textures/200s",
 	                        "FrontUp":"",
 	                        "FrontDown":"",
@@ -434,6 +450,7 @@ static function type_Ex(type:String) {
 	   case "ex20-d":
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
+							"cabinetDoor":"D",
 							"Front":"textures/200s",
 	                        "FrontUp":"",
 	                        "FrontDown":"",
@@ -460,6 +477,7 @@ static function type_Ex(type:String) {
 	   case "ex20-f":
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
+							"cabinetDoor":"F",
 							"Front":"textures/200s",
 	                        "FrontUp":"",
 	                        "FrontDown":"",
@@ -486,6 +504,7 @@ static function type_Ex(type:String) {
 	   case "ex20-dd":
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
+							"cabinetDoor":"DD",
 							"Front":"textures/200s",
 	                        "FrontUp":"textures/200s",
 	                        "FrontDown":"textures/200s",
@@ -512,6 +531,7 @@ static function type_Ex(type:String) {
 	   case "ex20-fd":
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
+							"cabinetDoor":"FD",
 							"Front":"textures/200s",
 	                        "FrontUp":"textures/200s",
 	                        "FrontDown":"textures/200s",
@@ -538,6 +558,7 @@ static function type_Ex(type:String) {
 	   case "ex20-t":
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
+							"cabinetDoor":"T",
 							"Front":"textures/speakertexture",
 	                        "FrontUp":"",
 	                        "FrontDown":"",
@@ -566,6 +587,7 @@ static function type_Ex(type:String) {
 	   case "ed50-f":
 		myStuffTex = {"elementId":0,
 							"elementType":"ED",
+							"cabinetDoor":"F",
 							"Front":"textures/200s",
 	                        "FrontUp":"",
 	                        "FrontDown":"",
@@ -592,6 +614,7 @@ static function type_Ex(type:String) {
 	   case "ed50-u":
 		myStuffTex = {"elementId":0,
 							"elementType":"ED",
+							"cabinetDoor":"U",
 							"Front":"textures/200s",
 	                        "FrontUp":"",
 	                        "FrontDown":"",
@@ -619,6 +642,7 @@ static function type_Ex(type:String) {
 	   case "ed50-f":
 		myStuffTex = {"elementId":0,
 							"elementType":"ED",
+							"cabinetDoor":"F",
 							"Front":"textures/200s",
 	                        "FrontUp":"",
 	                        "FrontDown":"",

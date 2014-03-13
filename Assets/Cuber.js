@@ -117,6 +117,7 @@ private var alphaRoomSize:float = 0.85f;
 //grid
 private var showGrid : boolean = false;
 static var lineMaterial : Material;
+private var gridMan : GameObject;
 
 private var pdfGenerated:boolean = false;
 function Start () {
@@ -1043,6 +1044,7 @@ function initKeyboardInteraction() {
 		
 		}else if(Event.current.Equals (Event.KeyboardEvent ("g")) || Event.current.Equals (Event.KeyboardEvent ("G"))) {
 			showGrid = !showGrid;
+			gridManToggle();
 	
 		}else if(Event.current.Equals (Event.KeyboardEvent ("e")) || Event.current.Equals (Event.KeyboardEvent ("e"))) {
 		
@@ -1241,6 +1243,11 @@ function SaveState(){
 		var elementType : String = parameters[i]["elementType"];
 		elementTypeXML.InnerText = elementType.ToString();
 		
+		var cabinetDoorXML : XmlElement = xmlDoc.CreateElement("cabinetDoor");
+		ElementXML.AppendChild(cabinetDoorXML);
+		var cabinetDoor : String = parameters[i]["cabinetDoor"];
+		cabinetDoorXML.InnerText = cabinetDoor.ToString();
+		
 		var FrontXML : XmlElement = xmlDoc.CreateElement("Front");
 		ElementXML.AppendChild(FrontXML);
 		var Front : String = parameters[i]["Front"];
@@ -1414,6 +1421,7 @@ function LoadState(){
   
   			var elementId : int = myLoad.Elements[j].elementId;
   			var elementType : String = myLoad.Elements[j].elementType;
+  			var cabinetDoor : String = myLoad.Elements[j].cabinetDoor;
   			var Front : String = myLoad.Elements[j].Front;
   			var FrontUp : String = myLoad.Elements[j].FrontUp;
   			var FrontDown : String = myLoad.Elements[j].FrontDown;
@@ -1437,6 +1445,7 @@ function LoadState(){
   			
 			var myStuffTex:Hashtable = {"elementId":elementId,
 							"elementType":elementType,
+							"cabinetDoor":cabinetDoor,
 							"Front":Front,
 	                        "FrontUp":FrontUp,
 	                        "FrontDown":FrontDown,
@@ -1469,10 +1478,6 @@ function LoadState(){
  
   baseAllH = baseHeight;
   
-   
-  
-  
- 
 
 }
 
@@ -1538,9 +1543,33 @@ function OnPostRender() {
 
 		GL.End();
 		GL.PopMatrix();
+		
+		
+		
 	
 	}
 
+}
+
+function gridManToggle(){
+
+	if(showGrid){
+			// human picture
+			gridMan  = GameObject.CreatePrimitive(PrimitiveType.Plane);
+			gridMan.name = "gridMan";
+			gridMan.transform.localScale = Vector3(7,0,18);
+			//gridMan.gameObject.renderer.material.color = Color.blue;
+			gridMan.transform.Rotate(90,180,0);
+			
+			gridMan.renderer.material.mainTexture = Resources.Load("mano", Texture2D);
+			gridMan.renderer.material.shader = Shader.Find ("Unlit/Transparent");
+			
+			gridMan.transform.localPosition = Vector3(0, 89, -2);
+			//gridMan.active = false;
+	}else{
+	
+		Destroy(gridMan);
+	}
 }
 
 function DebugEngine(){
@@ -1849,6 +1878,34 @@ function DebugEngine(){
 	}
 		
 	// Rule 5 : ENDS HERE.
+	
+	// Rule 6 : ED ÜRÜNLERİ OMUZ HİZASI VE ÜZERİNDE “U”, ALTINDA İSE “F” KAPAK SEÇENEĞİNE SAHİP OLMALI.
+	
+	
+	// Rule 6 : ENDS HERE.
+	
+	var shoulderLevel : int = 160;
+	
+	for(var c : int = 0; c < parameters.Count; c++){
+
+
+		if(parameters[c]["elementType"] == "ED"){
+		
+			var cabinetDoor	: String = parameters[c]["cabinetDoor"];
+			myH = parameters[c]["y"];
+						
+			if(myH < shoulderLevel && cabinetDoor == "U"){
+				print("error");
+			
+			}
+			
+			if(myH > shoulderLevel && cabinetDoor == "F"){
+			
+				print("error");
+			}
+			
+		}
+	}
 		
 }
 
@@ -2299,295 +2356,3 @@ function returnStructure(){
 			
 
 }
-
-/* function RulesEngine(){
-
-		var othersX	: int;
-		var othersY : int;
-		var othersH : int;
-		var othersW : int;
-		
-		var deltaW : int;
-		
-		var considerX : int;
-		var considerY : int;
-		var considerH : int;
-		var considerW : int;
-		
-		considerX = parameters[draggingElementId]["x"];
-		considerY = parameters[draggingElementId]["y"];
-		considerH = parameters[draggingElementId]["h"];
-		considerW = parameters[draggingElementId]["w"];
-
-		// Rule 1 : EX ÜST ÜSTE OLMAZ
-		
-		if(parameters[draggingElementId]["elementType"] == "EX"){
-			
-			
-			for(var i : int = 0; i < parameters.Count; i++){
-			
-				if(i != draggingElementId && parameters[i]["elementType"] == "EX"){
-				
-					othersX = parameters[i]["x"];
-					othersY = parameters[i]["y"];
-					othersH = parameters[i]["h"];
-					othersW = parameters[i]["w"];
-					
-					if(Mathf.Min(othersX,considerX) == othersX){
-						
-							//others solda
-							deltaW = othersW;
-						
-					}else{
-							//others solda
-							deltaW = considerW;
-						
-					}
-					
-				
-					if(//conditions
-					
-					(Mathf.Abs(othersY - considerY) == considerH) //yukarda aşağıda
-					
-					&&
-					
-					(Mathf.Abs(othersX - considerX) < deltaW) // arasında
-					
-					
-					){
-						
-						Debug.Log("EX Type Moduls cannot be superposed");
-						
-						guiNotification = "EX Type Moduls cannot be superposed";
-						//Notification.showNotification();
-						Notification.notiBool[0] = "1";
-						break;
-					}else{
-						Notification.notiBool[0] = "0";
-					}
-				
-				}
-				
-			}
-		
-		}
-		
-		// Rule 2 : ED ÜST ÜSTE OLMAZ
-		
-		if(parameters[draggingElementId]["elementType"] == "ED"){
-			
-			//Debug.Log("2 : ED rule");
-			for(var j : int = 0; j < parameters.Count; j++){
-			
-				if(j != draggingElementId && parameters[j]["elementType"] == "ED"){
-					
-					othersX = parameters[j]["x"];
-					othersY = parameters[j]["y"];
-					othersH = parameters[j]["h"];
-					othersW = parameters[j]["w"];
-					
-					if(Mathf.Min(othersX,considerX) == othersX){
-						
-							//others solda
-							deltaW = othersW;
-						
-					}else{
-							//others solda
-							deltaW = considerW;
-						
-					}
-		
-					if(//conditions
-
-					
-					(Mathf.Abs(othersY - considerY) == considerH) //yukarda aşağıda
-					
-					&&
-					
-					(Mathf.Abs(othersX - considerX) < deltaW) // arasında
-					
-					
-					){
-						
-						//Debug.Log("2 : ED ust uste olmaaaaz");
-						guiNotification = "2 : ED Type Moduls cannot be superposed";
-						//Notification.showNotification();
-						Notification.notiBool[1] = "1";
-						break;
-					}else{
-						Notification.notiBool[1] = "0";
-					}
-				
-				}
-				
-			}
-		
-		}
-		
-		// Rule 3 : ED EX’in ÜSTÜNE GELEBİLİR. TAM TERSİ OLAMAZ. = EX ED'in üstüne gelemez
-		
-		if(parameters[draggingElementId]["elementType"] == "EX"){
-		
-			//Debug.Log("3 : ED EX rule");
-		
-			for(var k : int = 0; k < parameters.Count; k++){
-			
-				if(k != draggingElementId && parameters[k]["elementType"] == "ED"){
-						//static ED'ler
-						othersX = parameters[k]["x"];
-						othersY = parameters[k]["y"];
-						othersH = parameters[k]["h"];
-						othersW = parameters[k]["w"];
-						
-						
-						
-						if(Mathf.Min(othersX,considerX) == othersX){
-						
-							//others solda
-							deltaW = othersW;
-						
-						}else{
-							//others solda
-							deltaW = considerW;
-						
-						}
-						
-						if(//conditions
-
-					
-						(considerY - othersY == considerH) //yukarda 
-						
-						&&
-						
-						(Mathf.Abs(othersX - considerX) < deltaW) // arasında
-						
-						
-						){
-							
-							//Debug.Log("3 : EX ED'in üstüne gelemez");
-							guiNotification = "3 : EX Type Moduls cannot be placed onto ED Moduls";
-							Notification.showNotification();
-							Notification.notiBool[2] = "1";
-							break;
-						}else{
-							Notification.notiBool[2] = "0";
-						}
-				
-				
-				}
-			
-			
-			}
-		}
-		
-		if(parameters[draggingElementId]["elementType"] == "ED"){
-		
-			//Debug.Log("3 : ED EX rule");
-		
-			for(var m : int = 0; m < parameters.Count; m++){
-			
-				if(m != draggingElementId && parameters[m]["elementType"] == "EX"){
-						//static EX'ler
-						othersX = parameters[m]["x"];
-						othersY = parameters[m]["y"];
-						othersH = parameters[m]["h"];
-						othersW = parameters[m]["w"];
-						
-						
-						
-						if(Mathf.Min(othersX,considerX) == othersX){
-						
-							//others solda
-							deltaW = othersW;
-						
-						}else{
-							//others solda
-							deltaW = considerW;
-						
-						}
-						
-						if(//conditions
-
-					
-						(othersY - considerY == considerH) //yukarda aşağıda
-						
-						&&
-						
-						(Mathf.Abs(othersX - considerX) < deltaW) // arasında
-						
-						
-						){
-							
-							//Debug.Log("3 : EX ED'in üstüne gelemez");
-							guiNotification = "3 : EX Type Moduls cannot be placed onto ED Moduls";
-							Notification.showNotification();
-							Notification.notiBool[2] = "1";
-							break;
-						}else{
-							Notification.notiBool[2] = "0";
-						}
-				
-				
-				}
-			
-			
-			}
-		}
-		
-		// Rule 4 : ED YERDE OLAMAZ.
-		
-		if(parameters[draggingElementId]["elementType"] == "ED"){
-			
-			if(considerY - considerH * 0.5 < snapFactorY){
-				Debug.Log("4 : ED YERDE OLAMAZ");
-				guiNotification = "4 : ED Type Moduls cannot be on the floor";
-				Notification.showNotification();
-				Notification.notiBool[3] = "1";
-			
-			}else{
-				Debug.Log("4 : Tamamdir");
-				Notification.notiBool[3] = "0";
-				
-			}
-		
-		}
-		
-		
-		// Rule 5 : EX DUVARDA OLAMAZ (ASILAMAZ). HER ZAMAN YERDE OLMALI
-		// Rule 6 : Yerdeki tüm ürünler (EX) bir baza seçeneğine sahip olmak zorunda.
-		
-		if(parameters[draggingElementId]["elementType"] == "EX"){
-		
-			var baseHeight : int = parameters[draggingElementId]["baseHeight"];
-			
-			if(considerY - considerH * 0.5 - baseHeight> 0){
-				//Debug.Log("5 : EX DUVARDA OLAMAZ (ASILAMAZ). HER ZAMAN YERDE OLMALI");
-				guiNotification = "5 : EX Type Moduls cannot be on the wall";
-				Notification.showNotification();
-				Notification.notiBool[4] = "1";
-			
-			}else{
-				//EX YERDE DEMEK
-				Notification.notiBool[4] = "0";
-				if(baseHeight <= 0){
-					guiState = "modul_edit";
-					
-					if(isGUIClosed) {
-						showInspector();
-						isGUIClosed = false;
-					}
-					
-					Debug.Log("6 : Yerdeki tüm ürünler (EX) bir baza seçeneğine sahip olmak zorunda.");
-					Notification.closeNotification();
-					Notification.notiBool[5] = "1";
-					
-					
-				}else{
-					Notification.notiBool[5] = "0";
-				}
-				
-			}
-		
-		}
-		
-} */

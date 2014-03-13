@@ -7,6 +7,7 @@
  	
  	public var elementId 	: int;
  	public var elementType 	: String;
+ 	public var cabinetDoor 	: String;
  	public var Front 		: String;
  	public var FrontUp 		: String;
  	public var FrontDown 	: String;
