@@ -6,6 +6,10 @@
 3) ED ÜRÜNLERÝ OMUZ HÝZASI VE ÜZERÝNDE “U”, ALTINDA ÝSE “F” KAPAK SEÇENEÐÝNE SAHÝP OLMALI.
 1.5 metre üstü ise U olmalý
 
+yapýldý ama Notification yok
+
 4) debugging
 
 5) Baza toplu secim
+
+6) Cabinet Door bilgisi material ekranýna ve pdf'e aktarýlmalý

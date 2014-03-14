@@ -811,27 +811,27 @@ function setTextures(tex:String,coverCount:int,cType:String,_id:int) {
 	cType = cType.Substring(0,5);
 	switch(decor) {
 		case "textures/black":
-		parameters[_id]["code"] = cType + " AMZ"  + " - " + parameters[_id]["structure"];
+		parameters[_id]["code"] = cType + parameters[_id]["cabinetDoor"] + "-" + " AMZ"  + "-" + parameters[_id]["structure"];
 		break;
 		
 		case "textures/regblack":
-		parameters[_id]["code"] = cType + " BLK"  + " - " + parameters[_id]["structure"];
+		parameters[_id]["code"] = cType + parameters[_id]["cabinetDoor"] + "-" + " BLK"  + "-" + parameters[_id]["structure"];
 		break;
 		
 		case "textures/capucino":
-		parameters[_id]["code"] = cType + " CPN"  + " - " + parameters[_id]["structure"];
+		parameters[_id]["code"] = cType + parameters[_id]["cabinetDoor"] + "-" + " CPN"  + "-" + parameters[_id]["structure"];
 		break;
 		
 		case "textures/H3375_ST22":
-		parameters[_id]["code"] = cType + " OAK"  + " - " + parameters[_id]["structure"];
+		parameters[_id]["code"] = cType + parameters[_id]["cabinetDoor"] + "-" + " OAK"  + "-" + parameters[_id]["structure"];
 		break;
 		
 		case "textures/200s":
-		parameters[_id]["code"] = cType + " WHT"  + " - " + parameters[_id]["structure"];
+		parameters[_id]["code"] = cType + parameters[_id]["cabinetDoor"] + "-" + " WHT"  + "-" + parameters[_id]["structure"];
 		break;
 		
 		case "textures/graphit":
-		parameters[_id]["code"] = cType + " GRP"  + " - " + parameters[_id]["structure"];
+		parameters[_id]["code"] = cType + parameters[_id]["cabinetDoor"] + "-" + " GRP"  + "-" + parameters[_id]["structure"];
 		break;
 		
 	}
@@ -944,6 +944,9 @@ function initSetRoomSize() {
 	GUI.Box(Rect(0,0,Screen.width,Screen.height),"");
 	GUI.skin.box.normal.background = null;
 	GUI.Box(Rect((Screen.width-GUITextures.tex_logo().width)*0.5,50,GUITextures.tex_logo().width,GUITextures.tex_logo().height),GUITextures.tex_logo());
+	
+	GUI.Label(Rect(Screen.width*0.5-70,150,70,20),"width");
+	GUI.Label(Rect(Screen.width*0.5-76,174,70,20),"height");
 	textWidth = GUI.TextField(Rect(Screen.width*0.5-35,150,70,20),textWidth);
 	textHeight = GUI.TextField(Rect(Screen.width*0.5-35,174,70,20),textHeight);
 	GUI.skin.box.normal.background = GUITextures.tex_box_bg();
@@ -1579,6 +1582,9 @@ function DebugEngine(){
 	Notification.notiBool[2] = "0";
 	Notification.notiBool[3] = "0";
 	Notification.notiBool[4] = "0";
+	Notification.notiBool[5] = "0";
+	Notification.notiBool[6] = "0";
+	Notification.notiBool[7] = "0";
 	
 	var myX	: int;
 	var myY : int;
@@ -1643,19 +1649,12 @@ function DebugEngine(){
 						//print("sorun yok abi");
 						
 					}
-					
-					
-			
+
 				
 				}
-			
-				
-			
-			
+
 			}
-		
-		
-		
+
 		}
 	
 		if(Notification.notiBool[0] == "0"){
@@ -1816,9 +1815,10 @@ function DebugEngine(){
 			myY = parameters[k]["y"];
 			myH = parameters[k]["h"];
 			myW = parameters[k]["w"];
-					
 			
-			if(myY - myH * 0.5 == 0){
+			
+			
+			if(myY - myH * 0.5 <= floor.transform.localPosition.y + floor.transform.localScale.y * 0.5){
 				Debug.Log("4 : ED YERDE OLAMAZ");
 				Notification.notiBool[3] = "1";
 			
@@ -1882,7 +1882,7 @@ function DebugEngine(){
 	// Rule 6 : ED ÜRÜNLERİ OMUZ HİZASI VE ÜZERİNDE “U”, ALTINDA İSE “F” KAPAK SEÇENEĞİNE SAHİP OLMALI.
 	
 	
-	// Rule 6 : ENDS HERE.
+	
 	
 	var shoulderLevel : int = 160;
 	
@@ -1895,17 +1895,20 @@ function DebugEngine(){
 			myH = parameters[c]["y"];
 						
 			if(myH < shoulderLevel && cabinetDoor == "U"){
-				print("error");
+				//print("error");
+				Notification.notiBool[6] = "1";
 			
 			}
 			
 			if(myH > shoulderLevel && cabinetDoor == "F"){
-			
-				print("error");
+				Notification.notiBool[7] = "1";
+				//print("error");
 			}
 			
 		}
 	}
+	
+	// Rule 6 : ENDS HERE.
 		
 }
 
@@ -1940,9 +1943,11 @@ function HighlightErrorsEngine(errorCode : int){
 			
 			}
 			
-			
+		//	print("errorCode : " + errorCode);
 			
 	switch(errorCode){
+	
+	
 	
 	case 0:
 			
@@ -2272,6 +2277,79 @@ function HighlightErrorsEngine(errorCode : int){
 			
 		// Rule 5 : ENDS HERE.
 	break;
+	
+	// Rule 6 : ED ÜRÜNLERİ OMUZ HİZASI VE ÜZERİNDE “U”, ALTINDA İSE “F” KAPAK SEÇENEĞİNE SAHİP OLMALI.
+	
+	
+	case 6:
+	
+		
+		var shoulderLevel : int = 160;
+		
+		for(var cc : int = 0; cc < parameters.Count; cc++){
+	
+	
+			if(parameters[cc]["elementType"] == "ED"){
+			
+				var cabinetDoor	: String = parameters[cc]["cabinetDoor"];
+				myH = parameters[cc]["y"];
+							
+				if(myH < shoulderLevel && cabinetDoor == "U"){
+					print("error U");
+					allChildren = moduls[cc].GetComponentsInChildren(Transform);
+									
+					for (var child : Transform in allChildren) {
+							// do whatever with child transform here
+							if(child.renderer != null){
+							
+								child.renderer.material.color = Color.red;
+						   
+							}
+					}
+				
+				}
+				
+				
+				
+			}
+		}
+	// Rule 6 : ENDS HERE.
+	break;
+	
+	case 7:
+	
+		
+		var shoulderLevel2 : int = 160;
+		
+		for(var ccc : int = 0; ccc < parameters.Count; ccc++){
+	
+	
+			if(parameters[ccc]["elementType"] == "ED"){
+			
+				var cabinetDoor2	: String = parameters[ccc]["cabinetDoor"];
+				myH = parameters[ccc]["y"];
+							
+				
+				
+				if(myH > shoulderLevel2 && cabinetDoor2 == "F"){
+					print("error F");
+					allChildren = moduls[ccc].GetComponentsInChildren(Transform);
+									
+					for (var child : Transform in allChildren) {
+							// do whatever with child transform here
+							if(child.renderer != null){
+							
+								child.renderer.material.color = Color.red;
+						   
+							}
+					}
+				}
+				
+			}
+		}
+	// Rule 6 : ENDS HERE.
+	break;
+	
 	}
 
 }

@@ -4,21 +4,23 @@ static var isNotClosed:boolean = true;
 static var notPosY:int = Screen.height;
 static var notificationRect:LTRect = new LTRect( 0, notPosY,Screen.width, h );
 static var notCount:int = 0;
-static var textH:int = 35;
+static var textH:int = 45;
 static var w:int = 240;
 static var selectionGridInt : int = 0;
-
-static var notiArr:Array = ["- EX Type Cabinets cannot be superposed",
-							"- ED Type Cabinets cannot be superposed",
-							"- EX Type Cabinets cannot be placed onto ED Cabinets",
-							"- ED Type Cabinets cannot be on the floor",
-							"- EX Type Cabinets cannot be on the wall",
-							"- EX Type Cabinets have to have a base option"];
+	
+static var notiArr:Array = ["- EX Cabinets cannot be superposed",
+							"- ED Cabinets cannot be superposed",
+							"- EX Cabinets cannot be onto ED Cabinets",
+							"- ED Cabinets cannot be on the floor",
+							"- EX Cabinets cannot be on the wall",
+							"- EX Cabinets must have a base option",
+							"- ED-U Cabinets should be above the shoulder",
+							"- ED-F Cabinets should be below the shoulder"];
 							
-static var notiBool:Array = ["0","0","0","0","0","0"];
+static var notiBool:Array = ["0","0","0","0","0","0","0","0"];
 
 static function checkForWarning() {
-	if(notiBool[0]=="1" || notiBool[1]=="1" || notiBool[2]=="1" || notiBool[3]=="1" || notiBool[4]=="1" || notiBool[5]=="1") {
+	if(notiBool[0]=="1" || notiBool[1]=="1" || notiBool[2]=="1" || notiBool[3]=="1" || notiBool[4]=="1" || notiBool[5]=="1" || notiBool[6]=="1" || notiBool[7]=="1") {
 		
 		return true;
 	}else{
@@ -27,6 +29,7 @@ static function checkForWarning() {
 }
 
 static function checkNotiCount() {
+
 	for(var i:int = 0; i < notiBool.Count; i++) {
 		if(notiBool[i] == "1") {
 			var str:String = notiArr[i];
@@ -64,8 +67,8 @@ static function message(str:String) {
 	GUI.skin.box.normal.background =  GUITextures.tex_box_bg();
 	GUI.color.a = 1;
 	GUI.skin.label.alignment = TextAnchor.MiddleCenter;
-	GUI.Label(Rect(mh,0,Screen.width-mh*2,h),str);
 	GUI.skin.label.alignment = TextAnchor.MiddleLeft;
+	GUI.skin.label.wordWrap = false;
 	GUI.EndGroup ();
 }
 
