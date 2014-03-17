@@ -2,25 +2,31 @@ using UnityEngine;
 using System.Collections;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
+using iTextSharp;
 using System.IO;
+
 
 public class pdfMaker : MonoBehaviour {
 
 	//http://forum.unity3d.com/threads/190797-Creating-PDF-with-iTextSharp-on-IOS
 	//http://answers.unity3d.com/questions/53170/using-drawing-package-like-systemdrawing.html
-	private static string pdf1 = "Deze PDF is gegenereerd vanuit Unity3D door Sebastiaan";
+	
 	private static string pdfName;
 	private static PdfPCell cellLight;
 	private static PdfPCell cellTitle;
 	private static ArrayList parms;      
-  	private static iTextSharp.text.Font regular = FontFactory.GetFont("Arial", 7, iTextSharp.text.Font.NORMAL, BaseColor.DARK_GRAY);
-	private static iTextSharp.text.Font title = FontFactory.GetFont("Arial", 8, iTextSharp.text.Font.BOLD, BaseColor.DARK_GRAY);
-	private static iTextSharp.text.Font maintitle = FontFactory.GetFont("Arial", 10, iTextSharp.text.Font.BOLDITALIC, BaseColor.DARK_GRAY);
+  	private static iTextSharp.text.Font regular = FontFactory.GetFont("DINPro-Bold 2", 7, iTextSharp.text.Font.NORMAL, BaseColor.DARK_GRAY);
+	private static iTextSharp.text.Font title = FontFactory.GetFont("DINPro-Bold 2", 8, iTextSharp.text.Font.BOLD, BaseColor.DARK_GRAY);
+	private static iTextSharp.text.Font maintitle;// = FontFactory.GetFont("Me Likey", 16, iTextSharp.text.Font.NORMAL, BaseColor.DARK_GRAY);
+	
+
 	
 	private static ArrayList sortedTable;    
 	
 	// Use this for initialization
 	void Start () {
+		
+		
 	
 	}
 	
@@ -37,7 +43,14 @@ public class pdfMaker : MonoBehaviour {
 	public static void pdfC(){
 	
 		
-		 
+		FontFactory.RegisterDirectory("C:\\WINDOWS\\Fonts");
+		
+		
+		
+		maintitle = FontFactory.GetFont("Me Likey", 16, iTextSharp.text.Font.NORMAL, BaseColor.DARK_GRAY);
+		
+		
+		
 		pdfName = "Test";
 		// create a texture to pass to encoding
         Texture2D texture = new Texture2D(Screen.width, Screen.height-100, TextureFormat.RGB24, false);
@@ -74,9 +87,24 @@ public class pdfMaker : MonoBehaviour {
 		
 		
 		doc.Open();
-
-        //doc.Add(new Paragraph(pdf1));
-		//doc.NewPage();
+		
+		BaseFont customfont = BaseFont.CreateFont(Application.dataPath+"/resources/DINPro-Bold 2.otf", BaseFont.CP1252, BaseFont.EMBEDDED);
+		iTextSharp.text.Font font = new iTextSharp.text.Font(customfont, 28);
+		
+		
+		Paragraph heading = new Paragraph("SONOROUS", font);
+		heading.Leading = 60f;
+		doc.Add(heading);
+		
+		
+		Chunk chkHeader = new Chunk("COMBINATION                                    ", font);
+		chkHeader.SetUnderline(0.3f, -12f);
+		Paragraph pHeader = new Paragraph(chkHeader);
+		pHeader.Leading = 28f;
+		pHeader.SpacingAfter = 200f;
+		doc.Add(pHeader);
+		
+	
 		
 		
 		//doc.Add(gif);
@@ -125,22 +153,32 @@ public class pdfMaker : MonoBehaviour {
 		}
 			
 		
-	
-		
 		
 		doc.Add(mark);
 		
-	
-		
-		
-		//for()
-		//int Score = GameObject.Find("Cuber").GetComponent<Cuber>().woodThickness;
-		
 		doc.Add(new Phrase("\n"));
+		doc.Add(new Phrase("\n"));
+			
 		
 		
+		BaseFont customfont2 = BaseFont.CreateFont(Application.dataPath+"/resources/DINPro-Regular 2.otf", BaseFont.CP1252, BaseFont.EMBEDDED);
+		iTextSharp.text.Font font2 = new iTextSharp.text.Font(customfont2, 12);
+		
+		tableSorter(parms);
+		
+		for(int i = 0; i<sortedTable.Count; i++) {
+			
+			
+			Hashtable ht = sortedTable[i] as Hashtable;
+			int id = (int)ht["screenId"] + 1;
+			doc.Add(new Phrase(id.ToString()+"-"+ht["code"].ToString().ToUpper(),font2));
+			doc.Add(new Phrase("\n"));
+			
+		}
+		
+		/*
   		PdfPTable table = new PdfPTable(2);
-		PdfPCell cell = new PdfPCell(new Phrase("Bill of Moduls",maintitle));
+		PdfPCell cell = new PdfPCell(new Phrase("BILL OF MODULS",maintitle));
 		cell.Colspan = 2;
 		cell.PaddingTop = 5;
 		cell.PaddingBottom = 8;
@@ -163,7 +201,7 @@ public class pdfMaker : MonoBehaviour {
 		cellTitle = new PdfPCell(new Phrase("Code",title));
 		setTitleStyleCell();
 		table.AddCell(cellTitle);
-		
+		*/
 		//cellTitle = new PdfPCell(new Phrase("Cover Num.",title));
 		//setTitleStyleCell();
 		//table.AddCell(cellTitle);
@@ -200,7 +238,7 @@ public class pdfMaker : MonoBehaviour {
 		setTitleStyleCell();
 		table.AddCell(cellTitle);
 		*/
-		
+		/*
 		tableSorter(parms);
 			
 		for(int i = 0; i<sortedTable.Count; i++) {
@@ -233,7 +271,7 @@ public class pdfMaker : MonoBehaviour {
 			cellLight.HorizontalAlignment = 1; //0=Left, 1=Centre, 2=Right
 			cellLight.BorderColor = BaseColor.LIGHT_GRAY;
 			table.AddCell(cellLight);
-			
+			*/
 			// third column
 			//table.AddCell(new Paragraph(ht["nFrontFace"].ToString(),regular));
 			/*cellLight = new PdfPCell(new Phrase(ht["nFrontFace"].ToString(),regular));
@@ -392,29 +430,21 @@ public class pdfMaker : MonoBehaviour {
 			cellLight.HorizontalAlignment = 1; //0=Left, 1=Centre, 2=Right
 			cellLight.BorderColor = BaseColor.LIGHT_GRAY;
 			table.AddCell(cellLight);*/
-		}
+		/*}
 		
 		
 		doc.Add(table);
 		
 		
-		
-		
-		doc.Add(new Paragraph(pdf1));
-		//iTextSharp.text.pdf.BaseFont bf = iTextSharp.text.pdf.BaseFont.CreateFont(iTextSharp.text.pdf.BaseFont.COURIER, iTextSharp.text.pdf.BaseFont.CP1252, iTextSharp.text.pdf.BaseFont.NOT_EMBEDDED);
-        
-		
-
+		 */
         doc.Close ();
 		
-		// Added by Karl. - Tell unity to delete the texture, by default it seems to keep hold of it and memory crashes will occur after too many screenshots.
-        DestroyObject( texture );
-		
-		//EditorUtility.DisplayDialog("Place Selection On Surface?","hhu","helal","yuk");
-			
-			
+		DestroyObject( texture );
+
 			
 	}
+	
+	
 	
 	public static PdfPCell cell(string txt) {
 		PdfPCell cellLighth = new PdfPCell(new Phrase(txt,regular));

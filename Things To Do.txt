@@ -3,13 +3,14 @@
 
 2) Baza beyaz kalýyor
 
-3) ED ÜRÜNLERÝ OMUZ HÝZASI VE ÜZERÝNDE “U”, ALTINDA ÝSE “F” KAPAK SEÇENEÐÝNE SAHÝP OLMALI.
-1.5 metre üstü ise U olmalý
+3) debugging
 
-yapýldý ama Notification yok
+4) Baza toplu secim
 
-4) debugging
+5) Kabinet üzerine çizgi
 
-5) Baza toplu secim
+6) pdf formatý
 
-6) Cabinet Door bilgisi material ekranýna ve pdf'e aktarýlmalý
+7) A,B,C formatý export anýnda problemli
+
+8) 
