@@ -15,9 +15,7 @@ public class pdfMaker : MonoBehaviour {
 	private static PdfPCell cellLight;
 	private static PdfPCell cellTitle;
 	private static ArrayList parms;      
-  	private static iTextSharp.text.Font regular = FontFactory.GetFont("DINPro-Bold 2", 7, iTextSharp.text.Font.NORMAL, BaseColor.DARK_GRAY);
-	private static iTextSharp.text.Font title = FontFactory.GetFont("DINPro-Bold 2", 8, iTextSharp.text.Font.BOLD, BaseColor.DARK_GRAY);
-	private static iTextSharp.text.Font maintitle;// = FontFactory.GetFont("Me Likey", 16, iTextSharp.text.Font.NORMAL, BaseColor.DARK_GRAY);
+  	
 	
 
 	
@@ -43,20 +41,18 @@ public class pdfMaker : MonoBehaviour {
 	public static void pdfC(){
 	
 		
-		FontFactory.RegisterDirectory("C:\\WINDOWS\\Fonts");
+		tableSorter(parms);
 		
-		
-		
-		maintitle = FontFactory.GetFont("Me Likey", 16, iTextSharp.text.Font.NORMAL, BaseColor.DARK_GRAY);
-		
-		
+		//FontFactory.RegisterDirectory("C:\\Windows\\Fonts");
+
+		//print (Application.streamingAssetsPath);
 		
 		pdfName = "Test";
 		// create a texture to pass to encoding
-        Texture2D texture = new Texture2D(Screen.width, Screen.height-100, TextureFormat.RGB24, false);
+        Texture2D texture = new Texture2D(Screen.width, Screen.height-120, TextureFormat.RGB24, false);
 		
 		// put buffer into texture
-        texture.ReadPixels(new Rect(0, 0, Screen.width, Screen.height - 100), 0, 0);
+        texture.ReadPixels(new Rect(0, 0, Screen.width, Screen.height - 120), 0, 0);
         texture.Apply();
 		
         byte[] bytes = texture.EncodeToPNG();
@@ -71,6 +67,8 @@ public class pdfMaker : MonoBehaviour {
         {
 
             PdfWriter.GetInstance(doc, new FileStream(Application.dataPath + "/" + pdfName + ".pdf", FileMode.Create ));
+			
+			
 			
         }
 
@@ -88,24 +86,50 @@ public class pdfMaker : MonoBehaviour {
 		
 		doc.Open();
 		
-		BaseFont customfont = BaseFont.CreateFont(Application.dataPath+"/resources/DINPro-Bold 2.otf", BaseFont.CP1252, BaseFont.EMBEDDED);
-		iTextSharp.text.Font font = new iTextSharp.text.Font(customfont, 28);
+		//iTextSharp.text.Font regular = FontFactory.GetFont("C:\\Windows\\Fonts\\Antipasto.ttf", 28, iTextSharp.text.Font.NORMAL, BaseColor.BLACK);
+		//print (regular.Familyname);
+		
+		iTextSharp.text.Font regular = FontFactory.GetFont("C:\\Windows\\Fonts\\Arial.ttf", BaseFont.CP1252, BaseFont.EMBEDDED, 12, iTextSharp.text.Font.NORMAL, BaseColor.BLACK );
+		
+		//BaseFont customfont = BaseFont.CreateFont("C:\\Windows\\Fonts\\DINPro-Regular 2.otf", BaseFont.CP1252, BaseFont.EMBEDDED);
+		//iTextSharp.text.Font font = new iTextSharp.text.Font(customfont, 28);
 		
 		
-		Paragraph heading = new Paragraph("SONOROUS", font);
+		/*
+		Paragraph heading = new Paragraph("SONOROUS",regular);
+		
 		heading.Leading = 60f;
 		doc.Add(heading);
 		
 		
-		Chunk chkHeader = new Chunk("COMBINATION                                    ", font);
+		Chunk chkHeader = new Chunk("COMBINATION                                    ",regular);
 		chkHeader.SetUnderline(0.3f, -12f);
+		
 		Paragraph pHeader = new Paragraph(chkHeader);
+		
 		pHeader.Leading = 28f;
-		pHeader.SpacingAfter = 200f;
+		pHeader.SpacingAfter = 150f;
 		doc.Add(pHeader);
+		*/
+		Image header = Image.GetInstance(Application.dataPath + "/resources/sono_combi.jpg");
 		
-	
+		header.ScalePercent(50f);
 		
+		
+		doc.Add(header);
+		
+		doc.Add(new Phrase("\n"));
+		doc.Add(new Phrase("\n"));
+		doc.Add(new Phrase("\n"));
+		doc.Add(new Phrase("\n"));
+		doc.Add(new Phrase("\n"));
+		doc.Add(new Phrase("\n"));
+		doc.Add(new Phrase("\n"));
+		doc.Add(new Phrase("\n"));
+		doc.Add(new Phrase("\n"));
+		doc.Add(new Phrase("\n"));
+		doc.Add(new Phrase("\n"));
+		doc.Add(new Phrase("\n"));
 		
 		//doc.Add(gif);
 		Image mark = Image.GetInstance(Application.dataPath + "/Test.png");
@@ -159,284 +183,24 @@ public class pdfMaker : MonoBehaviour {
 		doc.Add(new Phrase("\n"));
 		doc.Add(new Phrase("\n"));
 			
+		/*
 		
-		
-		BaseFont customfont2 = BaseFont.CreateFont(Application.dataPath+"/resources/DINPro-Regular 2.otf", BaseFont.CP1252, BaseFont.EMBEDDED);
+		BaseFont customfont2 = BaseFont.CreateFont("C:\\Windows\\Fonts\\DINPro-Regular 2.otf", BaseFont.CP1252, BaseFont.EMBEDDED);
 		iTextSharp.text.Font font2 = new iTextSharp.text.Font(customfont2, 12);
 		
-		tableSorter(parms);
+		*/
 		
 		for(int i = 0; i<sortedTable.Count; i++) {
 			
 			
 			Hashtable ht = sortedTable[i] as Hashtable;
 			int id = (int)ht["screenId"] + 1;
-			doc.Add(new Phrase(id.ToString()+"-"+ht["code"].ToString().ToUpper(),font2));
+			doc.Add(new Phrase(id.ToString()+"- "+ht["code"].ToString().ToUpper(),regular));
 			doc.Add(new Phrase("\n"));
 			
 		}
 		
-		/*
-  		PdfPTable table = new PdfPTable(2);
-		PdfPCell cell = new PdfPCell(new Phrase("BILL OF MODULS",maintitle));
-		cell.Colspan = 2;
-		cell.PaddingTop = 5;
-		cell.PaddingBottom = 8;
 		
-		cell.BackgroundColor = new BaseColor(System.Drawing.ColorTranslator.FromHtml("#CCCCCC"));
-		cell.HorizontalAlignment = 1; //0=Left, 1=Centre, 2=Right
-		cell.BorderColor = BaseColor.LIGHT_GRAY;
-		table.AddCell(cell);
-		
-		table.WidthPercentage = 100;
-        float[] widths = new float[] { 1.2f, 2f};
-        table.SetWidths(widths);
-		
-		table.HorizontalAlignment = 1;
-		
-		cellTitle = new PdfPCell(new Phrase("Id",title));
-		setTitleStyleCell();
-		table.AddCell(cellTitle);
-		
-		cellTitle = new PdfPCell(new Phrase("Code",title));
-		setTitleStyleCell();
-		table.AddCell(cellTitle);
-		*/
-		//cellTitle = new PdfPCell(new Phrase("Cover Num.",title));
-		//setTitleStyleCell();
-		//table.AddCell(cellTitle);
-		/*
-		cellTitle = new PdfPCell(new Phrase("Material",title));
-		setTitleStyleCell();
-		table.AddCell(cellTitle);
-		
-		cellTitle = new PdfPCell(new Phrase("Mat. Front Up",title));
-		setTitleStyleCell();
-		table.AddCell(cellTitle);
-		
-		cellTitle = new PdfPCell(new Phrase("Mat. Front Down",title));
-		setTitleStyleCell();
-		table.AddCell(cellTitle);*/
-		
-		//cellTitle = new PdfPCell(new Phrase("Hole",title));
-		//setTitleStyleCell();
-		//table.AddCell(cellTitle);
-		/*
-		cellTitle = new PdfPCell(new Phrase("Width",title));
-		setTitleStyleCell();
-		table.AddCell(cellTitle);
-		
-		cellTitle = new PdfPCell(new Phrase("Height",title));
-		setTitleStyleCell();
-		table.AddCell(cellTitle);
-		
-		cellTitle = new PdfPCell(new Phrase("Depth",title));
-		setTitleStyleCell();
-		table.AddCell(cellTitle);
-		
-		cellTitle = new PdfPCell(new Phrase("Base Height",title));
-		setTitleStyleCell();
-		table.AddCell(cellTitle);
-		*/
-		/*
-		tableSorter(parms);
-			
-		for(int i = 0; i<sortedTable.Count; i++) {
-			
-			
-			Hashtable ht = sortedTable[i] as Hashtable;
-			
-			// 1st column
-			int id = (int)ht["screenId"] + 1;
-			cellLight = new PdfPCell(new Phrase(id.ToString(),regular));
-			cellLight.PaddingTop = 5;
-			cellLight.PaddingBottom = 8;
-			if(i % 2 == 0)
-				cellLight.BackgroundColor = new BaseColor(System.Drawing.ColorTranslator.FromHtml("#CCCCCC"));
-			else
-				cellLight.BackgroundColor = new BaseColor(System.Drawing.ColorTranslator.FromHtml("#FFFFFF"));
-			cellLight.HorizontalAlignment = 1; //0=Left, 1=Centre, 2=Right
-			cellLight.BorderColor = BaseColor.LIGHT_GRAY;
-			table.AddCell(cellLight);
-			
-			// second column
-			//table.AddCell(new Paragraph(ht["elementType"] as string,regular));
-			cellLight = new PdfPCell(new Phrase(ht["code"].ToString().ToUpper(),regular));
-			cellLight.PaddingTop = 5;
-			cellLight.PaddingBottom = 8;
-			if(i % 2 == 0)
-				cellLight.BackgroundColor = new BaseColor(System.Drawing.ColorTranslator.FromHtml("#CCCCCC"));
-			else
-				cellLight.BackgroundColor = new BaseColor(System.Drawing.ColorTranslator.FromHtml("#FFFFFF"));
-			cellLight.HorizontalAlignment = 1; //0=Left, 1=Centre, 2=Right
-			cellLight.BorderColor = BaseColor.LIGHT_GRAY;
-			table.AddCell(cellLight);
-			*/
-			// third column
-			//table.AddCell(new Paragraph(ht["nFrontFace"].ToString(),regular));
-			/*cellLight = new PdfPCell(new Phrase(ht["nFrontFace"].ToString(),regular));
-			cellLight.PaddingTop = 5;
-			cellLight.PaddingBottom = 8;
-			if(i % 2 == 0)
-				cellLight.BackgroundColor = new BaseColor(System.Drawing.ColorTranslator.FromHtml("#CCCCCC"));
-			else
-				cellLight.BackgroundColor = new BaseColor(System.Drawing.ColorTranslator.FromHtml("#FFFFFF"));
-			cellLight.HorizontalAlignment = 1; //0=Left, 1=Centre, 2=Right
-			cellLight.BorderColor = BaseColor.LIGHT_GRAY;
-			table.AddCell(cellLight);
-
-			
-			if(ht["nFrontFace"].ToString() != "2") {
-				// fourth column
-				//table.AddCell(new Paragraph(ht["Front"] as string,regular));
-				cellLight = new PdfPCell(new Phrase(ht["Front"].ToString(),regular));
-				cellLight.PaddingTop = 5;
-				cellLight.PaddingBottom = 8;
-				if(i % 2 == 0)
-					cellLight.BackgroundColor = new BaseColor(System.Drawing.ColorTranslator.FromHtml("#CCCCCC"));
-				else
-					cellLight.BackgroundColor = new BaseColor(System.Drawing.ColorTranslator.FromHtml("#FFFFFF"));
-				cellLight.HorizontalAlignment = 1; //0=Left, 1=Centre, 2=Right
-				cellLight.BorderColor = BaseColor.LIGHT_GRAY;
-				table.AddCell(cellLight);
-				
-				// sixth column
-				//table.AddCell(new Paragraph("-",regular));
-				cellLight = new PdfPCell(new Phrase("-",regular));
-				cellLight.PaddingTop = 5;
-				cellLight.PaddingBottom = 8;
-				if(i % 2 == 0)
-					cellLight.BackgroundColor = new BaseColor(System.Drawing.ColorTranslator.FromHtml("#CCCCCC"));
-				else
-					cellLight.BackgroundColor = new BaseColor(System.Drawing.ColorTranslator.FromHtml("#FFFFFF"));
-				cellLight.HorizontalAlignment = 1; //0=Left, 1=Centre, 2=Right
-				cellLight.BorderColor = BaseColor.LIGHT_GRAY;
-				table.AddCell(cellLight);
-				
-				// seventh column
-				//table.AddCell(new Paragraph("-",regular));
-				cellLight = new PdfPCell(new Phrase("-",regular));
-				cellLight.PaddingTop = 5;
-				cellLight.PaddingBottom = 8;
-				if(i % 2 == 0)
-					cellLight.BackgroundColor = new BaseColor(System.Drawing.ColorTranslator.FromHtml("#CCCCCC"));
-				else
-					cellLight.BackgroundColor = new BaseColor(System.Drawing.ColorTranslator.FromHtml("#FFFFFF"));
-				cellLight.HorizontalAlignment = 1; //0=Left, 1=Centre, 2=Right
-				cellLight.BorderColor = BaseColor.LIGHT_GRAY;
-				table.AddCell(cellLight);
-			}else{
-				// fourth column
-				//table.AddCell(new Paragraph("-",regular));
-				cellLight = new PdfPCell(new Phrase("-",regular));
-				cellLight.PaddingTop = 5;
-				cellLight.PaddingBottom = 8;
-				if(i % 2 == 0)
-					cellLight.BackgroundColor = new BaseColor(System.Drawing.ColorTranslator.FromHtml("#CCCCCC"));
-				else
-					cellLight.BackgroundColor = new BaseColor(System.Drawing.ColorTranslator.FromHtml("#FFFFFF"));
-				cellLight.HorizontalAlignment = 1; //0=Left, 1=Centre, 2=Right
-				cellLight.BorderColor = BaseColor.LIGHT_GRAY;
-				table.AddCell(cellLight);
-				
-				// fifth column
-				//table.AddCell(new Paragraph(ht["FrontUp"] as string,regular));
-				cellLight = new PdfPCell(new Phrase(ht["FrontUp"] as string,regular));
-				cellLight.PaddingTop = 5;
-				cellLight.PaddingBottom = 8;
-				if(i % 2 == 0)
-					cellLight.BackgroundColor = new BaseColor(System.Drawing.ColorTranslator.FromHtml("#CCCCCC"));
-				else
-					cellLight.BackgroundColor = new BaseColor(System.Drawing.ColorTranslator.FromHtml("#FFFFFF"));
-				cellLight.HorizontalAlignment = 1; //0=Left, 1=Centre, 2=Right
-				cellLight.BorderColor = BaseColor.LIGHT_GRAY;
-				table.AddCell(cellLight);
-				
-				// sixth column
-				//table.AddCell(new Paragraph(ht["FrontDown"] as string,regular));	
-				cellLight = new PdfPCell(new Phrase(ht["FrontDown"] as string,regular));
-				cellLight.PaddingTop = 5;
-				cellLight.PaddingBottom = 8;
-				if(i % 2 == 0)
-					cellLight.BackgroundColor = new BaseColor(System.Drawing.ColorTranslator.FromHtml("#CCCCCC"));
-				else
-					cellLight.BackgroundColor = new BaseColor(System.Drawing.ColorTranslator.FromHtml("#FFFFFF"));
-				cellLight.HorizontalAlignment = 1; //0=Left, 1=Centre, 2=Right
-				cellLight.BorderColor = BaseColor.LIGHT_GRAY;
-				table.AddCell(cellLight);	
-			}
-			*/
-			// seventh column
-			//table.AddCell(new Paragraph(ht["Hole"].ToString(),regular));
-			/*cellLight = new PdfPCell(new Phrase(ht["Hole"].ToString(),regular));
-			cellLight.PaddingTop = 5;
-			cellLight.PaddingBottom = 8;
-			if(i % 2 == 0)
-				cellLight.BackgroundColor = new BaseColor(System.Drawing.ColorTranslator.FromHtml("#CCCCCC"));
-			else
-				cellLight.BackgroundColor = new BaseColor(System.Drawing.ColorTranslator.FromHtml("#FFFFFF"));
-			cellLight.HorizontalAlignment = 1; //0=Left, 1=Centre, 2=Right
-			cellLight.BorderColor = BaseColor.LIGHT_GRAY;
-			table.AddCell(cellLight);	*/
-			
-			// eigth column
-			//table.AddCell(new Paragraph(ht["w"].ToString(),regular));
-			/*cellLight = new PdfPCell(new Phrase(ht["w"].ToString()+" cm",regular));
-			cellLight.PaddingTop = 5;
-			cellLight.PaddingBottom = 8;
-			if(i % 2 == 0)
-				cellLight.BackgroundColor = new BaseColor(System.Drawing.ColorTranslator.FromHtml("#CCCCCC"));
-			else
-				cellLight.BackgroundColor = new BaseColor(System.Drawing.ColorTranslator.FromHtml("#FFFFFF"));
-			cellLight.HorizontalAlignment = 1; //0=Left, 1=Centre, 2=Right
-			cellLight.BorderColor = BaseColor.LIGHT_GRAY;
-			table.AddCell(cellLight);	
-			
-			// ninth column
-			//table.AddCell(new Paragraph(ht["h"].ToString(),regular));
-			cellLight = new PdfPCell(new Phrase(ht["h"].ToString()+" cm",regular));
-			cellLight.PaddingTop = 5;
-			cellLight.PaddingBottom = 8;
-			if(i % 2 == 0)
-				cellLight.BackgroundColor = new BaseColor(System.Drawing.ColorTranslator.FromHtml("#CCCCCC"));
-			else
-				cellLight.BackgroundColor = new BaseColor(System.Drawing.ColorTranslator.FromHtml("#FFFFFF"));
-			cellLight.HorizontalAlignment = 1; //0=Left, 1=Centre, 2=Right
-			cellLight.BorderColor = BaseColor.LIGHT_GRAY;
-			table.AddCell(cellLight);	
-			
-			// tenth column
-			//table.AddCell(new Paragraph(ht["depth"].ToString(),regular));
-			cellLight = new PdfPCell(new Phrase(ht["depth"].ToString()+" cm",regular));
-			cellLight.PaddingTop = 5;
-			cellLight.PaddingBottom = 8;
-			if(i % 2 == 0)
-				cellLight.BackgroundColor = new BaseColor(System.Drawing.ColorTranslator.FromHtml("#CCCCCC"));
-			else
-				cellLight.BackgroundColor = new BaseColor(System.Drawing.ColorTranslator.FromHtml("#FFFFFF"));
-			cellLight.HorizontalAlignment = 1; //0=Left, 1=Centre, 2=Right
-			cellLight.BorderColor = BaseColor.LIGHT_GRAY;
-			table.AddCell(cellLight);	
-			
-			// eleventh column
-			//table.AddCell(new Paragraph(ht["baseHeight"].ToString(),regular));
-			cellLight = new PdfPCell(new Phrase(ht["baseHeight"].ToString()+" cm",regular));
-			cellLight.PaddingTop = 5;
-			cellLight.PaddingBottom = 8;
-			if(i % 2 == 0)
-				cellLight.BackgroundColor = new BaseColor(System.Drawing.ColorTranslator.FromHtml("#CCCCCC"));
-			else
-				cellLight.BackgroundColor = new BaseColor(System.Drawing.ColorTranslator.FromHtml("#FFFFFF"));
-			cellLight.HorizontalAlignment = 1; //0=Left, 1=Centre, 2=Right
-			cellLight.BorderColor = BaseColor.LIGHT_GRAY;
-			table.AddCell(cellLight);*/
-		/*}
-		
-		
-		doc.Add(table);
-		
-		
-		 */
         doc.Close ();
 		
 		DestroyObject( texture );
@@ -446,27 +210,14 @@ public class pdfMaker : MonoBehaviour {
 	
 	
 	
-	public static PdfPCell cell(string txt) {
-		PdfPCell cellLighth = new PdfPCell(new Phrase(txt,regular));
-		cellLighth.PaddingTop = 5;
-		cellLighth.PaddingBottom = 8;
-		cellLighth.BackgroundColor = new BaseColor(System.Drawing.ColorTranslator.FromHtml("#CCCCCC"));
-		cellLighth.HorizontalAlignment = 1; //0=Left, 1=Centre, 2=Right
-		cellLighth.BorderColor = BaseColor.LIGHT_GRAY;
-		
-		return cellLighth;
-	}
 	
-	public static void setTitleStyleCell() {
-		cellTitle.PaddingTop = 5;
-		cellTitle.PaddingBottom = 8;
-		cellTitle.HorizontalAlignment = 1;
-		cellTitle.BorderColor = BaseColor.LIGHT_GRAY;
-		cellTitle.BackgroundColor = new BaseColor(System.Drawing.ColorTranslator.FromHtml("#FFFFFF"));	
-	}
 	public static void setRows(Hashtable par) {
 		
+		
+		
 		parms.Add(par);
+		
+		
 	}
 	
 	public static void resetRows() {
@@ -474,11 +225,16 @@ public class pdfMaker : MonoBehaviour {
 		
 		//parms.Clear();
 		parms = new ArrayList();
+		
 	}
+	
 	
 	public static void tableSorter(ArrayList _parms){
 		
+		
+		
 		sortedTable = new ArrayList();
+		sortedTable.Clear();
 		
 		for(int i = 0; i<_parms.Count; i++) {
 			
@@ -513,7 +269,7 @@ public class pdfMaker : MonoBehaviour {
 		for(int j = 0; j< sortedTable.Count; j++) {
 			
 			Hashtable htNew = sortedTable[j] as Hashtable;
-			//print (htNew["elementId"].ToString());
+			//print (htNew["structure"].ToString());
 			//print (htNew["elementType"].ToString());
 		}
 		

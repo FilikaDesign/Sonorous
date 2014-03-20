@@ -13,8 +13,10 @@ var cubeFrontMid	: GameObject;
 var cubeBack 		: GameObject;
 var cubeLeft 		: GameObject;
 var cubeLeftSkin 	: GameObject;
+var cubeLeftSkinTop	: GameObject;
 var cubeRight 		: GameObject;
 var cubeRightSkin 	: GameObject;
+var cubeRightSkinTop: GameObject;
 var cubeBottom 		: GameObject;
 var cubeBottomSkin 	: GameObject;
 var cubeTop 		: GameObject;
@@ -195,6 +197,16 @@ function Start (){
 			var cubeLeftSkinBoxCollider : BoxCollider = cubeLeftSkin.GetComponent("BoxCollider");
 			cubeLeftSkinBoxCollider.enabled = false;
 			
+			//Left Skin Top
+		    cubeLeftSkinTop  = GameObject.CreatePrimitive(PrimitiveType.Cube);
+		    cubeLeftSkinTop.name = "skin";
+		    cubeLeftSkinTop.transform.localScale = Vector3(woodThickness,0.1,depth);
+			cubeLeftSkinTop.transform.localPosition = Vector3(0.5 * woodThickness, h , -0.5 * depth);
+			cubeLeftSkinTop.renderer.material.color = Color.black;
+			cubeLeftSkinTop.transform.parent = elementContainer.transform;
+			var cubeLeftSkinTopBoxCollider : BoxCollider = cubeLeftSkinTop.GetComponent("BoxCollider");
+			cubeLeftSkinTopBoxCollider.enabled = false;
+			
 			//Right
 		    cubeRight  = GameObject.CreatePrimitive(PrimitiveType.Cube);
 		    cubeRight.name = "cubeRight";
@@ -214,6 +226,16 @@ function Start (){
 			cubeRightSkin.transform.parent = elementContainer.transform;
 			var cubeRightSkinBoxCollider : BoxCollider = cubeRightSkin.GetComponent("BoxCollider");
 			cubeRightSkinBoxCollider.enabled = false;
+			
+			//Right Skin Top
+		    cubeRightSkinTop  = GameObject.CreatePrimitive(PrimitiveType.Cube);
+		    cubeRightSkinTop.name = "skin";
+		    cubeRightSkinTop.transform.localScale = Vector3(woodThickness,0.1,depth);
+			cubeRightSkinTop.transform.localPosition = Vector3(w - woodThickness*0.5, h , -0.5 * depth);
+			cubeRightSkinTop.renderer.material.color = Color.black;
+			cubeRightSkinTop.transform.parent = elementContainer.transform;
+			var cubeRightSkinTopBoxCollider : BoxCollider = cubeRightSkinTop.GetComponent("BoxCollider");
+			cubeRightSkinTopBoxCollider.enabled = false;
 
 			
 			//Bottom

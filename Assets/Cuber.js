@@ -6,7 +6,6 @@ import System.Collections.Generic;
 import System.IO;
 
 private var secretKey="x91{7&85,[cN5.S";//server side
-private var billofmaterialsUrl="http://www.filikatasarim.com/clients/sonorous/writeElement.php?"; //be sure to add a ? to your url
 private var baseNoti:String = "All cabinets (EX type) should have a base underneath. Please, set the base height.";
 
 private var wall 		: GameObject;
@@ -465,6 +464,8 @@ function OnGUI() {
 	
 	GUI.skin = sonorousGUISkin;
 	
+	
+	
 	// Enable Keyboard Interaction
 	initKeyboardInteraction();
 	
@@ -811,32 +812,33 @@ function setTextures(tex:String,coverCount:int,cType:String,_id:int) {
 	cType = cType.Substring(0,5);
 	switch(decor) {
 		case "textures/black":
-		parameters[_id]["code"] = cType + parameters[_id]["cabinetDoor"] + "-" + " AMZ"  + "-" + parameters[_id]["structure"];
+		parameters[_id]["code"] = cType + parameters[_id]["cabinetDoor"] + "-" + "AMZ"  + "-" + parameters[_id]["structure"];
 		break;
 		
 		case "textures/regblack":
-		parameters[_id]["code"] = cType + parameters[_id]["cabinetDoor"] + "-" + " BLK"  + "-" + parameters[_id]["structure"];
+		parameters[_id]["code"] = cType + parameters[_id]["cabinetDoor"] + "-" + "BLK"  + "-" + parameters[_id]["structure"];
 		break;
 		
 		case "textures/capucino":
-		parameters[_id]["code"] = cType + parameters[_id]["cabinetDoor"] + "-" + " CPN"  + "-" + parameters[_id]["structure"];
+		parameters[_id]["code"] = cType + parameters[_id]["cabinetDoor"] + "-" + "CPN"  + "-" + parameters[_id]["structure"];
 		break;
 		
 		case "textures/H3375_ST22":
-		parameters[_id]["code"] = cType + parameters[_id]["cabinetDoor"] + "-" + " OAK"  + "-" + parameters[_id]["structure"];
+		parameters[_id]["code"] = cType + parameters[_id]["cabinetDoor"] + "-" + "OAK"  + "-" + parameters[_id]["structure"];
 		break;
 		
 		case "textures/200s":
-		parameters[_id]["code"] = cType + parameters[_id]["cabinetDoor"] + "-" + " WHT"  + "-" + parameters[_id]["structure"];
+		parameters[_id]["code"] = cType + parameters[_id]["cabinetDoor"] + "-" + "WHT"  + "-" + parameters[_id]["structure"];
 		break;
 		
 		case "textures/graphit":
-		parameters[_id]["code"] = cType + parameters[_id]["cabinetDoor"] + "-" + " GRP"  + "-" + parameters[_id]["structure"];
+		parameters[_id]["code"] = cType + parameters[_id]["cabinetDoor"] + "-" + "GRP"  + "-" + parameters[_id]["structure"];
 		break;
 		
 	}
 	
 	elementType = parameters[_id]["code"];
+	
 	
 	
 	setFrontUp = setFrontDown = setLeft = setRight = setBottom = setTop = setBack = setFront = false;
@@ -1189,12 +1191,14 @@ function BillofMaterials(){
 		
 		variableScript.showIds();
 		
+		//print(parameters[m]["structure"]);
 		// modul info to pdf maker
 		pdfMaker.setRows(parameters[m]);
 	}
 	
 	// Reset Cam Pos
-	resetCameraPos();
+	//resetCameraPos();
+	setZoom();
 	
 	// Close GUI
 	if(!isGUIClosed) {
@@ -1220,6 +1224,8 @@ function BillofMaterials(){
 		
 		variableScript.hideIds();
 	}
+	
+	resetCameraPos();
 }
 
 function SaveState(){
@@ -1364,8 +1370,9 @@ function SaveState(){
 	xmlDoc.Save(path);
 									
 	*/
-	xmlDoc.Save(Application.dataPath+"/XmlDocs/"+"Save"+".xml");
+	xmlDoc.Save(Application.dataPath+"/resources/Save"+".xml");
 	
+   
 
 
 }
@@ -1412,7 +1419,7 @@ function removeAndDestroyAt(rId:int) {
 
 function LoadState(){
 
-  var myLoad : Combination = Combination.Load(Application.dataPath+"/XmlDocs/"+"Save"+".xml");
+  var myLoad : Combination = Combination.Load(Application.dataPath+"/resources/Save"+".xml");
 	
   //Debug.Log(myLoad.Elements.Count);
 			
@@ -1495,6 +1502,17 @@ function resetCameraPos(){
 
 }
 
+function setZoom(){
+	
+	//this.transform.position = Vector3(0 ,160,-400);
+	
+    Camera.main.fieldOfView = 15;
+    Camera.main.farClipPlane = 4000;
+	
+	LeanTween.move(camera.main.gameObject,new Vector3(0 ,150,-1400),1f).setEase(LeanTweenType.easeOutExpo);
+
+}
+
 
 //show grid
 
@@ -1563,8 +1581,10 @@ function gridManToggle(){
 			gridMan.transform.localScale = Vector3(7,0,18);
 			//gridMan.gameObject.renderer.material.color = Color.blue;
 			gridMan.transform.Rotate(90,180,0);
+			var tex:Texture2D = Resources.Load("textures/mano", Texture2D);
 			
-			gridMan.renderer.material.mainTexture = Resources.Load("mano", Texture2D);
+			
+			gridMan.renderer.material.mainTexture = tex;
 			gridMan.renderer.material.shader = Shader.Find ("Unlit/Transparent");
 			
 			gridMan.transform.localPosition = Vector3(0, 89, -2);
@@ -2424,11 +2444,12 @@ function returnStructure(){
 				
 				//print("box structure : "+boxStructure );
 				parameters[i]["structure"] = boxStructure;
+				//parameters[i]["code"] = boxStructure;
 				
 				var tip:String = parameters[i]["code"].ToString().Substring(0,parameters[i]["code"].ToString().Length-1);
 				
-				//print(tip);
-				//parameters[i]["code"] = tip + " " + parameters[i]["structure"];
+				
+				parameters[i]["code"] = tip + parameters[i]["structure"];
 			}
 			
 			

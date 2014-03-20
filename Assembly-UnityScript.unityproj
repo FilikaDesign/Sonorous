@@ -53,7 +53,7 @@
      <Compile Include="Assets\Notification.js" />
      <Compile Include="Assets\md5functions.js" />
      <Compile Include="Assets\snippets.js" />
-     <None Include="Assets\XmlDocs\Save.xml" />
+     <None Include="Assets\resources\Save.xml" />
      <None Include="Assets\plugins\iTextSharp.xml" />
      <None Include="Assets\plugins\iTween\ReadMe!\ReadMe!.txt" />
  <Reference Include="itextsharp">
