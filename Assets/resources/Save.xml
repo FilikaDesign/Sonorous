@@ -19,13 +19,13 @@
       <w>65</w>
       <h>40</h>
       <depth>36</depth>
-      <x>-175</x>
+      <x>-195</x>
       <y>125</y>
       <isRigid>True</isRigid>
       <baseHeight>0</baseHeight>
-      <code>ed50-F-WHT-B</code>
+      <code>ed50-F-WHT-A</code>
       <screenid>0</screenid>
-      <structure>B</structure>
+      <structure>A</structure>
     </Element>
     <Element>
       <elementId>1</elementId>
@@ -50,9 +50,9 @@
       <y>125</y>
       <isRigid>True</isRigid>
       <baseHeight>0</baseHeight>
-      <code>ed50-F-WHT-C</code>
+      <code>ed50-F-WHT-A</code>
       <screenid>0</screenid>
-      <structure>C</structure>
+      <structure>A</structure>
     </Element>
     <Element>
       <elementId>2</elementId>
@@ -74,10 +74,10 @@
       <h>40</h>
       <depth>50</depth>
       <x>-25</x>
-      <y>20</y>
+      <y>28</y>
       <isRigid>True</isRigid>
       <baseHeight>8</baseHeight>
-      <code>ex11-F-WHT-A</code>
+      <code>ex11-F-WHT-8-A</code>
       <screenid>0</screenid>
       <structure>A</structure>
     </Element>

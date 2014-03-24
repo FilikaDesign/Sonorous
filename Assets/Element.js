@@ -134,7 +134,11 @@ function Start (){
 			//things to do
 			//FrontUp
 		    cubeFrontUp  = GameObject.CreatePrimitive(PrimitiveType.Cube);
-		    cubeFrontUp.name = "cubeFrontUp";
+		    if(params["FrontUp"] == "textures/speakertexture"){
+		    	cubeFrontUp.name = "cubeFrontUpSpeaker";
+		    }else{
+		    	cubeFrontUp.name = "cubeFrontUp";
+		    }
 		    cubeFrontUp.transform.localScale = Vector3(w-2*woodThickness,(h-woodThickness)*0.5-0.2,woodThickness);
 			cubeFrontUp.transform.localPosition = Vector3(w*0.5,(h - woodThickness)*0.75+0.1, -1 * depth + woodThickness*0.5);
 			cubeFrontUp.renderer.material.mainTexture = Resources.Load(FrontUp, Texture2D);
@@ -440,29 +444,30 @@ function OnTriggerExit (other : Collider) {
 
 function createBase(size : int){
 
-	var temp_baseHeight : int = params["baseHeight"];
+	if(elementType == "EX") {
+		var temp_baseHeight : int = params["baseHeight"];
+		
+		if(temp_baseHeight == 0){
+		
+			print(elementID);
+			//Debug.Log("Baza yarat");
+			params["baseHeight"] = size;
+			baseHeight = size;
+			baseElement = GameObject.CreatePrimitive(PrimitiveType.Cube);
+			baseElement.name = "Base";
+			baseElement.transform.localScale = Vector3(this.w,size,this.depth-2);
+			baseElement.transform.position.x = elementContainer.transform.position.x + this.w * 0.5;
+			baseElement.transform.position.y = this.transform.localPosition.y - h*0.5 - size * 0.5;
+			baseElement.transform.position.z = elementContainer.transform.position.z - this.depth * 0.5 + 1;
+			baseElement.renderer.material.mainTexture = Resources.Load("textures/basetexture", Texture2D);
+			baseElement.transform.parent = elementContainer.transform;
+		}
 	
-	if(temp_baseHeight == 0){
-	
-		print(elementID);
-		//Debug.Log("Baza yarat");
-		params["baseHeight"] = size;
-		baseHeight = size;
-		baseElement = GameObject.CreatePrimitive(PrimitiveType.Cube);
-		baseElement.name = "Base";
-		baseElement.transform.localScale = Vector3(this.w,size,this.depth-2);
-		baseElement.transform.position.x = elementContainer.transform.position.x + this.w * 0.5;
-		baseElement.transform.position.y = this.transform.localPosition.y - h*0.5 - size * 0.5;
-		baseElement.transform.position.z = elementContainer.transform.position.z - this.depth * 0.5 + 1;
-		baseElement.renderer.material.mainTexture = Resources.Load("textures/basetexture", Texture2D);
-		baseElement.transform.parent = elementContainer.transform;
 	}
-	
-	
 }
 
 function changeBase(size : int){
-
+	if(elementType == "EX") {
 		Destroy(baseElement);
 		params["baseHeight"] = size;
 		baseHeight = size;
@@ -475,6 +480,7 @@ function changeBase(size : int){
 		baseElement.transform.position.z = elementContainer.transform.position.z - this.depth * 0.5 + 1;
 		baseElement.renderer.material.mainTexture = Resources.Load("textures/basetexture", Texture2D);
 		baseElement.transform.parent = elementContainer.transform;
+	}
 	
 }
 

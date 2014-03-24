@@ -7,22 +7,12 @@
 
 4) Baza toplu secim
 
-5) Hoperlorlu iken beyaza dönüyor
+5) Kumaþ kapaklý ürünler (T , TF) ilk çaðýrýldýklarýnda kapak dokularý doðru, fakat oynattýktan sonra (yerine oturtmak için) kumaþ dokusu kayboluyor.
 
-Kumaþ kapaklý ürünler (T , TF) ilk çaðýrýldýklarýnda kapak dokularý doðru, fakat oynattýktan sonra (yerine oturtmak için) kumaþ dokusu kayboluyor.
+6) Sahneye ikinci çaðýrýlan ex kabinler bazen otomatik olarak ilk çaðýrýlan ile ayný baza seçeneðine geçmiyor. Hatta manüel olarak seçip bazasýný iþaretlediðimde bile bazasý görünmüyor.
 
-Sahneye ikinci çaðýrýlan ex kabinler bazen otomatik olarak ilk çaðýrýlan ile ayný baza seçeneðine geçmiyor. Hatta manüel olarak seçip bazasýný iþaretlediðimde bile bazasý görünmüyor.
+7) Geliþtirme ; önceden sahneye alýnmýþ bir kabini silip yenisini çaðýrmadan deðiþtirme þansýmýz var mý? (örn; EX10 olarak çaðýrdýðým kabini EX12 ye çevirmek gibi)
 
-Geliþtirme ; önceden sahneye alýnmýþ bir kabini silip yenisini çaðýrmadan deðiþtirme þansýmýz var mý? (örn; EX10 olarak çaðýrdýðým kabini EX12 ye çevirmek gibi)
+8) Yeni sahne açtýðýmda bir önceki sahnede kullanýlan numaralar (1,2 vb) yerlerinde duruyor. Silinmiyorlar. Numaralandýrmalarýn sadece PDF de görünmesi yeterli olur diye düþünüyorum. Ayrýca PDF de kurulan kombinasyonun ölçülerinin çýkmasý konusu var. Sanýrým bunu sonradan çalýþacaksýnýz.
 
-Navigasyonda sahne,sað/sol ok tuþlarý çok fazla yol kat ediyor (sanýrým 1,5mt gibi). Daha kýsa mesafe almasýný saðlayabilir miyiz? (örn, her okta 1 veya 2 grid karesi kadar)
-
-Sistem bazen sonradan eklenen ED modellere ilk eklenmiþ EX modellerin seçili bazasýný da ekliyor. ED modellere hiçbir þekilde baza eklenmemeli veya seçilmemeli.
-
-Yeni sahne açtýðýmda bir önceki sahnede kullanýlan numaralar (1,2 vb) yerlerinde duruyor. Silinmiyorlar. Numaralandýrmalarýn sadece PDF de görünmesi yeterli olur diye düþünüyorum. Ayrýca PDF de kurulan kombinasyonun ölçülerinin çýkmasý konusu var. Sanýrým bunu sonradan çalýþacaksýnýz.
-
-Geliþtirme ; “save combination” a týkladýðýmda “SAVED” vb bir uyarý alabilir miyiz?
-
-PDF de oluþturulan ürün kodlarýnda baza bilgisi eksik.
-
-Bazen üst menü donuyor. Fakat navigasyon devam ediyor. Yani uygulama deðil sadece menü donuyor. Üst menü donduktan sonra navigasyon yaparak tekrar normale dönüyor.
+9) Bazen üst menü donuyor. Fakat navigasyon devam ediyor. Yani uygulama deðil sadece menü donuyor. Üst menü donduktan sonra navigasyon yaparak tekrar normale dönüyor.

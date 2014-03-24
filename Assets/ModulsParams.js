@@ -7,7 +7,8 @@ static function type_Ex(type:String) {
 	{
 	
 		/* EX-10 TYPE CABINETS*/
-		case "ex10-f":
+		//case "ex10-f":
+		case "EX10-F-BLK-8-A":
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
 							"cabinetDoor":"F",
@@ -34,7 +35,8 @@ static function type_Ex(type:String) {
 	                        };
 	   break;
 	   
-	   case "ex10-fd":
+	   //case "ex10-fd":
+	    case "EX10-FD-BLK-8-A":
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
 							"cabinetDoor":"FD",
@@ -61,7 +63,8 @@ static function type_Ex(type:String) {
 	                        };
 	   break;
 	   
-	    case "ex10-dd":
+	    //case "ex10-dd":
+	    case "EX10-FD-BLK-8-A":
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
 							"cabinetDoor":"DD",
@@ -88,7 +91,8 @@ static function type_Ex(type:String) {
 	                        };
 	   break;
 	   
-	   case "ex10-t":
+	   //case "ex10-t":
+	   case "EX10-T-BLK-8-A":
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
 							"cabinetDoor":"T",
@@ -115,7 +119,8 @@ static function type_Ex(type:String) {
 	                        };
 	   break;
 	   
-	    case "ex10-tf":
+	   case "EX10-TF-BLK-8-A":
+	    //case "ex10-tf":
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
 							"cabinetDoor":"TF",
@@ -144,7 +149,8 @@ static function type_Ex(type:String) {
 	   
 	   
 	   /* EX-11 TYPE CABINETS*/
-		case "ex11-f":
+		//case "ex11-f":
+		case "EX11-F-BLK-8-A":
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
 							"cabinetDoor":"F",
@@ -171,7 +177,9 @@ static function type_Ex(type:String) {
 	                        };
 	   break;
 	   
-	   case "ex11-fd":
+	   
+	   //case "ex11-fd":
+		case "EX10-FD-BLK-8-A":
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
 							"cabinetDoor":"FD",
@@ -198,7 +206,8 @@ static function type_Ex(type:String) {
 	                        };
 	   break;
 	   
-	   case "ex11-dd":
+	   //case "ex11-dd":
+	   case "EX11-DD-BLK-8-A":
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
 							"cabinetDoor":"DD",
@@ -226,7 +235,8 @@ static function type_Ex(type:String) {
 	   break;
 	   
 	   
-	   case "ex11-t":
+	   //case "ex11-t":
+	   case "EX11-T-BLK-8-A":
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
 							"cabinetDoor":"T",
@@ -254,7 +264,8 @@ static function type_Ex(type:String) {
 	   break;
 	   
 	   
-	   case "ex11-tf":
+	   //case "ex11-tf":
+	   case "EX11-TF-BLK-8-A":
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
 							"cabinetDoor":"TF",
@@ -282,7 +293,8 @@ static function type_Ex(type:String) {
 	   break;
 	   
 	   /* EX-12 TYPE CABINETS*/
-	   case "ex12-f":
+	   //case "ex12-f":
+	   case "EX12-F-BLK-8-A":
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
 							"cabinetDoor":"F",
@@ -309,7 +321,8 @@ static function type_Ex(type:String) {
 	                        };
 	   break;
 	   
-	   case "ex12-fd":
+	   //case "ex12-fd":
+	   case "EX12-FD-BLK-8-A":
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
 							"cabinetDoor":"FD",
@@ -336,7 +349,8 @@ static function type_Ex(type:String) {
 	                        };
 	   break;
 	   
-	   case "ex12-dd":
+	   //case "ex12-dd":
+	   case "EX12-DD-BLK-8-A":
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
 							"cabinetDoor":"DD",
@@ -363,7 +377,8 @@ static function type_Ex(type:String) {
 	                        };
 	   break;
 	   
-	   case "ex12-t":
+	   //case "ex12-t":
+	   case "EX12-T-BLK-8-A":
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
 							"cabinetDoor":"T",
@@ -390,7 +405,8 @@ static function type_Ex(type:String) {
 	                        };
 	   break;
 	   
-	   case "ex12-tf":
+	   //case "ex12-tf":
+	   case "EX12-TF-BLK-8-A":
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
 							"cabinetDoor":"TF",
@@ -418,7 +434,8 @@ static function type_Ex(type:String) {
 	   break;
 	   
 	   /* EX-32 TYPE CABINETS*/
-	   case "ex32-f":
+	   //case "ex32-f":
+	   case "EX32-F-BLK-2-A":
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
 							"cabinetDoor":"F",
@@ -447,7 +464,8 @@ static function type_Ex(type:String) {
 	   
 	   
 	   /* EX-20 TYPE CABINETS*/
-	   case "ex20-d":
+	   //case "ex20-d":
+		case "EX20-D-BLK-8-A":
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
 							"cabinetDoor":"D",
@@ -474,7 +492,8 @@ static function type_Ex(type:String) {
 	                        };
 	   break;
 	   
-	   case "ex20-f":
+	   //case "ex20-f":
+		case "EX20-F-BLK-8-A":
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
 							"cabinetDoor":"F",
@@ -501,7 +520,8 @@ static function type_Ex(type:String) {
 	                        };
 	   break;
 	   
-	   case "ex20-dd":
+	   //case "ex20-dd":
+		case "EX20-DD-BLK-8-A":
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
 							"cabinetDoor":"DD",
@@ -528,7 +548,8 @@ static function type_Ex(type:String) {
 	                        };
 	   break;
 	   
-	   case "ex20-fd":
+	   //case "ex20-fd":
+		case "EX20-FD-BLK-8-A":
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
 							"cabinetDoor":"FD",
@@ -555,7 +576,8 @@ static function type_Ex(type:String) {
 	                        };
 	   break;
 	   
-	   case "ex20-t":
+	   //case "ex20-t":
+		case "EX20-T-BLK-8-A":
 		myStuffTex = {"elementId":0,
 							"elementType":"EX",
 							"cabinetDoor":"T",
@@ -584,7 +606,8 @@ static function type_Ex(type:String) {
 	   
 	   
 	   /* ED-50 TYPE CABINETS*/
-	   case "ed50-f":
+	   //case "ed50-f":
+		case "ED50-F-BLK-A":
 		myStuffTex = {"elementId":0,
 							"elementType":"ED",
 							"cabinetDoor":"F",
@@ -611,7 +634,8 @@ static function type_Ex(type:String) {
 	                        };
 	   break;
 	   
-	   case "ed50-u":
+	   //case "ed50-u":
+		case "ED50-U-BLK-A":
 		myStuffTex = {"elementId":0,
 							"elementType":"ED",
 							"cabinetDoor":"U",

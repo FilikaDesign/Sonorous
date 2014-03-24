@@ -219,12 +219,19 @@ function Start () {
 	floor.renderer.material.mainTexture = Resources.Load("textures/floortexture", Texture2D);
 	floor.renderer.material.mainTextureScale = Vector2 (11,11);	
 	
-	
+	/*
 	thumbTypes = ["ed50-f","ed50-u","ex10-dd","ex10-f","ex10-fd","ex10-t","ex10-tf",
 	"ex11-dd","ex11-f","ex11-fd","ex11-t","ex11-tf",
 	"ex12-dd","ex12-dd","ex12-f","ex12-fd","ex12-t","ex12-tf",
 	"ex20-d","ex20-dd","ex20-f","ex20-fd","ex20-t",
-	"ex32-f"];
+	"ex32-f"];*/
+	
+	thumbTypes = ["EX10-TF-BLK-8-A","EX10-T-BLK-8-A","EX10-FD-BLK-8-A","EX10-F-BLK-8-A","EX10-DD-BLK-8-A",
+	"EX11-T-BLK-8-A","EX11-TF-BLK-8-A","EX11-FD-BLK-8-A","EX11-F-BLK-8-A","EX11-DD-BLK-8-A",
+	"EX12-TF-BLK-8-A","EX12-T-BLK-8-A","EX12-FD-BLK-8-A","EX12-F-BLK-8-A","EX12-DD-BLK-8-A",
+	"EX20-T-BLK-8-A","EX20-F-BLK-8-A","EX20-FD-BLK-8-A","EX20-DD-BLK-8-A","EX20-D-BLK-8-A",
+	"EX32-F-BLK-2-A",
+	"ED50-U-BLK-A","ED50-F-BLK-A"];
 	
 	// Load Thumbnails
 	for(var p:int = 0; p < thumbTypes.Count; p++) {
@@ -287,6 +294,8 @@ function changeBaseAll(baseH : int){
 		
 			}*/
 			
+			
+			print(tip);
 			wall.transform.position.y = -baseAllH + hh*0.5;
 			floor.transform.position.y = -baseAllH -1 ;
 		
@@ -296,6 +305,7 @@ function changeBaseAll(baseH : int){
 		}
 			
 	}
+	
 	
 	DebugEngine();
 
@@ -493,7 +503,9 @@ function OnGUI() {
 	
 	// Save
 	else if(GUI.Button(Rect((btnW+1)*2,0,btnW,btnW),GUITextures.tex_save())) {
+		guiState = "save";
 		SaveState();
+   		
 	}
 	
 	
@@ -523,6 +535,7 @@ function OnGUI() {
 	else if(GUI.Button(Rect((btnW+1)*5,0,btnW,btnW),GUITextures.tex_new_scene())) {
 		guiState = "default";
 		removeAndDestroy();
+		resetGUIParams();
 	}
 	
 	// Change Material
@@ -572,7 +585,13 @@ function OnGUI() {
 	
 	
 	
+	if(guiState == "save") {
+		popUpMessage("COMBINATION SAVED");
+	}
 	
+	if(guiState == "ids") {
+		popUpMessage("PDF SAVING...");
+	}
 
 		
 	
@@ -596,15 +615,23 @@ function OnGUI() {
 	
 		// Select Modul to Add Screen
 		scrollPosition = GUI.BeginScrollView (Rect (ml,ml,w-12,Screen.height - ml - 5),
-		scrollPosition, Rect (0, 0, 0, (64+ml)*(thumbs.Count-1)));	
+		scrollPosition, Rect (0, 0, 0, (134+ml)*(thumbs.Count-1)));	
 		
 		
 		GUI.skin.button.normal.background  = GUITextures.load_thumb_bg(); 
 		for(var t:int=0; t < thumbs.Count; t++) {
-			if(GUI.Button(Rect( 0,(64+1)*t,w-26,64 ),GUITextures.load_tex(thumbs[t]["src"]))) {
+			if(GUI.Button(Rect( -50,(128+1)*t,320,128 ),GUITextures.load_tex(thumbs[t]["src"]))) {
 				addMBox(thumbs[t]["type"]);
 				
+				
 			}
+			GUI.skin.label.normal.textColor = Color.black;
+			GUI.skin.label.fontSize = 9;
+			GUI.skin.label.alignment = TextAnchor.MiddleRight;
+			var boxName : String = thumbTypes[t];
+			GUI.Label(Rect(5,(128+1)*(t),w-38,20),boxName);
+			GUI.skin.label.normal.textColor = Color.white;
+			GUI.skin.label.fontSize = 12;
 		}
 		GUI.skin.button.normal.background  = GUITextures.tex_box_bg(); 
 		GUI.EndScrollView ();
@@ -667,7 +694,7 @@ function OnGUI() {
 				variableScript = preDraggingObj.GetComponent("Element");
 				
 				baseAllH = 2;
-				
+				setElementCode();
 				if(variableScript.baseHeight == 0){
 					GameObject.Find(preDraggingObj.name).SendMessage("createBase",baseAllH);
 					DebugEngine();
@@ -691,7 +718,7 @@ function OnGUI() {
 				variableScript = preDraggingObj.GetComponent("Element");
 				
 				baseAllH = 8;
-				
+				setElementCode();
 				if(variableScript.baseHeight == 0){
 					GameObject.Find(preDraggingObj.name).SendMessage("createBase",baseAllH);
 					DebugEngine();
@@ -755,6 +782,14 @@ function OnGUI() {
 	
 	
 }
+/*
+* POP UP MESSAGE WINDOW
+*/
+function popUpMessage( msg:String) {
+	GUI.Box(Rect((Screen.width-300)*0.5, (Screen.height-100)*0.5, 300, 100),"");
+	GUI.skin.label.alignment = TextAnchor.MiddleCenter;
+	GUI.Label(Rect((Screen.width-300)*0.5, (Screen.height-100)*0.5,300,100),msg);
+}
 
 /*
 * SET EDIT TEXTURES OF SELECTED MODUL
@@ -808,36 +843,51 @@ function setTextures(tex:String,coverCount:int,cType:String,_id:int) {
 	
 	variableScript.params = parameters[_id];
 	
-	var decor:String = parameters[_id]["Top"];
+	
+	
+	setElementCode();
+}
+
+function setElementCode() {
+	var baseHg : String;
+	var cType :String = parameters[draggingElementId]["code"];
+	var decor:String = parameters[draggingElementId]["Top"];
 	cType = cType.Substring(0,5);
+	
+	if(baseAllH == 0) {
+		baseHg = "";
+	}else{
+		baseHg = baseAllH.ToString()+"-";
+	}
+	
 	switch(decor) {
 		case "textures/black":
-		parameters[_id]["code"] = cType + parameters[_id]["cabinetDoor"] + "-" + "AMZ"  + "-" + parameters[_id]["structure"];
+		parameters[draggingElementId]["code"] = cType + parameters[draggingElementId]["cabinetDoor"] + "-" + "AMZ"  + "-" + baseHg + parameters[draggingElementId]["structure"];
 		break;
 		
 		case "textures/regblack":
-		parameters[_id]["code"] = cType + parameters[_id]["cabinetDoor"] + "-" + "BLK"  + "-" + parameters[_id]["structure"];
+		parameters[draggingElementId]["code"] = cType + parameters[draggingElementId]["cabinetDoor"] + "-" + "BLK"  + "-" + baseHg + parameters[draggingElementId]["structure"];
 		break;
 		
 		case "textures/capucino":
-		parameters[_id]["code"] = cType + parameters[_id]["cabinetDoor"] + "-" + "CPN"  + "-" + parameters[_id]["structure"];
+		parameters[draggingElementId]["code"] = cType + parameters[draggingElementId]["cabinetDoor"] + "-" + "CPN"  + "-" + baseHg + parameters[draggingElementId]["structure"];
 		break;
 		
 		case "textures/H3375_ST22":
-		parameters[_id]["code"] = cType + parameters[_id]["cabinetDoor"] + "-" + "OAK"  + "-" + parameters[_id]["structure"];
+		parameters[draggingElementId]["code"] = cType + parameters[draggingElementId]["cabinetDoor"] + "-" + "OAK"  + "-" + baseHg + parameters[draggingElementId]["structure"];
 		break;
 		
 		case "textures/200s":
-		parameters[_id]["code"] = cType + parameters[_id]["cabinetDoor"] + "-" + "WHT"  + "-" + parameters[_id]["structure"];
+		parameters[draggingElementId]["code"] = cType + parameters[draggingElementId]["cabinetDoor"] + "-" + "WHT"  + "-" + baseHg + parameters[draggingElementId]["structure"];
 		break;
 		
 		case "textures/graphit":
-		parameters[_id]["code"] = cType + parameters[_id]["cabinetDoor"] + "-" + "GRP"  + "-" + parameters[_id]["structure"];
+		parameters[draggingElementId]["code"] = cType + parameters[draggingElementId]["cabinetDoor"] + "-" + "GRP"  + "-" + baseHg + parameters[draggingElementId]["structure"];
 		break;
 		
 	}
 	
-	elementType = parameters[_id]["code"];
+	elementType = parameters[draggingElementId]["code"];
 	
 	
 	
@@ -912,6 +962,7 @@ function clearAllHighlightedModuls() {
 		for (var child : Transform in allChildren) {
 		// do whatever with child transform here
 			if(child.renderer != null){
+			
     			if(child.renderer.gameObject.name =="Base"){
 	    			child.renderer.material.color = Color.white;
 	    			//child.renderer.material.mainTexture = Resources.Load("textures/basetexture", Texture2D);
@@ -919,7 +970,9 @@ function clearAllHighlightedModuls() {
 	   			 else if(child.renderer.gameObject.name =="skin"){
 	   			 	child.renderer.material.color = Color.black;
 	   			 }else{
-	   				 child.renderer.material.color = Color.white;
+	   			 	child.renderer.material.color = Color.white;
+	   			 	
+	   				 
 	   			 }
     			variableScript.highlighted = false;
     			
@@ -986,16 +1039,16 @@ function setCameraPosition(direction : String) {
 			this.gameObject.transform.position.z = this.gameObject.transform.position.z - cameraShift;	
 			break;
 		case "up":
-			this.gameObject.transform.position.y = this.gameObject.transform.position.y + cameraShift;	
+			this.gameObject.transform.position.y = this.gameObject.transform.position.y + cameraShift/15;	
 			break;
 		case "down":
-			this.gameObject.transform.position.y = this.gameObject.transform.position.y - cameraShift;	
+			this.gameObject.transform.position.y = this.gameObject.transform.position.y - cameraShift/15;	
 			break;
 		case "right":
-			this.gameObject.transform.position.x = this.gameObject.transform.position.x + cameraShift;	
+			this.gameObject.transform.position.x = this.gameObject.transform.position.x + cameraShift/15;	
 			break;
 		case "left":
-			this.gameObject.transform.position.x = this.gameObject.transform.position.x - cameraShift;	
+			this.gameObject.transform.position.x = this.gameObject.transform.position.x - cameraShift/15;	
 			break;
 		default :
 			break;
@@ -1100,6 +1153,7 @@ function ToggleLight(){
 		for (var child : Transform in allChildren) {
 	    // do whatever with child transform here
 		    if(child.renderer != null){
+		    
 		    	if(child.renderer.gameObject.name =="Base"){
 	    			child.renderer.material.color = Color.white;
 	    			//child.renderer.material.mainTexture = Resources.Load("textures/basetexture", Texture2D);
@@ -1109,6 +1163,7 @@ function ToggleLight(){
 	   			 }
 	    		else{
 	   				 child.renderer.material.color = Color.white;
+	   				 
 	   			 }
 			    variableScript.highlighted = false;
 			   
@@ -1182,6 +1237,7 @@ function screenIDSorter(){
 function BillofMaterials(){
 	
 	
+	
 	screenIDSorter();
 	pdfMaker.resetRows();
 	
@@ -1207,7 +1263,8 @@ function BillofMaterials(){
 		isGUIClosed = true;
 	}
 	
-	yield WaitForSeconds(1);
+	yield WaitForSeconds(1.5);
+	guiState = "default";
 	
 	// Hide Grid
 	showGrid = false;
@@ -1226,6 +1283,9 @@ function BillofMaterials(){
 	}
 	
 	resetCameraPos();
+	
+	
+	
 }
 
 function SaveState(){
@@ -1372,6 +1432,8 @@ function SaveState(){
 	*/
 	xmlDoc.Save(Application.dataPath+"/resources/Save"+".xml");
 	
+	yield WaitForSeconds(1.5);
+		guiState = "default";
    
 
 
@@ -1391,6 +1453,11 @@ function removeAndDestroy() {
 	moduls.Clear();
 	parameters.Clear();
 	modulDestroyed = true;
+	Notification.notCount = 0;
+	for(var j:int=0; j < Notification.notiBool.Count;j++) {
+		Notification.notiBool[j] = "0";
+	}
+	
 }
 
 /**
@@ -1581,12 +1648,12 @@ function gridManToggle(){
 			gridMan.transform.localScale = Vector3(7,0,18);
 			//gridMan.gameObject.renderer.material.color = Color.blue;
 			gridMan.transform.Rotate(90,180,0);
-			var tex:Texture2D = Resources.Load("textures/mano", Texture2D);
+			var texi:Texture2D = Resources.Load("textures/mano", Texture2D);
 			
-			
-			gridMan.renderer.material.mainTexture = tex;
+		
+			gridMan.renderer.material.mainTexture = texi;
+			//gridMan.renderer.material.shader = 
 			gridMan.renderer.material.shader = Shader.Find ("Unlit/Transparent");
-			
 			gridMan.transform.localPosition = Vector3(0, 89, -2);
 			//gridMan.active = false;
 	}else{

@@ -54,7 +54,11 @@
      <Compile Include="Assets\md5functions.js" />
      <Compile Include="Assets\snippets.js" />
      <None Include="Assets\resources\Save.xml" />
+     <None Include="Assets\resources\Unlit\Unlit-Alpha.shader" />
+     <None Include="Assets\resources\Unlit\Unlit-Normal.shader" />
      <None Include="Assets\plugins\iTextSharp.xml" />
+     <None Include="Assets\resources\Unlit\Unlit-AlphaTest.shader" />
+     <None Include="Assets\resources\trans.shader" />
      <None Include="Assets\plugins\iTween\ReadMe!\ReadMe!.txt" />
  <Reference Include="itextsharp">
  <HintPath>Assets\plugins\itextsharp.dll</HintPath>
