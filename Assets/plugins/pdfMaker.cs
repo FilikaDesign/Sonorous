@@ -111,7 +111,7 @@ public class pdfMaker : MonoBehaviour {
 		pHeader.SpacingAfter = 150f;
 		doc.Add(pHeader);
 		*/
-		Image header = Image.GetInstance(Application.dataPath + "/resources/sono_combi.jpg");
+		Image header = Image.GetInstance(Application.streamingAssetsPath + "/sono_combi.jpg");
 		
 		header.ScalePercent(50f);
 		

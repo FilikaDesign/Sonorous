@@ -1,18 +1,13 @@
-
 1) Kombinasyonun birimlerine dair ölçüler katalogdaki gibi kurgulanacak
 
-2) Baza beyaz kalýyor
+2) Bazalarda bazen beyaz kalma oluyor
 
-3) debugging
+3) Kumaþ kapaklý ürünler (T , TF) ilk çaðýrýldýklarýnda kapak dokularý doðru, fakat oynattýktan sonra (yerine oturtmak için) kumaþ dokusu kayboluyor.
 
-4) Baza toplu secim
+4) Sahneye ikinci çaðýrýlan ex kabinler bazen otomatik olarak ilk çaðýrýlan ile ayný baza seçeneðine geçmiyor. Hatta manüel olarak seçip bazasýný iþaretlediðimde bile bazasý görünmüyor.
 
-5) Kumaþ kapaklý ürünler (T , TF) ilk çaðýrýldýklarýnda kapak dokularý doðru, fakat oynattýktan sonra (yerine oturtmak için) kumaþ dokusu kayboluyor.
+5) Geliþtirme ; önceden sahneye alýnmýþ bir kabini silip yenisini çaðýrmadan deðiþtirme þansýmýz var mý? (örn; EX10 olarak çaðýrdýðým kabini EX12 ye çevirmek gibi)
 
-6) Sahneye ikinci çaðýrýlan ex kabinler bazen otomatik olarak ilk çaðýrýlan ile ayný baza seçeneðine geçmiyor. Hatta manüel olarak seçip bazasýný iþaretlediðimde bile bazasý görünmüyor.
+6) Yeni sahne açtýðýmda bir önceki sahnede kullanýlan numaralar (1,2 vb) yerlerinde duruyor. Silinmiyorlar. Numaralandýrmalarýn sadece PDF de görünmesi yeterli olur diye düþünüyorum. Ayrýca PDF de kurulan kombinasyonun ölçülerinin çýkmasý konusu var. Sanýrým bunu sonradan çalýþacaksýnýz.
 
-7) Geliþtirme ; önceden sahneye alýnmýþ bir kabini silip yenisini çaðýrmadan deðiþtirme þansýmýz var mý? (örn; EX10 olarak çaðýrdýðým kabini EX12 ye çevirmek gibi)
-
-8) Yeni sahne açtýðýmda bir önceki sahnede kullanýlan numaralar (1,2 vb) yerlerinde duruyor. Silinmiyorlar. Numaralandýrmalarýn sadece PDF de görünmesi yeterli olur diye düþünüyorum. Ayrýca PDF de kurulan kombinasyonun ölçülerinin çýkmasý konusu var. Sanýrým bunu sonradan çalýþacaksýnýz.
-
-9) Bazen üst menü donuyor. Fakat navigasyon devam ediyor. Yani uygulama deðil sadece menü donuyor. Üst menü donduktan sonra navigasyon yaparak tekrar normale dönüyor.
+7) Bazen üst menü donuyor. Fakat navigasyon devam ediyor. Yani uygulama deðil sadece menü donuyor. Üst menü donduktan sonra navigasyon yaparak tekrar normale dönüyor.

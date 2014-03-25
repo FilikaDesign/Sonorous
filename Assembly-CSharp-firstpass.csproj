@@ -50,12 +50,11 @@
      <Compile Include="Assets\plugins\iTween\Sample\RotateSample.cs" />
      <Compile Include="Assets\plugins\iTween\Sample\SampleInfo.cs" />
      <Compile Include="Assets\plugins\pdfMaker.cs" />
-     <None Include="Assets\resources\Save.xml" />
      <None Include="Assets\resources\Unlit\Unlit-Alpha.shader" />
      <None Include="Assets\resources\Unlit\Unlit-Normal.shader" />
      <None Include="Assets\plugins\iTextSharp.xml" />
      <None Include="Assets\resources\Unlit\Unlit-AlphaTest.shader" />
-     <None Include="Assets\resources\trans.shader" />
+     <None Include="Assets\StreamingAssets\Save.xml" />
      <None Include="Assets\plugins\iTween\ReadMe!\ReadMe!.txt" />
  <Reference Include="itextsharp">
  <HintPath>Assets\plugins\itextsharp.dll</HintPath>

@@ -1430,7 +1430,7 @@ function SaveState(){
 	xmlDoc.Save(path);
 									
 	*/
-	xmlDoc.Save(Application.dataPath+"/resources/Save"+".xml");
+	xmlDoc.Save(Application.streamingAssetsPath+"/Save"+".xml");
 	
 	yield WaitForSeconds(1.5);
 		guiState = "default";
@@ -1486,7 +1486,7 @@ function removeAndDestroyAt(rId:int) {
 
 function LoadState(){
 
-  var myLoad : Combination = Combination.Load(Application.dataPath+"/resources/Save"+".xml");
+  var myLoad : Combination = Combination.Load(Application.streamingAssetsPath+"/Save"+".xml");
 	
   //Debug.Log(myLoad.Elements.Count);
 			
