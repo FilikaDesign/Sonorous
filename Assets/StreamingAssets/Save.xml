@@ -2,36 +2,35 @@
   <Elements>
     <Element>
       <elementId>0</elementId>
-      <elementType>ED</elementType>
-      <cabinetDoor>F</cabinetDoor>
-      <Front>textures/200s</Front>
-      <FrontUp>
-      </FrontUp>
-      <FrontDown>
-      </FrontDown>
+      <elementType>EX</elementType>
+      <cabinetDoor>TF</cabinetDoor>
+      <Front>
+      </Front>
+      <FrontUp>textures/speakertexture</FrontUp>
+      <FrontDown>textures/200s</FrontDown>
       <Back>textures/200s</Back>
       <Left>textures/200s</Left>
       <Right>textures/200s</Right>
       <Bottom>textures/200s</Bottom>
       <Top>textures/200s</Top>
       <Hole>0</Hole>
-      <nFrontFace>1</nFrontFace>
-      <w>65</w>
+      <nFrontFace>2</nFrontFace>
+      <w>130</w>
       <h>40</h>
-      <depth>36</depth>
-      <x>-195</x>
-      <y>125</y>
+      <depth>50</depth>
+      <x>-130</x>
+      <y>20</y>
       <isRigid>True</isRigid>
-      <baseHeight>0</baseHeight>
-      <code>ed50-F-WHT-A</code>
+      <baseHeight>8</baseHeight>
+      <code>EX10-TF-WHT-8-A</code>
       <screenid>0</screenid>
       <structure>A</structure>
     </Element>
     <Element>
       <elementId>1</elementId>
-      <elementType>ED</elementType>
-      <cabinetDoor>F</cabinetDoor>
-      <Front>textures/200s</Front>
+      <elementType>EX</elementType>
+      <cabinetDoor>T</cabinetDoor>
+      <Front>textures/speakertexture</Front>
       <FrontUp>
       </FrontUp>
       <FrontDown>
@@ -43,14 +42,14 @@
       <Top>textures/200s</Top>
       <Hole>0</Hole>
       <nFrontFace>1</nFrontFace>
-      <w>65</w>
+      <w>130</w>
       <h>40</h>
-      <depth>36</depth>
-      <x>-110</x>
-      <y>125</y>
+      <depth>50</depth>
+      <x>5</x>
+      <y>20</y>
       <isRigid>True</isRigid>
-      <baseHeight>0</baseHeight>
-      <code>ed50-F-WHT-A</code>
+      <baseHeight>8</baseHeight>
+      <code>EX10-T-WHT-8-A</code>
       <screenid>0</screenid>
       <structure>A</structure>
     </Element>
@@ -68,16 +67,16 @@
       <Right>textures/200s</Right>
       <Bottom>textures/200s</Bottom>
       <Top>textures/200s</Top>
-      <Hole>1</Hole>
+      <Hole>0</Hole>
       <nFrontFace>1</nFrontFace>
       <w>130</w>
       <h>40</h>
       <depth>50</depth>
-      <x>-25</x>
-      <y>28</y>
+      <x>145</x>
+      <y>20</y>
       <isRigid>True</isRigid>
       <baseHeight>8</baseHeight>
-      <code>ex11-F-WHT-8-A</code>
+      <code>EX10-F-WHT-8-A</code>
       <screenid>0</screenid>
       <structure>A</structure>
     </Element>

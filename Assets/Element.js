@@ -52,6 +52,7 @@ function Start (){
     		elementContainer = new GameObject("Element Container");
     		elementContainer.transform.parent = this.transform;
     		
+    		
     		elementID = params["elementId"];
 			
 			////
@@ -63,6 +64,7 @@ function Start (){
 			var y:float = params["y"];
 			
 			elementType = params["elementType"];
+			
 			
 			this.gameObject.transform.localPosition.y = h*0.5;
 			baseHeight = params["baseHeight"];
@@ -316,6 +318,7 @@ function Start (){
 			
 			if(!showId) {
 				theText = new GameObject();
+				
  
 				textMesh = theText.AddComponent("TextMesh");
 				var meshRenderer = theText.AddComponent("MeshRenderer");
@@ -349,6 +352,11 @@ function Start (){
 
 function updateElementId() {
 	textMesh.GetComponent(TextMesh).text = (screenId + 1).ToString();
+}
+
+function removeText() {
+	Destroy(theText);
+	print("kokoko");
 }
 
 function showIds() {
@@ -421,18 +429,7 @@ function OnTriggerStay (collided : Collider) {
 		yPos = collided.gameObject.transform.position.y;
 		
 		isColliding = 1;
-		//Debug.Log(isColliding);
-		/*
-		var arr = new Array();
-		arr.push(elementID);
-		arr.push(this.gameObject.transform.position.x);
-		arr.push(this.gameObject.transform.position.y);
-		arr.push(wCol);
-		arr.push(hCol);
 		
-		
-		GameObject.Find("Main Camera").SendMessage("CollisionSnap",arr);
-		*/
 		
 }
 
@@ -444,13 +441,14 @@ function OnTriggerExit (other : Collider) {
 
 function createBase(size : int){
 
+
+
 	if(elementType == "EX") {
 		var temp_baseHeight : int = params["baseHeight"];
 		
 		if(temp_baseHeight == 0){
 		
-			print(elementID);
-			//Debug.Log("Baza yarat");
+			
 			params["baseHeight"] = size;
 			baseHeight = size;
 			baseElement = GameObject.CreatePrimitive(PrimitiveType.Cube);

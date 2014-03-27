@@ -66,6 +66,8 @@ private var guiPosX:int = Screen.width;
 // toggle state
 private var inch2:boolean = false;
 private var inch8:boolean = false;
+private var inch2S:boolean = false;
+private var inch8S:boolean = false;
 // Material Change
 private var setFront:boolean = false;
 private var setFrontUp:boolean = false;
@@ -203,7 +205,7 @@ function Start () {
 	wall.name = "Wall";
 	var wallBoxCollider : BoxCollider = wall.GetComponent("BoxCollider");
 	wallBoxCollider.enabled = false;
-	wall.transform.position = Vector3(0,hh*0.5,0);
+	wall.transform.position = Vector3(0,hh*0.5,2);
 	wall.transform.localScale = Vector3(ww,2,hh);
 	wall.transform.Rotate(90,0,0);
 	wall.renderer.material.mainTexture = Resources.Load("textures/floortexture", Texture2D);
@@ -226,12 +228,12 @@ function Start () {
 	"ex20-d","ex20-dd","ex20-f","ex20-fd","ex20-t",
 	"ex32-f"];*/
 	
-	thumbTypes = ["EX10-TF-BLK-8-A","EX10-T-BLK-8-A","EX10-FD-BLK-8-A","EX10-F-BLK-8-A","EX10-DD-BLK-8-A",
-	"EX11-T-BLK-8-A","EX11-TF-BLK-8-A","EX11-FD-BLK-8-A","EX11-F-BLK-8-A","EX11-DD-BLK-8-A",
-	"EX12-TF-BLK-8-A","EX12-T-BLK-8-A","EX12-FD-BLK-8-A","EX12-F-BLK-8-A","EX12-DD-BLK-8-A",
-	"EX20-T-BLK-8-A","EX20-F-BLK-8-A","EX20-FD-BLK-8-A","EX20-DD-BLK-8-A","EX20-D-BLK-8-A",
-	"EX32-F-BLK-2-A",
-	"ED50-U-BLK-A","ED50-F-BLK-A"];
+	thumbTypes = ["EX10-TF","EX10-T","EX10-FD","EX10-F","EX10-DD",
+	"EX11-T","EX11-TF","EX11-FD","EX11-F","EX11-DD",
+	"EX12-TF","EX12-T","EX12-FD","EX12-F","EX12-DD",
+	"EX20-T","EX20-F","EX20-FD","EX20-DD","EX20-D",
+	"EX32-F",
+	"ED50-U","ED50-F"];
 	
 	// Load Thumbnails
 	for(var p:int = 0; p < thumbTypes.Count; p++) {
@@ -258,7 +260,9 @@ function addModul(modulParams:Hashtable, id:String) {
 	var other : Element = eleman.GetComponent("Element");
 	other.params = parameters[parameters.Count-1];
 
+	
 	moduls.Add(eleman);
+	
 	
 	  
 	
@@ -267,6 +271,7 @@ function addModul(modulParams:Hashtable, id:String) {
 
 function changeBaseAll(baseH : int){
 
+	
 	for(var i:int = 0; i < moduls.Count; i++) {
 			
 		variableScript = moduls[i].GetComponent("Element");
@@ -279,23 +284,15 @@ function changeBaseAll(baseH : int){
 		if(tip == "EX") {
 			
 			// duvarları toparla
-			/*if(baseAllH == 8){
-		
-				
-				wall.transform.position.y = -8 + hh*0.5;
-				floor.transform.position.y = -8 -1 ;
-				
-			}else{
-				
-				
-				wall.transform.position.y = -2 + hh*0.5;
-				floor.transform.position.y = -2 -1 ;
-				
-		
-			}*/
 			
 			
-			print(tip);
+			
+			parameters[i]["baseHeight"] = baseAllH;
+			
+			var codeChange : String = parameters[i]["code"];
+			
+			parameters[i]["code"] = (codeChange.Substring(0,codeChange.Length-3)+baseAllH+"-"+codeChange.Substring(codeChange.Length-1,1));
+			
 			wall.transform.position.y = -baseAllH + hh*0.5;
 			floor.transform.position.y = -baseAllH -1 ;
 		
@@ -373,7 +370,7 @@ function Update () {
 					elementBO 	= parameters[draggingElementId]["Bottom"];
 					elementT 	= parameters[draggingElementId]["Top"];
 					
-					Debug.Log("draggingElementId : "+draggingElementId);
+					//Debug.Log("draggingElementId : "+draggingElementId);
 					ToggleLight();
 
 				}
@@ -453,6 +450,9 @@ function Update () {
 				var codum:String = parameters[draggingElementId]["code"];
 	
 				setTextures(textureF,fNum ,codum,draggingElementId); 
+				if(baseAllH != 0){
+					changeBaseAll(baseAllH);
+				}
 				
 			}
 		}
@@ -691,6 +691,7 @@ function OnGUI() {
 			if(GUI.Toggle(Rect(ml,lastY + (tFloor)*(2+120)+tfH*4+ml,100,30),inch2," 2 cm")) {
 				
 				
+				
 				variableScript = preDraggingObj.GetComponent("Element");
 				
 				baseAllH = 2;
@@ -700,11 +701,16 @@ function OnGUI() {
 					DebugEngine();
 					wall.transform.position.y = -baseAllH + hh*0.5;
 					floor.transform.position.y = -baseAllH -1 ;	
-				    //parameters[draggingElementId]["y"] = 2 + preDraggingObj.transform.localScale.y*0.5;
+					changeBaseAll(baseAllH);
 				}else{
-					if(!inch2)
+						
+					if(!inch2){
+						
 						changeBaseAll(baseAllH);
+						
+					}
 				}
+				
 				inch2 = true;
 				inch8 = false;
 				
@@ -724,17 +730,23 @@ function OnGUI() {
 					DebugEngine();
 					wall.transform.position.y = -baseAllH + hh*0.5;
 					floor.transform.position.y = -baseAllH - 1;	
-					//parameters[draggingElementId]["y"] = 8 + preDraggingObj.transform.localScale.y*0.5;
+					changeBaseAll(baseAllH);
 				}else{
-					if(!inch8)
+					
+					if(!inch8){
+						
 						changeBaseAll(baseAllH);
+						
+						}
 				}
 				
-				inch2 = false;
 				inch8 = true;
+				inch2 = false;
 				
 				clearAllHighlightedModuls();
 			}
+			
+			
 			
 			
 		}
@@ -802,15 +814,30 @@ function setTextures(tex:String,coverCount:int,cType:String,_id:int) {
 	
 	variableScript = moduls[_id].GetComponent("Element");
 	
-	var tip:String = (cType.Substring(5,cType.Length-5));
+	//var tip:String = (cType.Substring(5,cType.Length-5));
 	
 	
+	var tip:String;
+	
+
 	
 	if(coverCount==2) {
-		if(tip != "tf") {
+		tip = cType.Substring(cType.IndexOf("-")+1,2);
+		
+		print(cType);
+		if(tip != "TF") {
+		
 			variableScript.cubeFrontUp.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
 			parameters[_id]["FrontUp"] = tex;
 			variableScript.params = parameters[_id];
+		}
+		
+		if(tip == "TF"){
+			
+			variableScript.cubeFrontUp.renderer.material.mainTexture = Resources.Load("textures/speakertexture", Texture2D);
+			parameters[_id]["FrontUp"] = "textures/speakertexture";
+			variableScript.params = parameters[_id];
+		
 		}
 		
 		variableScript.cubeFrontDown.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
@@ -818,11 +845,21 @@ function setTextures(tex:String,coverCount:int,cType:String,_id:int) {
 		variableScript.params = parameters[_id];
 	}
 	if(coverCount==1){
-		if(tip != "t") {
+		tip = cType.Substring(cType.IndexOf("-")+1,1);
+		print("tip tip "+tip);
+		if(tip != "T") {
 			//print("tex : "+tex);
 			variableScript.cubeFront.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
 			parameters[_id]["Front"] = tex;
 			variableScript.params = parameters[_id];
+		}
+		
+		if(tip == "T"){
+			
+			variableScript.cubeFront.renderer.material.mainTexture = Resources.Load("textures/speakertexture", Texture2D);
+			parameters[_id]["Front"] = "textures/speakertexture";
+			variableScript.params = parameters[_id];
+		
 		}
 	}
 	
@@ -852,6 +889,7 @@ function setElementCode() {
 	var baseHg : String;
 	var cType :String = parameters[draggingElementId]["code"];
 	var decor:String = parameters[draggingElementId]["Top"];
+	
 	cType = cType.Substring(0,5);
 	
 	if(baseAllH == 0) {
@@ -969,10 +1007,9 @@ function clearAllHighlightedModuls() {
 	   			 }
 	   			 else if(child.renderer.gameObject.name =="skin"){
 	   			 	child.renderer.material.color = Color.black;
-	   			 }else{
-	   			 	child.renderer.material.color = Color.white;
-	   			 	
-	   				 
+	   			 }
+	   			 else{
+	   			 	child.renderer.material.color = Color.white;	   				 
 	   			 }
     			variableScript.highlighted = false;
     			
@@ -1012,7 +1049,7 @@ function initSetRoomSize() {
 		ww = parseInt(textWidth);
 		hh = parseInt(textHeight);
 		wall.transform.localScale = Vector3(parseInt(textWidth),2,parseInt(textHeight));
-		wall.transform.position = Vector3(0,parseInt(textHeight)*0.5,0);
+		wall.transform.position = Vector3(0,parseInt(textHeight)*0.5,2);
 		floor.transform.localScale = Vector3(parseInt(textWidth),2,parseInt(textHeight));
 		floor.transform.position = Vector3(0,-1,-parseInt(textHeight)*0.5);
 
@@ -1446,6 +1483,14 @@ function removeAndDestroy() {
 
 	clearAllHighlightedModuls();
 	
+	for(var m:int = 0; m < moduls.Count; m++) {
+			variableScript = moduls[m].GetComponent("Element");
+			variableScript.elementID = m;
+			variableScript.updateElementId();
+			parameters[m]["elementId"] = m;
+			variableScript.hideIds();
+			
+		}
 	for(var i:int=0; i < moduls.Count; i++) {
 		Destroy(moduls[i]);
 	}
@@ -1457,6 +1502,11 @@ function removeAndDestroy() {
 	for(var j:int=0; j < Notification.notiBool.Count;j++) {
 		Notification.notiBool[j] = "0";
 	}
+	
+	baseAllH = 0;
+	
+	wall.transform.position.y = -baseAllH + hh*0.5;
+ 	floor.transform.position.y = -baseAllH - 1;	
 	
 }
 
@@ -1477,6 +1527,7 @@ function removeAndDestroyAt(rId:int) {
 			variableScript.elementID = m;
 			variableScript.updateElementId();
 			parameters[m]["elementId"] = m;
+			variableScript.hideIds();
 			
 		}
 	
@@ -1554,7 +1605,9 @@ function LoadState(){
   
  
   baseAllH = baseHeight;
-  
+
+  wall.transform.position.y = -baseAllH + hh*0.5;
+  floor.transform.position.y = -baseAllH - 1;	
 
 }
 
@@ -1645,6 +1698,8 @@ function gridManToggle(){
 			// human picture
 			gridMan  = GameObject.CreatePrimitive(PrimitiveType.Plane);
 			gridMan.name = "gridMan";
+			var gridManCollider : MeshCollider = gridMan.GetComponent("MeshCollider");
+			gridManCollider.enabled = false;
 			gridMan.transform.localScale = Vector3(7,0,18);
 			//gridMan.gameObject.renderer.material.color = Color.blue;
 			gridMan.transform.Rotate(90,180,0);
@@ -1654,7 +1709,7 @@ function gridManToggle(){
 			gridMan.renderer.material.mainTexture = texi;
 			//gridMan.renderer.material.shader = 
 			gridMan.renderer.material.shader = Shader.Find ("Unlit/Transparent");
-			gridMan.transform.localPosition = Vector3(0, 89, -2);
+			gridMan.transform.localPosition = Vector3(0, 89, 0.5);
 			//gridMan.active = false;
 	}else{
 	
@@ -2512,11 +2567,13 @@ function returnStructure(){
 				//print("box structure : "+boxStructure );
 				parameters[i]["structure"] = boxStructure;
 				//parameters[i]["code"] = boxStructure;
+				setElementCode();
 				
 				var tip:String = parameters[i]["code"].ToString().Substring(0,parameters[i]["code"].ToString().Length-1);
 				
 				
 				parameters[i]["code"] = tip + parameters[i]["structure"];
+				
 			}
 			
 			
