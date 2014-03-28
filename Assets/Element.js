@@ -356,7 +356,7 @@ function updateElementId() {
 
 function removeText() {
 	Destroy(theText);
-	print("kokoko");
+	
 }
 
 function showIds() {

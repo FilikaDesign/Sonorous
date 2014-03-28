@@ -119,9 +119,22 @@ private var alphaRoomSize:float = 0.85f;
 private var showGrid : boolean = false;
 static var lineMaterial : Material;
 private var gridMan : GameObject;
+private var showDimensions:boolean = false;
+
+private var minX : int = 0;
+private	var maxX : int = 0;
+private	var minY : int = 0;
+private	var maxY : int = 0;
+
+private var dimensionsX : GameObject;
+private var dimensionsY : GameObject;
+private var textMeshX : TextMesh;
+private var textMeshY : TextMesh;
+
 
 private var pdfGenerated:boolean = false;
 function Start () {
+	
 	
 	//camera positioning
 	resetCameraPos();
@@ -244,6 +257,27 @@ function Start () {
 	textures = ["textures/200s", "textures/black", "textures/capucino", "textures/graphit", "textures/H3375_ST22", "textures/regblack"];
 	welcomeRect.alpha = 0;
 	
+	///Dimensions on Screen
+	
+	
+	dimensionsX = new GameObject();
+	textMeshX = dimensionsX.AddComponent("TextMesh");
+	
+	
+	dimensionsY = new GameObject();
+	textMeshY = dimensionsY.AddComponent("TextMesh");
+	
+	var meshRendererX = dimensionsX.AddComponent("MeshRenderer");
+	var meshRendererY = dimensionsY.AddComponent("MeshRenderer");
+	textMeshX.GetComponent(TextMesh).fontSize = 70;
+	textMeshY.GetComponent(TextMesh).fontSize = 70;
+	var newFont = Resources.Load("Arial", typeof(Font)) as Font;
+	textMeshX.GetComponent(TextMesh).font = newFont;
+	textMeshY.GetComponent(TextMesh).font = newFont;
+	newFont.material.color = Color.black;
+	meshRendererX.GetComponent(MeshRenderer).renderer.material = newFont.material;
+	meshRendererY.GetComponent(MeshRenderer).renderer.material = newFont.material;
+	
 	
 }
 
@@ -327,11 +361,11 @@ function Update () {
 		
 		//gizmo
 		
-		
+		/*
 		Debug.DrawLine (Vector3 (0, 0, 0), Vector3 (100, 0, 0), Color.red);
 		Debug.DrawLine (Vector3 (0, 0, 0), Vector3 (0, 100, 0), Color.blue);
 		Debug.DrawLine (Vector3 (0, 0, 0), Vector3 (0, 0, -100), Color.green);	
-		
+		*/
 		
 	
 		if (Input.GetMouseButtonDown (0) && iSwitch){
@@ -462,6 +496,9 @@ function Update () {
 	} // Set room size condition
 	
 	setMouseZoom();
+	
+	
+	
 }
 
 
@@ -892,7 +929,7 @@ function setElementCode() {
 	
 	cType = cType.Substring(0,5);
 	
-	if(baseAllH == 0) {
+	if(baseAllH == 0 || parameters[draggingElementId]["elementType"] != "EX") {
 		baseHg = "";
 	}else{
 		baseHg = baseAllH.ToString()+"-";
@@ -1141,10 +1178,9 @@ function initKeyboardInteraction() {
 			showGrid = !showGrid;
 			gridManToggle();
 	
-		}else if(Event.current.Equals (Event.KeyboardEvent ("e")) || Event.current.Equals (Event.KeyboardEvent ("e"))) {
+		}else if(Event.current.Equals (Event.KeyboardEvent ("p")) || Event.current.Equals (Event.KeyboardEvent ("P"))) {
 		
-			//pdfMaker.pdfC();
-			//System.Diagnostics.Process.Start(Application.dataPath + "/bin/oscillator_debug.exe");
+			groupDimensions();
 			
 			
 		}
@@ -1277,6 +1313,7 @@ function BillofMaterials(){
 	
 	screenIDSorter();
 	pdfMaker.resetRows();
+	groupDimensions();
 	
 	// Show element ids on export //
 	for(var m:int = 0; m < moduls.Count; m++) {
@@ -1307,8 +1344,9 @@ function BillofMaterials(){
 	showGrid = false;
 	yield WaitForEndOfFrame();
 	
- 
 	
+	
+ 
 	pdfMaker.pdfC();
 	
 	pdfGenerated = false;
@@ -1321,6 +1359,7 @@ function BillofMaterials(){
 	
 	resetCameraPos();
 	
+	groupDimensions();
 	
 	
 }
@@ -1684,9 +1723,53 @@ function OnPostRender() {
 
 		GL.End();
 		GL.PopMatrix();
+
+	}
+	
+	if(showDimensions){
+	
+		GL.PushMatrix();
+		CreateLineMaterial();
+		// set the current material
+		lineMaterial.SetPass( 0 );
 		
+		GL.Begin(GL.LINES);
+		GL.Color(Color(224/255,224/255,221/255,1));
+		GL.Vertex(Vector3(minX,maxY+20,0));
+		GL.Vertex(Vector3(maxX,maxY+20,0));
+		GL.Vertex(Vector3(minX-20,minY,0));
+		GL.Vertex(Vector3(minX-20,maxY,0));
+		GL.End();
 		
+		//dimensionX Left
+		GL.Begin(GL.TRIANGLES);
+		GL.Vertex3(minX+4,maxY+2+20,0);
+		GL.Vertex3(minX,maxY+20,0);
+		GL.Vertex3(minX+4,maxY-2+20,0);
+		GL.End();
 		
+		//dimensionX Right
+		GL.Begin(GL.TRIANGLES);
+		GL.Vertex3(maxX-4,maxY+2+20,0);
+		GL.Vertex3(maxX,maxY+20,0);
+		GL.Vertex3(maxX-4,maxY-2+20,0);
+		GL.End();
+		
+		//dimensionY Top
+		GL.Begin(GL.TRIANGLES);
+		GL.Vertex3(minX-2-20,maxY-4,0);
+		GL.Vertex3(minX-20,maxY,0);
+		GL.Vertex3(minX+2-20,maxY-4,0);
+		GL.End();
+		
+		//dimensionY Bottom
+		GL.Begin(GL.TRIANGLES);
+		GL.Vertex3(minX-2-20,minY+4,0);
+		GL.Vertex3(minX-20,minY,0);
+		GL.Vertex3(minX+2-20,minY+4,0);
+		GL.End();
+		
+		GL.PopMatrix();
 	
 	}
 
@@ -1715,6 +1798,87 @@ function gridManToggle(){
 	
 		Destroy(gridMan);
 	}
+}
+
+function groupDimensions(){
+
+	minX  = ww;
+	maxX  = -ww;
+	minY  = hh;
+	maxY  = -hh;
+	
+	var myX	: int;
+	var myY : int;
+	
+	var incWidth : int = 0;
+	var incHeight : int = 0;
+	var decHeight : int = 0;
+	var myH : int;
+	
+	for(var i : int = 0; i < parameters.Count; i++){
+	
+		myX = parameters[i]["x"];
+		myY = parameters[i]["y"];
+		
+		
+		
+		minX = Mathf.Min(minX,myX);
+		minY = Mathf.Min(minY,myY);
+		
+		maxX = Mathf.Max(maxX,myX);
+		maxY = Mathf.Max(maxY,myY);
+		
+		if(maxX == myX){
+		
+			incWidth = parameters[i]["w"];
+		}
+		
+		if(maxY == myY){
+			
+			myH = parameters[i]["h"];
+			incHeight = 0.5 * myH;
+		}
+		
+		if(minY == myY){
+			
+			myH = parameters[i]["h"];
+			decHeight = 0.5 * myH;
+		}
+		
+		
+
+	}
+	
+	maxX += incWidth;
+	maxY += incHeight;
+	minY -= (decHeight + baseAllH);
+	
+		
+	
+	showDimensions = !showDimensions;
+	
+	
+	var dimensionX : String = (maxX - minX).ToString();
+	var dimensionY : String = (maxY - minY).ToString();
+	
+	if(showDimensions){
+	textMeshX.GetComponent(TextMesh).text = dimensionX + " cm";
+	textMeshY.GetComponent(TextMesh).text = dimensionY + " cm";
+	}else{
+	textMeshX.GetComponent(TextMesh).text = "";
+	textMeshY.GetComponent(TextMesh).text = "";
+	}
+	
+	
+	
+	
+	dimensionsX.transform.position.x = minX + (maxX - minX) * 0.5;
+	dimensionsX.transform.position.y = maxY + 35;
+	
+	dimensionsY.transform.position.x = minX - 50;
+	dimensionsY.transform.position.y = minY + (maxY - minY) * 0.5;
+	
+	
 }
 
 function DebugEngine(){

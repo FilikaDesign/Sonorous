@@ -1,18 +1,15 @@
-1) Kombinasyonun birimlerine dair ölçüler katalogdaki gibi kurgulanacak
+1) Bazen üst menü donuyor. Fakat navigasyon devam ediyor. Yani uygulama deðil sadece menü donuyor. Üst menü donduktan sonra navigasyon yaparak tekrar normale dönüyor.
 
 
-2) Bazen üst menü donuyor. Fakat navigasyon devam ediyor. Yani uygulama deðil sadece menü donuyor. Üst menü donduktan sonra navigasyon yaparak tekrar normale dönüyor.
+2) Geliþtirme ; program ilk çalýþtýrýldýðýnda seçilen scr. Resolution sonraki kullanýmlarda da hatýrlanabilir mi?
 
 
-3) Geliþtirme ; program ilk çalýþtýrýldýðýnda seçilen scr. Resolution sonraki kullanýmlarda da hatýrlanabilir mi?
+3) Geliþtirme ; programa bir undo tuþu eklenebilir mi?
 
 
-4) Geliþtirme ; programa bir undo tuþu eklenebilir mi?
+4) Kabinler bazen pointer e takýlý kalýyor, nereye sol týklasam kabin oraya yerleþiyor. Her týkladýðýmda bu böyle sürüyor.
 
 
-5) Kabinler bazen pointer e takýlý kalýyor, nereye sol týklasam kabin oraya yerleþiyor. Her týkladýðýmda bu böyle sürüyor.
-
-
-6) Programda bug oluþtuðunda yeni sahne açýlamýyor. Programý restart etmek gerekiyor.
+5) Programda bug oluþtuðunda yeni sahne açýlamýyor. Programý restart etmek gerekiyor.
 
 
