@@ -5,9 +5,11 @@
  @XmlRoot("Combination")
  public class Combination
  {
+ 	@XmlElement("Settings")
  	@XmlArray("Elements")
  	@XmlArrayItem("Element")
  	public var Elements : List.<ElementData>;
+ 	public var Settings : List.<SettingsData>;
  
  	public function Save(path : String)
  	{

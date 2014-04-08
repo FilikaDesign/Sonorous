@@ -13,3 +13,7 @@
 5) Programda bug oluþtuðunda yeni sahne açýlamýyor. Programý restart etmek gerekiyor.
 
 
+
+6) Geliþtirme; örneðin görselde 4=6 ve 5=7. Pdf export da birbirinin ayný olan kabinetlere ayný numarayý verip, listede “kodx2” demek mümkün mü?
+
+

@@ -96,8 +96,8 @@ private var elementT:String = "none";
 private var baseAllH:int = 0;
 
 var setRoomSize : boolean = false;
-private var textWidth:String = "800";
-private var textHeight:String = "300";
+private var textWidth:String = "600";
+private var textHeight:String = "240";
 
 //private var prevHighlighted : GameObject;
 private var prevHighlightedId : int = -1;
@@ -565,14 +565,12 @@ function OnGUI() {
 	
 	// Delete Button
 	if(GUI.Button(Rect((btnW+1)*4,0,btnW,btnW),GUITextures.tex_delete())) {
-		removeAndDestroyAt(draggingElementId);
+		guiState = "deleteModul";
 	}
 	
 	// Delete All Button
 	else if(GUI.Button(Rect((btnW+1)*5,0,btnW,btnW),GUITextures.tex_new_scene())) {
-		guiState = "default";
-		removeAndDestroy();
-		resetGUIParams();
+		guiState = "deleteAllModul";
 	}
 	
 	// Change Material
@@ -630,8 +628,13 @@ function OnGUI() {
 		popUpMessage("PDF SAVING...");
 	}
 
-		
+	if(guiState == "deleteModul") {
+		popUpMessageButton("Are you sure?","one");
+	}
 	
+	if(guiState == "deleteAllModul") {
+		popUpMessageButton("Are you sure?","all");
+	}
 	
 	
 	// Tooltip
@@ -798,14 +801,14 @@ function OnGUI() {
 	
 	GUI.skin.label.normal.textColor = Color.gray;
 	GUI.skin.label.fontSize = 32;
-		
+	/*	
 	for(var g:int = 0; g < moduls.Count; g++) {
 			//var screenPos : Vector3 = camera.WorldToScreenPoint (moduls[g].transform.position);
 			//GUI.Label(Rect(screenPos.x,Screen.height-screenPos.y,30,30),(g+1).ToString());
 		
 			
 			
-	}
+	}*/
 	/*
 	if(guiState == "ids") {
 		GUI.skin.label.normal.textColor = Color.gray;
@@ -839,6 +842,36 @@ function popUpMessage( msg:String) {
 	GUI.skin.label.alignment = TextAnchor.MiddleCenter;
 	GUI.Label(Rect((Screen.width-300)*0.5, (Screen.height-100)*0.5,300,100),msg);
 }
+
+/*
+* POP UP MESSAGE WINDOW WITH BUTTON
+*/
+function popUpMessageButton( msg:String,type:String) {
+	GUI.Box(Rect((Screen.width-300)*0.5, (Screen.height-100)*0.5, 300, 100),"");
+	GUI.skin.label.alignment = TextAnchor.MiddleCenter;
+	GUI.Label(Rect((Screen.width-300)*0.5, (Screen.height-120)*0.5,300,100),msg);
+	
+	if(type=="all") {
+		if(GUI.Button(Rect((Screen.width)*0.5 - 70, (Screen.height)*0.5 + 15, 60, 20),"OK")) {
+			guiState = "default";
+			removeAndDestroy();
+			resetGUIParams();
+		}
+	}
+	
+	else if(type=="one") {
+		if(GUI.Button(Rect((Screen.width)*0.5 - 70, (Screen.height)*0.5 + 15, 60, 20),"OK")) {
+			removeAndDestroyAt(draggingElementId);
+			guiState = "default";
+		}
+	}
+	
+	if(GUI.Button(Rect((Screen.width-60)*0.5 + 35, (Screen.height)*0.5 + 15, 60, 20),"CANCEL")) {
+		guiState = "default";
+	}
+	
+}
+
 
 /*
 * SET EDIT TEXTURES OF SELECTED MODUL
@@ -1342,6 +1375,7 @@ function BillofMaterials(){
 	
 	// Hide Grid
 	showGrid = false;
+	gridManToggle();
 	yield WaitForEndOfFrame();
 	
 	
@@ -1357,7 +1391,7 @@ function BillofMaterials(){
 		variableScript.hideIds();
 	}
 	
-	resetCameraPos();
+	//resetCameraPos();
 	
 	groupDimensions();
 	
@@ -1370,8 +1404,23 @@ function SaveState(){
 	var xmlDoc : XmlDocument = new XmlDocument();
 	var CombinationXML : XmlElement = xmlDoc.CreateElement("Combination");
 	xmlDoc.AppendChild(CombinationXML);
+	
+	var settingsXML : XmlElement = xmlDoc.CreateElement("Settings");
+	CombinationXML.AppendChild(settingsXML);
+	
+	var screenWidthXML : XmlElement = xmlDoc.CreateElement("screenWidth");
+	settingsXML.AppendChild(screenWidthXML);
+	screenWidthXML.InnerText = ww.ToString();
+		
+	var screenHeightXML : XmlElement = xmlDoc.CreateElement("screenHeight");
+	settingsXML.AppendChild(screenHeightXML);
+	screenHeightXML.InnerText = hh.ToString();
+		
+	
 	var ElementsXML : XmlElement = xmlDoc.CreateElement("Elements");
 	CombinationXML.AppendChild(ElementsXML);
+	
+	
 	
 	for(var i : int = 0; i < parameters.Count; i++){
 			
@@ -1515,6 +1564,157 @@ function SaveState(){
 
 }
 
+function AutoSave(){
+
+	
+	var xmlDoc : XmlDocument = new XmlDocument();
+	var CombinationXML : XmlElement = xmlDoc.CreateElement("Combination");
+	xmlDoc.AppendChild(CombinationXML);
+	var ElementsXML : XmlElement = xmlDoc.CreateElement("Elements");
+	CombinationXML.AppendChild(ElementsXML);
+	
+	for(var i : int = 0; i < parameters.Count; i++){
+			
+		var ElementXML : XmlElement = xmlDoc.CreateElement("Element");
+		ElementsXML.AppendChild(ElementXML);
+		
+		var elementIdXML : XmlElement = xmlDoc.CreateElement("elementId");
+		ElementXML.AppendChild(elementIdXML);
+		var elementId : int = parameters[i]["elementId"];
+		elementIdXML.InnerText = elementId.ToString();
+		
+		var elementTypeXML : XmlElement = xmlDoc.CreateElement("elementType");
+		ElementXML.AppendChild(elementTypeXML);
+		var elementType : String = parameters[i]["elementType"];
+		elementTypeXML.InnerText = elementType.ToString();
+		
+		var cabinetDoorXML : XmlElement = xmlDoc.CreateElement("cabinetDoor");
+		ElementXML.AppendChild(cabinetDoorXML);
+		var cabinetDoor : String = parameters[i]["cabinetDoor"];
+		cabinetDoorXML.InnerText = cabinetDoor.ToString();
+		
+		var FrontXML : XmlElement = xmlDoc.CreateElement("Front");
+		ElementXML.AppendChild(FrontXML);
+		var Front : String = parameters[i]["Front"];
+		FrontXML.InnerText = Front.ToString();
+		
+		var FrontUpXML : XmlElement = xmlDoc.CreateElement("FrontUp");
+		ElementXML.AppendChild(FrontUpXML);
+		var FrontUp : String = parameters[i]["FrontUp"];
+		FrontUpXML.InnerText = FrontUp.ToString();
+		
+		var FrontDownXML : XmlElement = xmlDoc.CreateElement("FrontDown");
+		ElementXML.AppendChild(FrontDownXML);
+		var FrontDown : String = parameters[i]["FrontDown"];
+		FrontDownXML.InnerText = FrontDown.ToString();
+		
+		var BackXML : XmlElement = xmlDoc.CreateElement("Back");
+		ElementXML.AppendChild(BackXML);
+		var Back : String = parameters[i]["Back"];
+		BackXML.InnerText = Back.ToString();
+		
+		var LeftXML : XmlElement = xmlDoc.CreateElement("Left");
+		ElementXML.AppendChild(LeftXML);
+		var Left : String = parameters[i]["Left"];
+		LeftXML.InnerText = Left.ToString();
+		
+		var RightXML : XmlElement = xmlDoc.CreateElement("Right");
+		ElementXML.AppendChild(RightXML);
+		var Right : String = parameters[i]["Right"];
+		RightXML.InnerText = Right.ToString();
+		
+		var BottomXML : XmlElement = xmlDoc.CreateElement("Bottom");
+		ElementXML.AppendChild(BottomXML);
+		var Bottom : String = parameters[i]["Bottom"];
+		BottomXML.InnerText = Bottom.ToString();
+		
+		var TopXML : XmlElement = xmlDoc.CreateElement("Top");
+		ElementXML.AppendChild(TopXML);
+		var Top : String = parameters[i]["Top"];
+		TopXML.InnerText = Top.ToString();
+		
+		var HoleXML : XmlElement = xmlDoc.CreateElement("Hole");
+		ElementXML.AppendChild(HoleXML);
+		var Hole : int = parameters[i]["Hole"];
+		HoleXML.InnerText = Hole.ToString();
+		
+		var nFrontFaceXML : XmlElement = xmlDoc.CreateElement("nFrontFace");
+		ElementXML.AppendChild(nFrontFaceXML);
+		var nFrontFace : int = parameters[i]["nFrontFace"];
+		nFrontFaceXML.InnerText = nFrontFace.ToString();
+		
+		var wXML : XmlElement = xmlDoc.CreateElement("w");
+		ElementXML.AppendChild(wXML);
+		var w : int = parameters[i]["w"];
+		wXML.InnerText = w.ToString();
+		
+		var hXML : XmlElement = xmlDoc.CreateElement("h");
+		ElementXML.AppendChild(hXML);
+		var h : int = parameters[i]["h"];
+		hXML.InnerText = h.ToString();
+		
+		var depthXML : XmlElement = xmlDoc.CreateElement("depth");
+		ElementXML.AppendChild(depthXML);
+		var depth : int = parameters[i]["depth"];
+		depthXML.InnerText = depth.ToString();
+		
+		var xXML : XmlElement = xmlDoc.CreateElement("x");
+		ElementXML.AppendChild(xXML);
+		var x : int = parameters[i]["x"];
+		xXML.InnerText = x.ToString();
+		
+		var yXML : XmlElement = xmlDoc.CreateElement("y");
+		ElementXML.AppendChild(yXML);
+		var y : int = parameters[i]["y"];
+		yXML.InnerText = y.ToString();
+		
+		var isRigidXML : XmlElement = xmlDoc.CreateElement("isRigid");
+		ElementXML.AppendChild(isRigidXML);
+		var isRigid : boolean = parameters[i]["isRigid"];
+		isRigidXML.InnerText = isRigid.ToString();
+		
+		var baseHeightXML : XmlElement = xmlDoc.CreateElement("baseHeight");
+		ElementXML.AppendChild(baseHeightXML);
+		var baseHeight : int = parameters[i]["baseHeight"];
+		baseHeightXML.InnerText = baseHeight.ToString();
+		
+		var codeXML : XmlElement = xmlDoc.CreateElement("code");
+		ElementXML.AppendChild(codeXML);
+		var code : String = parameters[i]["code"];
+		codeXML.InnerText = code.ToString();
+		
+		var screenIDXML : XmlElement = xmlDoc.CreateElement("screenid");
+		ElementXML.AppendChild(screenIDXML);
+		var screenId : int = parameters[i]["screenId"];
+		screenIDXML.InnerText = screenId.ToString();
+		
+		var structureXML : XmlElement = xmlDoc.CreateElement("structure");
+		ElementXML.AppendChild(structureXML);
+		var structure : String = parameters[i]["structure"];
+		structureXML.InnerText = structure.ToString();
+
+	}
+	
+
+	/*
+	var path = EditorUtility.SaveFilePanel(
+						"Save",
+						"",
+						"",
+						"xml");
+		
+	xmlDoc.Save(path);
+									
+	*/
+	xmlDoc.Save(Application.streamingAssetsPath+"/Temp"+".xml");
+	
+	yield WaitForSeconds(1.5);
+		guiState = "default";
+   
+
+
+}
+
 /**
 * DESTROY EVERYTHING
 */
@@ -1584,6 +1784,11 @@ function LoadState(){
   
   removeAndDestroy();
   
+  var screenWidth : int = myLoad.Settings.screenWidth;
+  var screenHeight : int = myLoad.Settings.screenHeight;
+  
+  print(screenWidth);
+  
   for(var j:int=0; j < myLoad.Elements.Count; j++) {
   
   			var elementId : int = myLoad.Elements[j].elementId;
@@ -1609,6 +1814,7 @@ function LoadState(){
   			var code : String = myLoad.Elements[j].code;
   			var screenId : int = myLoad.Elements[j].screenId;
   			var structure : String = myLoad.Elements[j].structure;
+  			
   			
 			var myStuffTex:Hashtable = {"elementId":elementId,
 							"elementType":elementType,
@@ -1667,8 +1873,13 @@ function setZoom(){
 	
     Camera.main.fieldOfView = 15;
     Camera.main.farClipPlane = 4000;
-	
-	LeanTween.move(camera.main.gameObject,new Vector3(0 ,150,-1400),1f).setEase(LeanTweenType.easeOutExpo);
+    
+   
+    
+    var zDepth: int = -1 * ww  * 2.2;
+    
+   // print(zDepth);
+	// LeanTween.move(camera.main.gameObject,new Vector3(0 ,150,zDepth),1f).setEase(LeanTweenType.easeOutExpo);
 
 }
 

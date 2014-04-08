@@ -125,6 +125,9 @@ function Start (){
 		    cubeFront.transform.localScale = Vector3(w-woodThickness * 2,h-woodThickness,woodThickness);
 			cubeFront.transform.localPosition = Vector3(w*0.5, h * 0.5 - 0.5* woodThickness, -1 * depth + woodThickness*0.5);
 			cubeFront.renderer.material.mainTexture = Resources.Load(Front, Texture2D);
+			if(params["Front"] == "textures/speakertexture"){
+		    	cubeFront.renderer.material.mainTextureScale = Vector2 (8,1);
+		    }
 			cubeFront.transform.parent = elementContainer.transform;
 			var cubeFrontBoxCollider : BoxCollider = cubeFront.GetComponent("BoxCollider");
 			cubeFrontBoxCollider.enabled = false;
@@ -144,6 +147,9 @@ function Start (){
 		    cubeFrontUp.transform.localScale = Vector3(w-2*woodThickness,(h-woodThickness)*0.5-0.2,woodThickness);
 			cubeFrontUp.transform.localPosition = Vector3(w*0.5,(h - woodThickness)*0.75+0.1, -1 * depth + woodThickness*0.5);
 			cubeFrontUp.renderer.material.mainTexture = Resources.Load(FrontUp, Texture2D);
+			if(params["FrontUp"] == "textures/speakertexture"){
+		    	cubeFrontUp.renderer.material.mainTextureScale = Vector2 (8,1);
+		    }
 			cubeFrontUp.transform.parent = elementContainer.transform;
 			var cubeFrontUpBoxCollider : BoxCollider = cubeFrontUp.GetComponent("BoxCollider");
 			cubeFrontUpBoxCollider.enabled = false;
@@ -332,6 +338,9 @@ function Start (){
 				var Texttir:String = params["Front"]; 
 				var Texttir2:String = params["FrontUp"]; 
 				//newFont.material.color = Color.black;
+				
+				//print("paramsFront"+params["Front"]);
+				//print("paramsFrontUp"+params["FrontUp"]);
 
 				if(Texttir == "textures/200s" || Texttir2 == "textures/200s"){
 					
