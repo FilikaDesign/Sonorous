@@ -5,9 +5,10 @@
  @XmlRoot("Combination")
  public class Combination
  {
- 	@XmlElement("Settings")
  	@XmlArray("Elements")
  	@XmlArrayItem("Element")
+ 	public var screenHeight : int;
+ 	public var screenWidth : int;
  	public var Elements : List.<ElementData>;
  	public var Settings : List.<SettingsData>;
  

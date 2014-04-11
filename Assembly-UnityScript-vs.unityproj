@@ -58,6 +58,7 @@
      <None Include="Assets\resources\Unlit\Unlit-Normal.shader" />
      <None Include="Assets\plugins\iTextSharp.xml" />
      <None Include="Assets\resources\Unlit\Unlit-AlphaTest.shader" />
+     <None Include="Assets\StreamingAssets\Undo.xml" />
      <None Include="Assets\StreamingAssets\Save.xml" />
      <None Include="Assets\plugins\iTween\ReadMe!\ReadMe!.txt" />
  <Reference Include="itextsharp">

@@ -7,32 +7,6 @@
     <Element>
       <elementId>0</elementId>
       <elementType>EX</elementType>
-      <cabinetDoor>TF</cabinetDoor>
-      <Front>
-      </Front>
-      <FrontUp>textures/speakertexture</FrontUp>
-      <FrontDown>textures/200s</FrontDown>
-      <Back>textures/200s</Back>
-      <Left>textures/200s</Left>
-      <Right>textures/200s</Right>
-      <Bottom>textures/200s</Bottom>
-      <Top>textures/200s</Top>
-      <Hole>0</Hole>
-      <nFrontFace>2</nFrontFace>
-      <w>130</w>
-      <h>40</h>
-      <depth>50</depth>
-      <x>-215</x>
-      <y>20</y>
-      <isRigid>True</isRigid>
-      <baseHeight>8</baseHeight>
-      <code>EX10-TF-WHT-8-A</code>
-      <screenid>0</screenid>
-      <structure>A</structure>
-    </Element>
-    <Element>
-      <elementId>1</elementId>
-      <elementType>EX</elementType>
       <cabinetDoor>T</cabinetDoor>
       <Front>textures/speakertexture</Front>
       <FrontUp>
@@ -49,11 +23,89 @@
       <w>130</w>
       <h>40</h>
       <depth>50</depth>
-      <x>125</x>
+      <x>-200</x>
       <y>20</y>
       <isRigid>True</isRigid>
       <baseHeight>8</baseHeight>
-      <code>EX10-T-WHT-8-A</code>
+      <code>EX10-T-WHT-8-B</code>
+      <screenid>0</screenid>
+      <structure>B</structure>
+    </Element>
+    <Element>
+      <elementId>1</elementId>
+      <elementType>EX</elementType>
+      <cabinetDoor>TF</cabinetDoor>
+      <Front>
+      </Front>
+      <FrontUp>textures/speakertexture</FrontUp>
+      <FrontDown>textures/200s</FrontDown>
+      <Back>textures/200s</Back>
+      <Left>textures/200s</Left>
+      <Right>textures/200s</Right>
+      <Bottom>textures/200s</Bottom>
+      <Top>textures/200s</Top>
+      <Hole>0</Hole>
+      <nFrontFace>2</nFrontFace>
+      <w>130</w>
+      <h>40</h>
+      <depth>50</depth>
+      <x>-70</x>
+      <y>20</y>
+      <isRigid>True</isRigid>
+      <baseHeight>8</baseHeight>
+      <code>EX10-TF-WHT-8-D</code>
+      <screenid>0</screenid>
+      <structure>D</structure>
+    </Element>
+    <Element>
+      <elementId>2</elementId>
+      <elementType>EX</elementType>
+      <cabinetDoor>DD</cabinetDoor>
+      <Front>textures/200s</Front>
+      <FrontUp>textures/capucino</FrontUp>
+      <FrontDown>textures/capucino</FrontDown>
+      <Back>textures/capucino</Back>
+      <Left>textures/capucino</Left>
+      <Right>textures/capucino</Right>
+      <Bottom>textures/capucino</Bottom>
+      <Top>textures/capucino</Top>
+      <Hole>0</Hole>
+      <nFrontFace>2</nFrontFace>
+      <w>130</w>
+      <h>40</h>
+      <depth>50</depth>
+      <x>60</x>
+      <y>20</y>
+      <isRigid>True</isRigid>
+      <baseHeight>8</baseHeight>
+      <code>EX10-DD-CPN-8-C</code>
+      <screenid>0</screenid>
+      <structure>C</structure>
+    </Element>
+    <Element>
+      <elementId>3</elementId>
+      <elementType>ED</elementType>
+      <cabinetDoor>U</cabinetDoor>
+      <Front>textures/200s</Front>
+      <FrontUp>
+      </FrontUp>
+      <FrontDown>
+      </FrontDown>
+      <Back>textures/200s</Back>
+      <Left>textures/200s</Left>
+      <Right>textures/200s</Right>
+      <Bottom>textures/200s</Bottom>
+      <Top>textures/200s</Top>
+      <Hole>0</Hole>
+      <nFrontFace>1</nFrontFace>
+      <w>65</w>
+      <h>40</h>
+      <depth>36</depth>
+      <x>-170</x>
+      <y>165</y>
+      <isRigid>True</isRigid>
+      <baseHeight>0</baseHeight>
+      <code>ED50-U-WHT-A</code>
       <screenid>0</screenid>
       <structure>A</structure>
     </Element>

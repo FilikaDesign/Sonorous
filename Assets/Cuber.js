@@ -133,6 +133,9 @@ private var textMeshY : TextMesh;
 
 
 private var pdfGenerated:boolean = false;
+
+private var leftControl:boolean = false; //undo
+
 function Start () {
 	
 	
@@ -278,7 +281,8 @@ function Start () {
 	meshRendererX.GetComponent(MeshRenderer).renderer.material = newFont.material;
 	meshRendererY.GetComponent(MeshRenderer).renderer.material = newFont.material;
 	
-	
+	//init room 
+	initState();
 }
 
 /* ADD MODUL METHOD */
@@ -348,7 +352,17 @@ function Update () {
 	if (Input.GetKeyDown(KeyCode.Escape)) {
         Application.Quit();
 	}
-		
+	
+
+
+    if(Input.GetKeyUp(KeyCode.Z))
+
+
+    {
+        UndoState();
+
+    }
+	
 	if(setRoomSize) {
 		 
 		if(!isGUIClosed) {
@@ -370,6 +384,8 @@ function Update () {
 	
 		if (Input.GetMouseButtonDown (0) && iSwitch){
 		
+			AutoSave();
+			
 			if( Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition),  hit ) ) {
 				
 				 if(hit.rigidbody.gameObject.GetComponent("BoxCollider")){
@@ -457,7 +473,9 @@ function Update () {
 		}
 		
 		if (Input.GetMouseButtonUp (0) && iSwitch){
-		
+			
+			
+			
 			if(draggingObject){
 				
 				
@@ -489,6 +507,9 @@ function Update () {
 				}
 				
 			}
+			
+		
+			
 		}
 		
 		
@@ -1116,12 +1137,7 @@ function initSetRoomSize() {
 	if(GUI.Button(Rect(Screen.width*0.5-50,210,100,30),"OK")) {
 		alphaRoomSize = 0;
 		alphaDelay = 0;
-		ww = parseInt(textWidth);
-		hh = parseInt(textHeight);
-		wall.transform.localScale = Vector3(parseInt(textWidth),2,parseInt(textHeight));
-		wall.transform.position = Vector3(0,parseInt(textHeight)*0.5,2);
-		floor.transform.localScale = Vector3(parseInt(textWidth),2,parseInt(textHeight));
-		floor.transform.position = Vector3(0,-1,-parseInt(textHeight)*0.5);
+		loadRoomSize(textWidth, textHeight);
 
 	}
 	
@@ -1129,6 +1145,20 @@ function initSetRoomSize() {
 	
 	if(!LeanTween.isTweening(welcomeRect))
 		LeanTween.alpha(welcomeRect,alphaRoomSize , 0.5f).setEase(LeanTweenType.easeOutExpo).setOnComplete(setBolFalse);
+}
+
+function loadRoomSize(roomWidth:String, roomHeight:String) {
+
+		ww = parseInt(roomWidth);
+		hh = parseInt(roomHeight);
+		wall.transform.localScale = Vector3(parseInt(roomWidth),2,parseInt(roomHeight));
+		wall.transform.position = Vector3(0,parseInt(roomHeight)*0.5,2);
+		floor.transform.localScale = Vector3(parseInt(roomWidth),2,parseInt(roomHeight));
+		floor.transform.position = Vector3(0,-1,-parseInt(roomHeight)*0.5);
+		
+		wall.transform.position.y = -baseAllH + hh*0.5;
+  		floor.transform.position.y = -baseAllH - 1;
+		AutoSave();
 }
 
 function setBolFalse() {
@@ -1180,6 +1210,10 @@ function setMouseZoom() {
 /* Keyboard Control */
 function initKeyboardInteraction() {
 	
+	
+	
+	
+    
 	if(setRoomSize) {
 		if (Event.current.Equals (Event.KeyboardEvent ("up")) ) {
 			
@@ -1198,12 +1232,12 @@ function initKeyboardInteraction() {
 			setCameraPosition("right");
 		
 		}
-		else if(Event.current.Equals (Event.KeyboardEvent ("z")) || Event.current.Equals (Event.KeyboardEvent ("Z"))) {
+		else if(Event.current.Equals (Event.KeyboardEvent ("a")) || Event.current.Equals (Event.KeyboardEvent ("A"))) {
 		
 			setCameraPosition("up");
 		
 		}
-		else if(Event.current.Equals (Event.KeyboardEvent ("x")) || Event.current.Equals (Event.KeyboardEvent ("X"))) {
+		else if(Event.current.Equals (Event.KeyboardEvent ("s")) || Event.current.Equals (Event.KeyboardEvent ("S"))) {
 		
 			setCameraPosition("down");
 		
@@ -1570,8 +1604,23 @@ function AutoSave(){
 	var xmlDoc : XmlDocument = new XmlDocument();
 	var CombinationXML : XmlElement = xmlDoc.CreateElement("Combination");
 	xmlDoc.AppendChild(CombinationXML);
+	
+	var settingsXML : XmlElement = xmlDoc.CreateElement("Settings");
+	CombinationXML.AppendChild(settingsXML);
+	
+	var screenWidthXML : XmlElement = xmlDoc.CreateElement("screenWidth");
+	settingsXML.AppendChild(screenWidthXML);
+	screenWidthXML.InnerText = ww.ToString();
+		
+	var screenHeightXML : XmlElement = xmlDoc.CreateElement("screenHeight");
+	settingsXML.AppendChild(screenHeightXML);
+	screenHeightXML.InnerText = hh.ToString();
+		
+	
 	var ElementsXML : XmlElement = xmlDoc.CreateElement("Elements");
 	CombinationXML.AppendChild(ElementsXML);
+	
+	
 	
 	for(var i : int = 0; i < parameters.Count; i++){
 			
@@ -1696,22 +1745,10 @@ function AutoSave(){
 	}
 	
 
-	/*
-	var path = EditorUtility.SaveFilePanel(
-						"Save",
-						"",
-						"",
-						"xml");
-		
-	xmlDoc.Save(path);
-									
-	*/
-	xmlDoc.Save(Application.streamingAssetsPath+"/Temp"+".xml");
-	
-	yield WaitForSeconds(1.5);
-		guiState = "default";
-   
 
+	xmlDoc.Save(Application.streamingAssetsPath+"/Undo"+".xml");
+	
+	
 
 }
 
@@ -1776,47 +1813,57 @@ function removeAndDestroyAt(rId:int) {
 
 function LoadState(){
 
-  var myLoad : Combination = Combination.Load(Application.streamingAssetsPath+"/Save"+".xml");
-	
-  //Debug.Log(myLoad.Elements.Count);
-			
-  //Debug.Log(myLoad.Elements[0].Back);
-  
   removeAndDestroy();
+   
+  //http://sushanta1991.blogspot.com.tr/2012/12/read-and-write-xml-using-javascript-in.html 
+  var xmlPath : String = Application.streamingAssetsPath+"/Save.xml";
+
+  var xmlDoc : XmlDocument = new XmlDocument();
+  xmlDoc.Load(xmlPath);
   
-  var screenWidth : int = myLoad.Settings.screenWidth;
-  var screenHeight : int = myLoad.Settings.screenHeight;
+  var screenWidthXML : XmlNodeList = xmlDoc.GetElementsByTagName("screenWidth");
+  var screenHeightXML : XmlNodeList = xmlDoc.GetElementsByTagName("screenHeight");
   
-  print(screenWidth);
+  var screenWidth : String = screenWidthXML[0].InnerText;
+  var screenHeight : String = screenHeightXML[0].InnerText;
+  loadRoomSize(screenWidth, screenHeight);
   
-  for(var j:int=0; j < myLoad.Elements.Count; j++) {
   
-  			var elementId : int = myLoad.Elements[j].elementId;
-  			var elementType : String = myLoad.Elements[j].elementType;
-  			var cabinetDoor : String = myLoad.Elements[j].cabinetDoor;
-  			var Front : String = myLoad.Elements[j].Front;
-  			var FrontUp : String = myLoad.Elements[j].FrontUp;
-  			var FrontDown : String = myLoad.Elements[j].FrontDown;
-  			var Back : String = myLoad.Elements[j].Back;
-  			var Left : String = myLoad.Elements[j].Left;
-  			var Right : String = myLoad.Elements[j].Right;
-  			var Bottom : String = myLoad.Elements[j].Bottom;
-  			var Top : String = myLoad.Elements[j].Top;
-  			var Hole : int = myLoad.Elements[j].Hole;
-  			var nFrontFace : int = myLoad.Elements[j].nFrontFace;
-  			var w : int = myLoad.Elements[j].w;
-  			var h : int = myLoad.Elements[j].h;
-  			var depth : int = myLoad.Elements[j].depth;
-  			var x : int = myLoad.Elements[j].x;
-  			var y : int = myLoad.Elements[j].y;
-  			var isRigid : String = myLoad.Elements[j].isRigid;//problem
-  			var baseHeight : int = myLoad.Elements[j].baseHeight;
-  			var code : String = myLoad.Elements[j].code;
-  			var screenId : int = myLoad.Elements[j].screenId;
-  			var structure : String = myLoad.Elements[j].structure;
-  			
-  			
-			var myStuffTex:Hashtable = {"elementId":elementId,
+  var ElementsList : XmlNodeList = xmlDoc.GetElementsByTagName("Element");
+  
+  for(var i : int = 0; i < ElementsList.Count;i++){
+           
+          var ElementList : XmlNodeList = ElementsList.Item(i).ChildNodes;
+          
+          var elementId : int = parseInt(ElementList[0].InnerText);
+          var elementType : String = ElementList[1].InnerText;
+  		  var cabinetDoor : String = ElementList[2].InnerText;
+  		  var Front : String = ElementList[3].InnerText;
+  		  var FrontUp : String = ElementList[4].InnerText;
+  		  var FrontDown : String = ElementList[5].InnerText;
+  		  var Back : String = ElementList[6].InnerText;
+  		  var Left : String = ElementList[7].InnerText;
+  		  var Right : String = ElementList[8].InnerText;
+  	      var Bottom : String = ElementList[9].InnerText;
+  		  var Top : String = ElementList[10].InnerText;
+  		  var Hole : int = parseInt(ElementList[11].InnerText);
+  		  var nFrontFace : int = parseInt(ElementList[12].InnerText);
+  		  var w : int = parseInt(ElementList[13].InnerText);
+  		  var h : int = parseInt(ElementList[14].InnerText);
+  		  var depth : int = parseInt(ElementList[15].InnerText);
+  		  var x : int = parseInt(ElementList[16].InnerText);
+  		  var y : int = parseInt(ElementList[17].InnerText);
+  		  var isRigid : String = ElementList[18].InnerText;//problem
+  		  var baseHeight : int = parseInt(ElementList[19].InnerText);
+  		  var code : String = ElementList[20].InnerText;
+  		  var screenId : int = parseInt(ElementList[21].InnerText);
+  		  var structure : String = ElementList[22].InnerText;
+  		  
+  		  if(elementType == "EX"){
+  		  	baseAllH = baseHeight;
+  		  }
+          
+          var myStuffTex:Hashtable = {"elementId":elementId,
 							"elementType":elementType,
 							"cabinetDoor":cabinetDoor,
 							"Front":Front,
@@ -1840,20 +1887,129 @@ function LoadState(){
 	                        "screenId":screenId,
 	                        "structure":structure
 	                        };
-	         var index = j.ToString();               
+	         var index = i.ToString();               
 	         addModul(myStuffTex,index);
-	         
-	         
-	         /**/   
-	               
+         
+           
   }
+
   
- 
-  baseAllH = baseHeight;
 
   wall.transform.position.y = -baseAllH + hh*0.5;
-  floor.transform.position.y = -baseAllH - 1;	
+  floor.transform.position.y = -baseAllH - 1;
+  
+ 
 
+}
+
+function UndoState(){
+
+  removeAndDestroy();
+   
+  //http://sushanta1991.blogspot.com.tr/2012/12/read-and-write-xml-using-javascript-in.html 
+  var xmlPath : String = Application.streamingAssetsPath+"/Undo.xml";
+
+  var xmlDoc : XmlDocument = new XmlDocument();
+  xmlDoc.Load(xmlPath);
+  
+  var screenWidthXML : XmlNodeList = xmlDoc.GetElementsByTagName("screenWidth");
+  var screenHeightXML : XmlNodeList = xmlDoc.GetElementsByTagName("screenHeight");
+  
+  var screenWidth : String = screenWidthXML[0].InnerText;
+  var screenHeight : String = screenHeightXML[0].InnerText;
+  loadRoomSize(screenWidth, screenHeight);
+  
+  
+  var ElementsList : XmlNodeList = xmlDoc.GetElementsByTagName("Element");
+  
+  for(var i : int = 0; i < ElementsList.Count;i++){
+           
+          var ElementList : XmlNodeList = ElementsList.Item(i).ChildNodes;
+          
+          var elementId : int = parseInt(ElementList[0].InnerText);
+          var elementType : String = ElementList[1].InnerText;
+  		  var cabinetDoor : String = ElementList[2].InnerText;
+  		  var Front : String = ElementList[3].InnerText;
+  		  var FrontUp : String = ElementList[4].InnerText;
+  		  var FrontDown : String = ElementList[5].InnerText;
+  		  var Back : String = ElementList[6].InnerText;
+  		  var Left : String = ElementList[7].InnerText;
+  		  var Right : String = ElementList[8].InnerText;
+  	      var Bottom : String = ElementList[9].InnerText;
+  		  var Top : String = ElementList[10].InnerText;
+  		  var Hole : int = parseInt(ElementList[11].InnerText);
+  		  var nFrontFace : int = parseInt(ElementList[12].InnerText);
+  		  var w : int = parseInt(ElementList[13].InnerText);
+  		  var h : int = parseInt(ElementList[14].InnerText);
+  		  var depth : int = parseInt(ElementList[15].InnerText);
+  		  var x : int = parseInt(ElementList[16].InnerText);
+  		  var y : int = parseInt(ElementList[17].InnerText);
+  		  var isRigid : String = ElementList[18].InnerText;//problem
+  		  var baseHeight : int = parseInt(ElementList[19].InnerText);
+  		  var code : String = ElementList[20].InnerText;
+  		  var screenId : int = parseInt(ElementList[21].InnerText);
+  		  var structure : String = ElementList[22].InnerText;
+  		  
+  		  if(elementType == "EX"){
+  		  	baseAllH = baseHeight;
+  		  }
+          
+          var myStuffTex:Hashtable = {"elementId":elementId,
+							"elementType":elementType,
+							"cabinetDoor":cabinetDoor,
+							"Front":Front,
+	                        "FrontUp":FrontUp,
+	                        "FrontDown":FrontDown,
+	                        "Back":Back,
+	                        "Left":Left,
+	                        "Right":Right,
+	                        "Bottom":Bottom,
+	                        "Top":Top,
+	                        "Hole":Hole,
+	                        "nFrontFace":nFrontFace,
+	                        "w":w,
+	                        "h":h,
+	                        "depth":depth,
+	                        "x":x,
+	                        "y":y,
+	                        "isRigid":true,
+	                        "baseHeight":baseHeight,
+	                        "code":code,
+	                        "screenId":screenId,
+	                        "structure":structure
+	                        };
+	         var index = i.ToString();               
+	         addModul(myStuffTex,index);
+         
+           
+  }
+
+  
+
+  wall.transform.position.y = -baseAllH + hh*0.5;
+  floor.transform.position.y = -baseAllH - 1;
+  
+ 
+
+}
+
+function initState(){
+
+  var xmlPath : String = Application.streamingAssetsPath+"/Undo.xml";
+
+  var xmlDoc : XmlDocument = new XmlDocument();
+  xmlDoc.Load(xmlPath);
+  
+  var screenWidthXML : XmlNodeList = xmlDoc.GetElementsByTagName("screenWidth");
+  var screenHeightXML : XmlNodeList = xmlDoc.GetElementsByTagName("screenHeight");
+  
+  var screenWidth : String = screenWidthXML[0].InnerText;
+  var screenHeight : String = screenHeightXML[0].InnerText;
+  loadRoomSize(screenWidth, screenHeight);
+  
+  textWidth = screenWidth;
+  textHeight = screenHeight;
+  
 }
 
 function resetCameraPos(){
