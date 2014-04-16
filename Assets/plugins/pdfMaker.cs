@@ -122,14 +122,7 @@ public class pdfMaker : MonoBehaviour {
 		doc.Add(new Phrase("\n"));
 		doc.Add(new Phrase("\n"));
 		doc.Add(new Phrase("\n"));
-		doc.Add(new Phrase("\n"));
-		doc.Add(new Phrase("\n"));
-		doc.Add(new Phrase("\n"));
-		doc.Add(new Phrase("\n"));
-		doc.Add(new Phrase("\n"));
-		doc.Add(new Phrase("\n"));
-		doc.Add(new Phrase("\n"));
-		doc.Add(new Phrase("\n"));
+		
 		
 		//doc.Add(gif);
 		Image mark = Image.GetInstance(Application.dataPath + "/Test.png");

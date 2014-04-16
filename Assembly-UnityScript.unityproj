@@ -55,12 +55,24 @@
      <Compile Include="Assets\md5functions.js" />
      <Compile Include="Assets\snippets.js" />
      <None Include="Assets\resources\Unlit\Unlit-Alpha.shader" />
+     <None Include="Assets\StreamingAssets\undo_10.xml" />
+     <None Include="Assets\StreamingAssets\undo_11.xml" />
      <None Include="Assets\resources\Unlit\Unlit-Normal.shader" />
+     <None Include="Assets\StreamingAssets\undo_7.xml" />
+     <None Include="Assets\StreamingAssets\undo_5.xml" />
      <None Include="Assets\plugins\iTextSharp.xml" />
+     <None Include="Assets\StreamingAssets\undo_0.xml" />
+     <None Include="Assets\StreamingAssets\undo_2.xml" />
      <None Include="Assets\resources\Unlit\Unlit-AlphaTest.shader" />
      <None Include="Assets\StreamingAssets\Undo.xml" />
+     <None Include="Assets\StreamingAssets\undo_1.xml" />
+     <None Include="Assets\StreamingAssets\undo_6.xml" />
+     <None Include="Assets\StreamingAssets\undo_4.xml" />
      <None Include="Assets\StreamingAssets\Save.xml" />
      <None Include="Assets\plugins\iTween\ReadMe!\ReadMe!.txt" />
+     <None Include="Assets\StreamingAssets\undo_9.xml" />
+     <None Include="Assets\StreamingAssets\undo_3.xml" />
+     <None Include="Assets\StreamingAssets\undo_8.xml" />
  <Reference Include="itextsharp">
  <HintPath>Assets\plugins\itextsharp.dll</HintPath>
  </Reference>

@@ -136,8 +136,21 @@ private var pdfGenerated:boolean = false;
 
 private var leftControl:boolean = false; //undo
 
+private var undoSize : int = 12;
+private var undoTimes : int = 0;
+private var undoFiles = new Array();
+private var currentState : int = 0;
+private var undoState : int = 0;
+private var undoSwitch : boolean = false;
+
 function Start () {
 	
+	//Create Undo names
+	for(var i:int = 0; i < undoSize ; i++){
+	
+		undoFiles[i] = "undo_" + i + ".xml";
+		
+	}
 	
 	//camera positioning
 	resetCameraPos();
@@ -283,6 +296,10 @@ function Start () {
 	
 	//init room 
 	initState();
+	
+	
+	
+	
 }
 
 /* ADD MODUL METHOD */
@@ -355,11 +372,16 @@ function Update () {
 	
 
 
-    if(Input.GetKeyUp(KeyCode.Z))
-
-
-    {
-        UndoState();
+    if(Input.GetKeyUp(KeyCode.Z)){
+    	
+    
+    	
+    	if(undoTimes<undoSize * 0.5){
+    	
+    	UndoState();
+    	undoTimes++;
+    	DebugEngine();
+    	}
 
     }
 	
@@ -377,14 +399,27 @@ function Update () {
 		
 		/*
 		Debug.DrawLine (Vector3 (0, 0, 0), Vector3 (100, 0, 0), Color.red);
-		Debug.DrawLine (Vector3 (0, 0, 0), Vector3 (0, 100, 0), Color.blue);
+		Debug.DrawLine (Vector3 (0, 0, 0), Vector3 (0, 100z, 0), Color.blue);
 		Debug.DrawLine (Vector3 (0, 0, 0), Vector3 (0, 0, -100), Color.green);	
 		*/
 		
+		if (Input.GetMouseButtonDown (0)){
+		
+			undoTimes = 0;
+			undoSwitch = false;
+			AutoSave();
+			currentState ++;
+			currentState = currentState % undoSize;
+			
+			print("MundoState : " +undoState);
+   			print("McurrentState : " +currentState);
+			
+		
+		}
 	
 		if (Input.GetMouseButtonDown (0) && iSwitch){
 		
-			AutoSave();
+			//AutoSave();
 			
 			if( Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition),  hit ) ) {
 				
@@ -876,7 +911,7 @@ function popUpMessageButton( msg:String,type:String) {
 		if(GUI.Button(Rect((Screen.width)*0.5 - 70, (Screen.height)*0.5 + 15, 60, 20),"OK")) {
 			guiState = "default";
 			removeAndDestroy();
-			resetGUIParams();
+			
 		}
 	}
 	
@@ -937,7 +972,7 @@ function setTextures(tex:String,coverCount:int,cType:String,_id:int) {
 	}
 	if(coverCount==1){
 		tip = cType.Substring(cType.IndexOf("-")+1,1);
-		print("tip tip "+tip);
+		//print("tip tip "+tip);
 		if(tip != "T") {
 			//print("tex : "+tex);
 			variableScript.cubeFront.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
@@ -1061,17 +1096,16 @@ function showInspector() {
 function hideInspector() {
 	guiPosX = guiPosX+w;
 	
-	LeanTween.move( guiRect, Vector2(guiPosX, 0), 0.5 ).setEase(LeanTweenType.easeOutExpo);/*.setOnComplete( tweenFinished );*/
+	LeanTween.move( guiRect, Vector2(guiPosX, 0), 0.5 ).setEase(LeanTweenType.easeOutExpo).setOnComplete( tweenFinished );
 	
 }
-/*
+
 function tweenFinished() {
-	isGUIClosed =  !isGUIClosed;
-	guiPosX = Screen.width-w;
-	LeanTween.move( guiRect, Vector2(guiPosX, 0), 0.5 ).setEase(LeanTweenType.easeOutExpo);
+	guiState = "default";
+	isGUIClosed = true;
 }
 
-*/
+
 /*
 *** RESET GUI PAREMETERS
 */
@@ -1138,7 +1172,7 @@ function initSetRoomSize() {
 		alphaRoomSize = 0;
 		alphaDelay = 0;
 		loadRoomSize(textWidth, textHeight);
-
+		AutoSave();
 	}
 	
 	GUI.EndGroup();
@@ -1158,7 +1192,9 @@ function loadRoomSize(roomWidth:String, roomHeight:String) {
 		
 		wall.transform.position.y = -baseAllH + hh*0.5;
   		floor.transform.position.y = -baseAllH - 1;
-		AutoSave();
+  		
+  		
+
 }
 
 function setBolFalse() {
@@ -1601,6 +1637,8 @@ function SaveState(){
 function AutoSave(){
 
 	
+	
+	
 	var xmlDoc : XmlDocument = new XmlDocument();
 	var CombinationXML : XmlElement = xmlDoc.CreateElement("Combination");
 	xmlDoc.AppendChild(CombinationXML);
@@ -1744,9 +1782,15 @@ function AutoSave(){
 
 	}
 	
-
-
-	xmlDoc.Save(Application.streamingAssetsPath+"/Undo"+".xml");
+	
+	
+	xmlDoc.Save(Application.streamingAssetsPath+"/"+undoFiles[currentState]);
+	
+	
+  
+	
+	//print("saveXML : " + Application.streamingAssetsPath+"/"+undoFiles[currentState]);
+	
 	
 	
 
@@ -1779,11 +1823,13 @@ function removeAndDestroy() {
 		Notification.notiBool[j] = "0";
 	}
 	
-	baseAllH = 0;
+	
 	
 	wall.transform.position.y = -baseAllH + hh*0.5;
  	floor.transform.position.y = -baseAllH - 1;	
+	resetGUIParams();
 	
+	draggingElementId = -1;
 }
 
 /**
@@ -1809,6 +1855,8 @@ function removeAndDestroyAt(rId:int) {
 	
 		modulDestroyed = true;
 	}
+	
+	//draggingElementId = -1;
 }
 
 function LoadState(){
@@ -1827,7 +1875,7 @@ function LoadState(){
   var screenWidth : String = screenWidthXML[0].InnerText;
   var screenHeight : String = screenHeightXML[0].InnerText;
   loadRoomSize(screenWidth, screenHeight);
-  
+  AutoSave();
   
   var ElementsList : XmlNodeList = xmlDoc.GetElementsByTagName("Element");
   
@@ -1903,12 +1951,37 @@ function LoadState(){
 }
 
 function UndoState(){
-
-  removeAndDestroy();
-   
+	
+  	removeAndDestroy();
+ 	
+ 	hideInspector();
+   	guiState = "default";
   //http://sushanta1991.blogspot.com.tr/2012/12/read-and-write-xml-using-javascript-in.html 
-  var xmlPath : String = Application.streamingAssetsPath+"/Undo.xml";
+  //var xmlPath : String = Application.streamingAssetsPath+"/Undo.xml";
+  
+  
+  
+  
+  if(!undoSwitch){
+ 	 undoState = currentState;
+ 	 undoSwitch = true;
+ 	 print(undoSwitch);
+  }
+  
+  if(undoState == 0){
+  
+  	undoState = undoSize;
+  }
+  
+  undoState --;
+  
+  
+  
 
+  var xmlPath : String = Application.streamingAssetsPath+"/"+undoFiles[undoState];
+  
+  
+  
   var xmlDoc : XmlDocument = new XmlDocument();
   xmlDoc.Load(xmlPath);
   
@@ -1989,7 +2062,12 @@ function UndoState(){
   wall.transform.position.y = -baseAllH + hh*0.5;
   floor.transform.position.y = -baseAllH - 1;
   
+  currentState ++;
+  currentState = currentState % undoSize;
+  AutoSave();
  
+  print("UundoState : " +undoState);
+  print("UcurrentState : " +currentState);
 
 }
 
@@ -2006,6 +2084,7 @@ function initState(){
   var screenWidth : String = screenWidthXML[0].InnerText;
   var screenHeight : String = screenHeightXML[0].InnerText;
   loadRoomSize(screenWidth, screenHeight);
+  AutoSave();
   
   textWidth = screenWidth;
   textHeight = screenHeight;
@@ -2517,9 +2596,14 @@ function DebugEngine(){
 			
 			var baseHeight : int = parameters[v]["baseHeight"];
 			
-			if(myY - myH * 0.5 - baseHeight> 0){
+			// = -baseAllH - 1;
+			
+			print(floor.transform.position.y);
+			
+			if(myY - myH * 0.5 - baseHeight> floor.transform.position.y + 1){
 				//Debug.Log("5 : EX DUVARDA OLAMAZ (ASILAMAZ). HER ZAMAN YERDE OLMALI");
 				Notification.notiBool[4] = "1";
+				break;
 			
 			}else{
 			
