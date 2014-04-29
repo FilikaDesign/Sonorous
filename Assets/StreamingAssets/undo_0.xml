@@ -22,8 +22,8 @@
       <w>130</w>
       <h>40</h>
       <depth>50</depth>
-      <x>-155</x>
-      <y>28</y>
+      <x>-120</x>
+      <y>20</y>
       <isRigid>True</isRigid>
       <baseHeight>8</baseHeight>
       <code>EX10-TF-WHT-8-A</code>
@@ -33,26 +33,27 @@
     <Element>
       <elementId>1</elementId>
       <elementType>EX</elementType>
-      <cabinetDoor>TF</cabinetDoor>
-      <Front>
-      </Front>
-      <FrontUp>textures/speakertexture</FrontUp>
-      <FrontDown>textures/200s</FrontDown>
+      <cabinetDoor>T</cabinetDoor>
+      <Front>textures/speakertexture</Front>
+      <FrontUp>
+      </FrontUp>
+      <FrontDown>
+      </FrontDown>
       <Back>textures/200s</Back>
       <Left>textures/200s</Left>
       <Right>textures/200s</Right>
       <Bottom>textures/200s</Bottom>
       <Top>textures/200s</Top>
       <Hole>0</Hole>
-      <nFrontFace>2</nFrontFace>
-      <w>130</w>
+      <nFrontFace>1</nFrontFace>
+      <w>65</w>
       <h>40</h>
       <depth>50</depth>
-      <x>-20</x>
-      <y>20</y>
+      <x>-32</x>
+      <y>300</y>
       <isRigid>True</isRigid>
-      <baseHeight>8</baseHeight>
-      <code>EX10-TF-WHT-8-A</code>
+      <baseHeight>0</baseHeight>
+      <code>EX20-T</code>
       <screenid>0</screenid>
       <structure>A</structure>
     </Element>

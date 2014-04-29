@@ -411,8 +411,6 @@ function Update () {
 			currentState ++;
 			currentState = currentState % undoSize;
 			
-			print("MundoState : " +undoState);
-   			print("McurrentState : " +currentState);
 			
 		
 		}
@@ -525,7 +523,7 @@ function Update () {
 				parameters[draggingElementId]["x"] = draggingObject.transform.position.x;
 				parameters[draggingElementId]["y"] = draggingObject.transform.position.y;
 				
-				//RulesEngine();
+			
 				DebugEngine();
 				returnStructure();
 				
@@ -950,7 +948,7 @@ function setTextures(tex:String,coverCount:int,cType:String,_id:int) {
 	if(coverCount==2) {
 		tip = cType.Substring(cType.IndexOf("-")+1,2);
 		
-		print(cType);
+		//print(cType);
 		if(tip != "TF") {
 		
 			variableScript.cubeFrontUp.renderer.material.mainTexture = Resources.Load(tex, Texture2D);
@@ -1117,6 +1115,8 @@ function resetGUIParams() {
 
 
 function clearAllHighlightedModuls() {
+
+
 	//clear Highlighted Elements
 	if(draggingElementId != -1 && moduls.Count > 0){
 		
@@ -1303,10 +1303,10 @@ function initKeyboardInteraction() {
 
 function ToggleLight(){
 
-	//print(draggingElementId);
+	print("hi hi");
+	
 	//highlight
 	var allChildren = moduls[draggingElementId].GetComponentsInChildren(Transform);
- 	
 
  	variableScript = moduls[draggingElementId].GetComponent("Element");
 
@@ -1320,6 +1320,7 @@ function ToggleLight(){
 	    }
 	       
 	}
+	
 	
  	if(prevHighlightedId != draggingElementId && prevHighlightedId != -1){
 	 	//de-highlight
@@ -1347,7 +1348,7 @@ function ToggleLight(){
 		}
 	}
 	
-		if(prevHighlightedId == -1 ) {
+	if(prevHighlightedId == -1 ) {
 			if(!modulDestroyed)
 				allChildren = moduls[draggingElementId].GetComponentsInChildren(Transform);
 		
@@ -1361,10 +1362,10 @@ function ToggleLight(){
 		    	}
 	       
 			}
-		}
+	}
 		
-		prevHighlightedId = draggingElementId;
-		modulDestroyed = false;
+	prevHighlightedId = draggingElementId;
+	modulDestroyed = false;
 		
 	
 }
@@ -1965,7 +1966,7 @@ function UndoState(){
   if(!undoSwitch){
  	 undoState = currentState;
  	 undoSwitch = true;
- 	 print(undoSwitch);
+ 	 //print(undoSwitch);
   }
   
   if(undoState == 0){
@@ -2066,8 +2067,8 @@ function UndoState(){
   currentState = currentState % undoSize;
   AutoSave();
  
-  print("UundoState : " +undoState);
-  print("UcurrentState : " +currentState);
+ // print("UundoState : " +undoState);
+ // print("UcurrentState : " +currentState);
 
 }
 
@@ -2329,6 +2330,7 @@ function groupDimensions(){
 
 function DebugEngine(){
 
+	
 	Notification.notiBool[0] = "0";
 	Notification.notiBool[1] = "0";
 	Notification.notiBool[2] = "0";
@@ -2409,7 +2411,8 @@ function DebugEngine(){
 
 		}
 	
-		if(Notification.notiBool[0] == "0"){
+		//color dehighlight
+		//if(Notification.notiBool[0] == "0"){
 		
 		
 		var allChildren = moduls[i].GetComponentsInChildren(Transform);
@@ -2417,19 +2420,22 @@ function DebugEngine(){
 			for (var child : Transform in allChildren) {
 			// do whatever with child transform here
 				if(child.renderer != null){
-					if(child.renderer.gameObject.name =="Base"){					
+					if(child.renderer.gameObject.name =="Base"){
+					if(child.renderer.material.color != Color.green)					
 						child.renderer.material.color = Color.white;
 						//child.renderer.material.mainTexture = Resources.Load("textures/basetexture", Texture2D);
 					}else if(child.renderer.gameObject.name =="skin"){
 	   			 		child.renderer.material.color = Color.black;
 	   			 	}
 					else{
-						child.renderer.material.color = Color.white;
+						if(child.renderer.material.color != Color.green)
+							child.renderer.material.color = Color.white;
 					}
 									   
 				}
 			}
-		}
+		//}
+		
 
 	}
 	
@@ -2598,9 +2604,8 @@ function DebugEngine(){
 			
 			// = -baseAllH - 1;
 			
-			print(floor.transform.position.y);
 			
-			if(myY - myH * 0.5 - baseHeight> floor.transform.position.y + 1){
+			if(myY - myH * 0.5 - baseAllH> floor.transform.position.y + 1){
 				//Debug.Log("5 : EX DUVARDA OLAMAZ (ASILAMAZ). HER ZAMAN YERDE OLMALI");
 				Notification.notiBool[4] = "1";
 				break;
@@ -2753,7 +2758,7 @@ function HighlightErrorsEngine(errorCode : int){
 							
 							
 							){
-								print("üstüsteyiz highlighted");
+								//print("üstüsteyiz highlighted");
 								
 								allChildren = moduls[i].GetComponentsInChildren(Transform);
 								
@@ -2990,7 +2995,7 @@ function HighlightErrorsEngine(errorCode : int){
 				
 				var baseHeight : int = parameters[v]["baseHeight"];
 				
-				if(myY - myH * 0.5 - baseHeight> 0){
+				if(myY - myH * 0.5 - baseAllH> floor.transform.position.y + 1){
 					//Debug.Log("5 : EX DUVARDA OLAMAZ (ASILAMAZ). HER ZAMAN YERDE OLMALI");
 					allChildren = moduls[v].GetComponentsInChildren(Transform);
 									
@@ -3052,7 +3057,7 @@ function HighlightErrorsEngine(errorCode : int){
 				myH = parameters[cc]["y"];
 							
 				if(myH < shoulderLevel && cabinetDoor == "U"){
-					print("error U");
+					//print("error U");
 					allChildren = moduls[cc].GetComponentsInChildren(Transform);
 									
 					for (var child : Transform in allChildren) {
@@ -3089,7 +3094,7 @@ function HighlightErrorsEngine(errorCode : int){
 				
 				
 				if(myH > shoulderLevel2 && cabinetDoor2 == "F"){
-					print("error F");
+					//print("error F");
 					allChildren = moduls[ccc].GetComponentsInChildren(Transform);
 									
 					for (var child : Transform in allChildren) {
