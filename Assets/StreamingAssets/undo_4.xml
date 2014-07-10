@@ -7,32 +7,6 @@
     <Element>
       <elementId>0</elementId>
       <elementType>EX</elementType>
-      <cabinetDoor>TF</cabinetDoor>
-      <Front>
-      </Front>
-      <FrontUp>textures/speakertexture</FrontUp>
-      <FrontDown>textures/200s</FrontDown>
-      <Back>textures/200s</Back>
-      <Left>textures/200s</Left>
-      <Right>textures/200s</Right>
-      <Bottom>textures/200s</Bottom>
-      <Top>textures/200s</Top>
-      <Hole>0</Hole>
-      <nFrontFace>2</nFrontFace>
-      <w>130</w>
-      <h>40</h>
-      <depth>50</depth>
-      <x>-120</x>
-      <y>20</y>
-      <isRigid>True</isRigid>
-      <baseHeight>2</baseHeight>
-      <code>EX10-TF-WHT-2-B</code>
-      <screenid>0</screenid>
-      <structure>B</structure>
-    </Element>
-    <Element>
-      <elementId>1</elementId>
-      <elementType>EX</elementType>
       <cabinetDoor>T</cabinetDoor>
       <Front>textures/speakertexture</Front>
       <FrontUp>
@@ -46,16 +20,43 @@
       <Top>textures/200s</Top>
       <Hole>0</Hole>
       <nFrontFace>1</nFrontFace>
-      <w>65</w>
+      <w>130</w>
       <h>40</h>
       <depth>50</depth>
-      <x>10</x>
+      <x>-130</x>
       <y>20</y>
       <isRigid>True</isRigid>
-      <baseHeight>2</baseHeight>
-      <code>EX20-T-WHT-2-C</code>
+      <baseHeight>8</baseHeight>
+      <code>EX10-T-WHT-8-A</code>
       <screenid>0</screenid>
-      <structure>C</structure>
+      <structure>A</structure>
+    </Element>
+    <Element>
+      <elementId>1</elementId>
+      <elementType>EX</elementType>
+      <cabinetDoor>F</cabinetDoor>
+      <Front>textures/200s</Front>
+      <FrontUp>
+      </FrontUp>
+      <FrontDown>
+      </FrontDown>
+      <Back>textures/200s</Back>
+      <Left>textures/200s</Left>
+      <Right>textures/200s</Right>
+      <Bottom>textures/200s</Bottom>
+      <Top>textures/200s</Top>
+      <Hole>0</Hole>
+      <nFrontFace>1</nFrontFace>
+      <w>130</w>
+      <h>40</h>
+      <depth>50</depth>
+      <x>5</x>
+      <y>20</y>
+      <isRigid>True</isRigid>
+      <baseHeight>8</baseHeight>
+      <code>EX10-F-WHT-8-A</code>
+      <screenid>0</screenid>
+      <structure>A</structure>
     </Element>
   </Elements>
 </Combination>

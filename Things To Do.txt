@@ -1,19 +1,13 @@
-1) Bazen üst menü donuyor. Fakat navigasyon devam ediyor. Yani uygulama deðil sadece menü donuyor. Üst menü donduktan sonra navigasyon yaparak tekrar normale dönüyor.
+Kabinetler gibi TV boyutlarý seçenekleri de olsun.
+Kullanýcý seçeceði TV yi de sahneye alýp sehpa üzerine yerleþtirebilsin.
+
+TV olmayacak diye konuþulmuþtu.Bizim için ekstradan plansýz bir iþ ortaya çýkýyor.
 
 
-2) Geliþtirme ; program ilk çalýþtýrýldýðýnda seçilen scr. Resolution sonraki kullanýmlarda da hatýrlanabilir mi?
+Ürün seçimi için kullanýlan side paneldeki iliþkili görseller ayný boyutta olsun.(örn; EX10 ile EX11 boylarý ayný olsun)
+Ayný boyutta olabilmeleri için EX10larýn küçülmesi gerekecek. Uygun mudur?
 
 
-3) Geliþtirme ; programa bir undo tuþu eklenebilir mi?
+Bir cabinet applicable deðil ise (hata mesajý alýyor ise) yere düþsün ve sahneden yok olsun.
 
-
-4) Kabinler bazen pointer e takýlý kalýyor, nereye sol týklasam kabin oraya yerleþiyor. Her týkladýðýmda bu böyle sürüyor.
-
-
-5) Programda bug oluþtuðunda yeni sahne açýlamýyor. Programý restart etmek gerekiyor.
-
-
-
-6) Geliþtirme; örneðin görselde 4=6 ve 5=7. Pdf export da birbirinin ayný olan kabinetlere ayný numarayý verip, listede “kodx2” demek mümkün mü?
-
-
+Fakat hata demek dogru degil, uyarý mesajý diye algýlamak lazým. Kullanýcý çalýþmasýný hazýrlarken bir kutuyu yerleþtirme organizasyonu yaparken bir kenara ayýrabilir. Hatalý diye yok olmasý kullaným açýsýndan ciddi bir problem.

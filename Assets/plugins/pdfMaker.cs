@@ -4,7 +4,7 @@ using iTextSharp.text;
 using iTextSharp.text.pdf;
 using iTextSharp;
 using System.IO;
-
+using System;
 
 public class pdfMaker : MonoBehaviour {
 
@@ -42,12 +42,11 @@ public class pdfMaker : MonoBehaviour {
 	
 		
 		tableSorter(parms);
-		
-		//FontFactory.RegisterDirectory("C:\\Windows\\Fonts");
 
-		//print (Application.streamingAssetsPath);
-		
-		pdfName = "Test";
+		string desktopPath = (Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
+
+		pdfName = "Sonorous_";
+		pdfName += DateTime.Now.Hour + "_" +DateTime.Now.Minute + "_" +DateTime.Now.Second;
 		// create a texture to pass to encoding
         Texture2D texture = new Texture2D(Screen.width, Screen.height-120, TextureFormat.RGB24, false);
 		
@@ -58,7 +57,7 @@ public class pdfMaker : MonoBehaviour {
         byte[] bytes = texture.EncodeToPNG();
  
         // save our test image (could also upload to WWW)
-        File.WriteAllBytes(Application.dataPath + "/" + pdfName + ".png", bytes);
+        File.WriteAllBytes(Application.dataPath + "/" + "temp.png", bytes);
 		
        
 		Document doc = new Document();
@@ -66,10 +65,8 @@ public class pdfMaker : MonoBehaviour {
 
         {
 
-            PdfWriter.GetInstance(doc, new FileStream(Application.dataPath + "/" + pdfName + ".pdf", FileMode.Create ));
-			
-			
-			
+            PdfWriter.GetInstance(doc, new FileStream(desktopPath + "/" + pdfName + ".pdf", FileMode.Create ));
+	
         }
 
         catch(System.Exception e)
@@ -80,37 +77,15 @@ public class pdfMaker : MonoBehaviour {
 
         }  
 		
-		
-		//print(Application.dataPath);
+	
 		
 		
 		doc.Open();
-		
-		//iTextSharp.text.Font regular = FontFactory.GetFont("C:\\Windows\\Fonts\\Antipasto.ttf", 28, iTextSharp.text.Font.NORMAL, BaseColor.BLACK);
-		//print (regular.Familyname);
+
 		
 		iTextSharp.text.Font regular = FontFactory.GetFont("C:\\Windows\\Fonts\\Arial.ttf", BaseFont.CP1252, BaseFont.EMBEDDED, 12, iTextSharp.text.Font.NORMAL, BaseColor.BLACK );
 		
-		//BaseFont customfont = BaseFont.CreateFont("C:\\Windows\\Fonts\\DINPro-Regular 2.otf", BaseFont.CP1252, BaseFont.EMBEDDED);
-		//iTextSharp.text.Font font = new iTextSharp.text.Font(customfont, 28);
 		
-		
-		/*
-		Paragraph heading = new Paragraph("SONOROUS",regular);
-		
-		heading.Leading = 60f;
-		doc.Add(heading);
-		
-		
-		Chunk chkHeader = new Chunk("COMBINATION                                    ",regular);
-		chkHeader.SetUnderline(0.3f, -12f);
-		
-		Paragraph pHeader = new Paragraph(chkHeader);
-		
-		pHeader.Leading = 28f;
-		pHeader.SpacingAfter = 150f;
-		doc.Add(pHeader);
-		*/
 		Image header = Image.GetInstance(Application.streamingAssetsPath + "/sono_combi.jpg");
 		
 		header.ScalePercent(50f);
@@ -125,15 +100,8 @@ public class pdfMaker : MonoBehaviour {
 		
 		
 		//doc.Add(gif);
-		Image mark = Image.GetInstance(Application.dataPath + "/Test.png");
-		//Image ImageOne = new Bitmap(Application.dataPath + "/" + pdfName + ".png");
-		/*
-		mark.Rotation = Mathf.PI / 2;
-		mark.RotationDegrees = 90f;
-		
-		mark.ScaleToFit(doc.PageSize.Width,doc.PageSize.Height-20);
-		*/
-		
+		Image mark = Image.GetInstance(Application.dataPath + "/temp.png");
+
 		float ow = mark.Width;
 		float oh = mark.Height;
 		
@@ -176,12 +144,7 @@ public class pdfMaker : MonoBehaviour {
 		doc.Add(new Phrase("\n"));
 		doc.Add(new Phrase("\n"));
 			
-		/*
-		
-		BaseFont customfont2 = BaseFont.CreateFont("C:\\Windows\\Fonts\\DINPro-Regular 2.otf", BaseFont.CP1252, BaseFont.EMBEDDED);
-		iTextSharp.text.Font font2 = new iTextSharp.text.Font(customfont2, 12);
-		
-		*/
+
 		
 		for(int i = 0; i<sortedTable.Count; i++) {
 			

@@ -1,9 +1,9 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Cuber.js">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\plugins\pdfMaker.cs">
     <Files>
-      <File FileName="Assets\Cuber.js" Line="2998" Column="68" />
-      <File FileName="Assets\plugins\pdfMaker.cs" Line="1" Column="1" />
+      <File FileName="Assets\Cuber.js" Line="712" Column="50" />
+      <File FileName="Assets\plugins\pdfMaker.cs" Line="66" Column="10" />
       <File FileName="Assets\GUITextures.js" Line="1" Column="1" />
       <File FileName="Assets\SettingsData.js" Line="1" Column="1" />
       <File FileName="Assets\Combination.js" Line="1" Column="1" />

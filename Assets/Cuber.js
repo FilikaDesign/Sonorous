@@ -679,7 +679,7 @@ function OnGUI() {
 	}
 	
 	if(guiState == "ids") {
-		popUpMessage("PDF SAVING...");
+		popUpMessage("PDF SAVING TO DESKTOP");
 	}
 
 	if(guiState == "deleteModul") {
